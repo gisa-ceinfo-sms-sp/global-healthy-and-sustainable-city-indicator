@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        
+        <!-- Favicon Oficial PMSP -->
+        <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/gisa-ceinfo-sms-sp/dados/refs/heads/main/Brasao_PMSP_reduzido_favicon.png">
+        
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="./resources/fontawesome-all.min.css">
+        <link rel="stylesheet" href="./resources/photon-geocoder-autocomplete.min.css">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                background-color: #ffffff;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            /* Ocultar elementos nativos desnecessários */
+            .project-title,
+            h2.project-title,
+            #abstract {
+                display: none !important;
+            }
+
+            /* 1. Banner Superior (100% da largura) */
+            #top-banner {
+                width: 100%;
+                flex-shrink: 0;
+                background-color: #ffffff;
+                border-bottom: 1px solid #e2e8f0;
+                line-height: 0;
+                z-index: 1001;
+            }
+            #top-banner img {
+                width: 100%;
+                height: auto;
+                max-height: 115px;
+                object-fit: cover;
+                display: block;
+            }
+
+            /* 2. Área do Mapa */
+            #map {
+                width: 100%;
+                flex: 1;
+                position: relative;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* 3. Rodapé Institucional Alinhado à Esquerda */
+            #map-footer {
+                width: 100%;
+                flex-shrink: 0;
+                background-color: #f8fafc;
+                border-top: 1px solid #cbd5e1;
+                padding: 6px 16px;
+                box-sizing: border-box;
+                font-size: 11.5px;
+                line-height: 1.45;
+                color: #334155;
+                text-align: left;
+                z-index: 1001;
+            }
+            #map-footer a {
+                color: #0284c7;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            #map-footer a:hover {
+                text-decoration: underline;
+                color: #0369a1;
+            }
+
+            /* Legenda Retrátil */
+            .layer-legend-items {
+                margin-top: 4px;
+                padding-left: 6px;
+                font-size: 12px;
+                line-height: 1.45;
+            }
+
+            /* 4. Barra de Busca de UBS (Canto Superior Esquerdo) */
+            #ubs-search-container {
+                position: absolute;
+                top: 8px;
+                left: 50px;
+                z-index: 2000;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                border: 1px solid #cbd5e1;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            #ubs-search-input {
+                border: none;
+                outline: none;
+                font-size: 13px;
+                padding: 4px;
+                width: 240px;
+                background: transparent;
+                color: #1e293b;
+            }
+            #ubs-search-input::placeholder {
+                color: #64748b;
+            }
+            #ubs-search-btn {
+                background: #0284c7;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            #ubs-search-btn:hover {
+                background: #0369a1;
+            }
+            #ubs-suggestions {
+                position: absolute;
+                top: 38px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                display: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 2001;
+            }
+            .ubs-suggestion-item {
+                padding: 6px 10px;
+                font-size: 12px;
+                cursor: pointer;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .ubs-suggestion-item:hover {
+                background: #e0f2fe;
+                color: #0284c7;
+            }
+
+            /* 5. Botão "i" no Canto Inferior Direito (Janela Larga com Nota Técnica) */
+            #custom-info-container {
+                position: absolute;
+                bottom: 28px;
+                right: 8px;
+                z-index: 2000;
+            }
+
+            #custom-info-btn {
+                background-color: #0284c7;
+                color: #ffffff;
+                border: 2px solid #ffffff;
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                line-height: 32px;
+                text-align: center;
+                font-family: Georgia, serif;
+                font-style: italic;
+                font-weight: bold;
+                font-size: 18px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+                cursor: pointer;
+                user-select: none;
+                transition: background-color 0.2s ease, transform 0.2s ease;
+                margin-left: auto;
+            }
+            #custom-info-btn:hover {
+                background-color: #0369a1;
+                transform: scale(1.06);
+            }
+
+            #custom-info-panel {
+                display: none;
+                background-color: rgba(255, 255, 255, 0.98);
+                color: #1e293b;
+                border: 1px solid #cbd5e1;
+                border-left: 4px solid #0284c7;
+                border-radius: 6px;
+                padding: 16px 32px 16px 18px;
+                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                font-size: 12.5px;
+                line-height: 1.55;
+                max-width: 620px;
+                width: 560px;
+                max-height: 70vh;
+                overflow-y: auto;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+                position: absolute;
+                bottom: 44px;
+                right: 0;
+            }
+            #custom-info-panel a {
+                color: #0284c7;
+                font-weight: 600;
+                text-decoration: underline;
+                word-break: break-all;
+            }
+            #custom-info-panel a:hover {
+                color: #0369a1;
+            }
+            #custom-info-close {
+                position: absolute;
+                top: 8px;
+                right: 12px;
+                font-size: 20px;
+                font-weight: bold;
+                color: #64748b;
+                cursor: pointer;
+                line-height: 1;
+                user-select: none;
+            }
+            #custom-info-close:hover {
+                color: #0284c7;
+            }
+
+            /* Estilização da Tabela no Painel Técnico */
+            .tech-note-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-size: 11.5px;
+            }
+            .tech-note-table th, .tech-note-table td {
+                border: 1px solid #cbd5e1;
+                padding: 5px 8px;
+                text-align: left;
+            }
+            .tech-note-table th {
+                background-color: #f1f5f9;
+                color: #0f172a;
+                font-weight: 600;
+            }
+
+            /* Controles OpenLayers Clean */
+            .ol-control {
+                background-color: rgba(255, 255, 255, 0.88) !important;
+                padding: 3px !important;
+                border-radius: 6px !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+            }
+            .ol-control > * {
+                background-color: #ffffff !important;
+                color: #1e293b !important;
+                border-radius: 4px !important;
+                transition: all 0.2s ease;
+            }
+            .ol-control > *:hover, .ol-control > *:focus {
+                background-color: #e0f2fe !important;
+                color: #0284c7 !important;
+            }
+            .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+                color: #444444 !important;
+            }
+            .search-layer-input-search {
+                background-color: #f8f8f8 !important;
+            }
+
+            /* Painel de Camadas (LayerSwitcher) no canto superior direito */
+            .ol-control.layer-switcher {
+                top: 8px !important;
+                right: 8px !important;
+            }
+
+            .layer-switcher .panel {
+                border-radius: 6px !important;
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+                font-size: 13px !important;
+                color: #1e293b !important;
+                max-height: 65vh;
+                overflow-y: auto;
+            }
+
+            /* Estilização dos Popups */
+            .ol-popup {
+                background-color: #ffffff !important;
+                border-radius: 8px !important;
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: 0 6px 20px rgba(15, 23, 42, 0.18) !important;
+                padding: 14px 16px !important;
+                min-width: 280px;
+                max-width: 380px;
+                max-height: 420px;
+                overflow-y: auto;
+                font-size: 12.5px;
+                color: #334155;
+            }
+            .ol-popup-closer {
+                color: #64748b !important;
+                top: 8px !important;
+                right: 10px !important;
+                text-decoration: none;
+            }
+            .ol-popup-closer:hover {
+                color: #0284c7 !important;
+            }
+            #popup-content table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 8px;
+            }
+            #popup-content th, #popup-content td {
+                padding: 5px 6px;
+                border-bottom: 1px solid #f1f5f9;
+                text-align: left;
+                vertical-align: top;
+            }
+            #popup-content th {
+                color: #0369a1;
+                font-weight: 600;
+                width: 58%;
+            }
+            #popup-content tr:hover {
+                background-color: #f8fafc;
+            }
+
+            @media (max-width: 768px) {
+                #map-footer {
+                    font-size: 10px;
+                    padding: 4px 10px;
+                }
+                #custom-info-panel {
+                    width: calc(100vw - 32px);
+                    max-width: none;
+                    right: -4px;
+                }
+                #ubs-search-container {
+                    top: 50px;
+                    left: 8px;
+                }
+                #ubs-search-input {
+                    width: 180px;
+                }
+            }
+        </style>
+        <title>Indicadores de Caminhabilidade, Acesso Alimentar e Saúde</title>
+    </head>
+    <body>
+        <!-- Banner no Topo (100% da largura) -->
+        <header id="top-banner">
+            <img src="https://raw.githubusercontent.com/gisa-ceinfo-sms-sp/global-healthy-and-sustainable-city-indicator/refs/heads/main/banner_upper.png" alt="Banner Institucional - Indicadores de Caminhabilidade, Acesso Alimentar e Saúde">
+        </header>
+
+        <!-- Container do Mapa -->
+        <div id="map">
+            <!-- Barra de Busca de UBS -->
+            <div id="ubs-search-container">
+                <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
+                <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
+                <button id="ubs-search-btn">Ir</button>
+                <div id="ubs-suggestions"></div>
+            </div>
+
+            <!-- Botão "i" no Canto Inferior Direito -->
+            <div id="custom-info-container">
+                <div id="custom-info-btn" title="Clique para ver informações sobre os dados e nota técnica">i</div>
+                <div id="custom-info-panel">
+                    <span id="custom-info-close" title="Fechar">×</span>
+                    <strong>Global indicator data from the Global Healthy and Sustainable City Indicator Study Collaboration</strong><br>
+                    21 June 2021<br>
+                    Output data prepared for analysis of 25 diverse global cities included in the Global Healthy and Sustainable City Indicator Study Collaboration study. The dataset will be described in detail in a forthcoming publication (under review, September 2021).<br>
+                    Data outputs were generated through use of the global-indicators software tool, designed for this study and available from:<br>
+                    <a href="https://github.com/global-healthy-liveable-cities/global-indicators" target="_blank" rel="noopener noreferrer">https://github.com/global-healthy-liveable-cities/global-indicators</a><br>
+                    Further detail on the methods used is provided in the following publication:<br>
+                    Liu, S., Higgs, C., Arundel, J., Boeing, G., Cerdera, N., Moctezuma, D., Cerin, E., Adlakha, D., Lowe, M. and Giles-Corti, B. (2021), A Generalized Framework for Measuring Pedestrian Accessibility around the World Using Open Data. Geogr Anal. <a href="https://doi.org/10.1111/gean.12290" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/gean.12290</a><br>
+                    This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
+                    
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 14px 0;">
+
+                    <!-- Nota Técnica Incorporada: Daily Living Z-Score -->
+                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
+                    <p style="margin: 0 0 8px 0;">O <strong>Z-Score</strong> é uma medida estatística que compara a pontuação de uma área (ou bairro) com a média geral de todas as áreas estudadas (normalmente, 25 grandes cidades globais no caso desta série da Lancet):</p>
+                    <ul style="margin: 0 0 10px 0; padding-left: 18px;">
+                        <li><strong>Z-Score de 0:</strong> A área está na média do estudo.</li>
+                        <li><strong>Z-Score Positivo:</strong> A área é melhor que a média.</li>
+                        <li><strong>Z-Score Negativo:</strong> A área é pior que a média.</li>
+                    </ul>
+                    <p style="margin: 0 0 8px 0;">O <em>"Daily Living Z-Score"</em> (ou índice de caminhabilidade/acessibilidade) é um indicador composto que mede o quão bem o ambiente construído (densidade populacional e de destinos, conectividade de ruas e acesso a transporte público) apoia um estilo de vida ativo e saudável nas atividades diárias[cite: 27].</p>
+                    
+                    <h4 style="font-size: 13px; color: #1e293b; margin: 10px 0 4px 0;">Interpretação do Intervalo em São Paulo</h4>
+                    <p style="margin: 0 0 6px 0;">O fato de São Paulo variar de um valor negativo expressivo a um valor positivo alto indica uma grande heterogeneidade espacial e iniquidade no planejamento urbano da cidade[cite: 27]:</p>
+                    
+                    <table class="tech-note-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 22%;">Z-Score</th>
+                                <th style="width: 38%;">Interpretação</th>
+                                <th style="width: 40%;">Implicações na Vida Diária</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>+2.15</strong> (Máximo)</td>
+                                <td>Pontuação muito acima da média global.</td>
+                                <td>Bairros com excelente planejamento. Áreas densas, alta conectividade, ampla acessibilidade a destinos e ótimo transporte público. Permite caminhadas e uso de bicicleta, promovendo saúde e sustentabilidade[cite: 27].</td>
+                            </tr>
+                            <tr>
+                                <td><strong>-1.12</strong> (Mínimo)</td>
+                                <td>Pontuação abaixo da média global.</td>
+                                <td>Bairros com planejamento deficiente. Baixa densidade, pouca conectividade (subúrbios dispersos) e baixo acesso a destinos/transporte. Alta dependência de veículos particulares, aumentando sedentarismo e poluição[cite: 27].</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p style="margin: 6px 0 0 0;">Em resumo, o intervalo mostra que São Paulo contém, simultaneamente, bolsões de excelência urbana comparáveis aos melhores padrões globais (Z-score 2.15) e extensas áreas de exclusão ou planejamento de baixa qualidade (Z-score -1.12) que promovem estilos de vida pouco saudáveis[cite: 27].</p>
+                </div>
+            </div>
+
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+
+        <!-- Rodapé Institucional Alinhado à Esquerda -->
+        <footer id="map-footer">
+            <div>
+                <strong>Fontes:</strong> <a href="https://prefeitura.sp.gov.br/web/saude/w/epidemiologia_e_informacao/geoprocessamento_e_informacoes_socioambientais/265388" target="_blank" rel="noopener noreferrer">Limites administrativos da Saúde - NGISA / CEInfo / SMS-SP</a> | Camadas <a href="https://www.healthysustainablecities.org/resources/#data-hub" target="_blank" rel="noopener noreferrer">Global Healthy and Sustainable City Indicators - Lancet - 2022</a>
+            </div>
+            <div>
+                <strong>Elaboração:</strong> <a href="https://www.prefeitura.sp.gov.br/web/saude/epidemiologia_e_informacao/geoprocessamento_e_informacoes_socioambientais" target="_blank" rel="noopener noreferrer">Núcleo de Geoprocessamento e Informação Socioambiental</a> / <a href="https://www.prefeitura.sp.gov.br/saude/epidemiologia_e_informacao/" target="_blank" rel="noopener noreferrer">Coordenação de Epidemiologia e Informação</a> / <a href="https://www.prefeitura.sp.gov.br/web/saude" target="_blank" rel="noopener noreferrer">Secretaria Municipal da Saúde de São Paulo</a> - 2026
+            </div>
+        </footer>
+
+        <!-- Bibliotecas Base -->
+        <script src="./resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="./resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="./resources/olms.js"></script>
+
+        <!-- Camadas de Dados -->
+        <script src="./layers/DailyLivingZglobal_1.js"></script>
+        <script src="./layers/DailyLivinglocal_2.js"></script>
+        <script src="./layers/Desertosalimentares_3.js"></script>
+        <script src="./layers/Populaosemacessoalimentosfrescosem500metros_4.js"></script>
+        <script src="./layers/Escoredeacessoalimentosfrescosem500metros_5.js"></script>
+        <script src="./layers/Caminhabilidadeparmetrolocal_6.js"></script>
+        <script src="./layers/Caminhabilidadeparmetroglobal_7.js"></script>
+        <script src="./layers/Densidadepopulacional_8.js"></script>
+        <script src="./layers/CoordenadoriaRegionaldeSade_9.js"></script>
+        <script src="./layers/SupervisoTcnicadeSade_10.js"></script>
+        <script src="./layers/readeabrangnciadeUBS_11.js"></script>
+
+        <!-- Estilos das 11 Camadas -->
+        <script src="./styles/DailyLivingZglobal_1_style.js"></script>
+        <script src="./styles/DailyLivinglocal_2_style.js"></script>
+        <script src="./styles/Desertosalimentares_3_style.js"></script>
+        <script src="./styles/Populaosemacessoalimentosfrescosem500metros_4_style.js"></script>
+        <script src="./styles/Escoredeacessoalimentosfrescosem500metros_5_style.js"></script>
+        <script src="./styles/Caminhabilidadeparmetrolocal_6_style.js"></script>
+        <script src="./styles/Caminhabilidadeparmetroglobal_7_style.js"></script>
+        <script src="./styles/Densidadepopulacional_8_style.js"></script>
+        <script src="./styles/CoordenadoriaRegionaldeSade_9_style.js"></script>
+        <script src="./styles/SupervisoTcnicadeSade_10_style.js"></script>
+        <script src="./styles/readeabrangnciadeUBS_11_style.js"></script>
+
+        <!-- Configuração de Camadas e Inicialização -->
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+
+        <!-- Scripts de Customização (Busca UBS, Janela "i" Larga com Nota Técnica e Legendas Retráteis) -->
+        <script>
+            window.addEventListener('load', function() {
+                // 1. Controle do Botão "i" (Canto Inferior Direito)
+                var infoBtn = document.getElementById('custom-info-btn');
+                var infoPanel = document.getElementById('custom-info-panel');
+                var infoClose = document.getElementById('custom-info-close');
+
+                if (infoBtn && infoPanel && infoClose) {
+                    infoBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        infoPanel.style.display = (infoPanel.style.display === 'block') ? 'none' : 'block';
+                    });
+
+                    infoClose.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        infoPanel.style.display = 'none';
+                    });
+
+                    infoPanel.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+
+                    document.addEventListener('click', function() {
+                        if (infoPanel.style.display === 'block') {
+                            infoPanel.style.display = 'none';
+                        }
+                    });
+                }
+
+                // 2. Funcionalidade de Busca por Nome da UBS (NOME_UBS) na camada 11
+                var searchInput = document.getElementById('ubs-search-input');
+                var searchBtn = document.getElementById('ubs-search-btn');
+                var suggestionsBox = document.getElementById('ubs-suggestions');
+
+                if (searchInput && typeof lyr_readeabrangnciadeUBS_11 !== 'undefined') {
+                    var ubsSource = lyr_readeabrangnciadeUBS_11.getSource();
+
+                    function getUbsFeatures() {
+                        return ubsSource ? ubsSource.getFeatures() : [];
+                    }
+
+                    function searchAndZoom(targetName) {
+                        var feats = getUbsFeatures();
+                        for (var i = 0; i < feats.length; i++) {
+                            var propName = feats[i].get('NOME_UBS');
+                            if (propName && propName.toString().trim().toUpperCase() === targetName.trim().toUpperCase()) {
+                                lyr_readeabrangnciadeUBS_11.setVisible(true);
+                                var cb = document.querySelector('.layer-switcher input[value*="readeabrangnciadeUBS_11"]') || 
+                                         Array.from(document.querySelectorAll('.layer-switcher input')).find(function(el){ return el.nextElementSibling && el.nextElementSibling.innerText.includes('UBS'); });
+                                if (cb && !cb.checked) {
+                                    cb.click();
+                                }
+
+                                var geom = feats[i].getGeometry();
+                                var extent = geom.getExtent();
+                                map.getView().fit(extent, { duration: 1000, maxZoom: 16, padding: [50, 50, 50, 50] });
+                                suggestionsBox.style.display = 'none';
+                                break;
+                            }
+                        }
+                    }
+
+                    searchInput.addEventListener('input', function() {
+                        var val = this.value.trim().toUpperCase();
+                        suggestionsBox.innerHTML = '';
+                        if (val.length < 2) {
+                            suggestionsBox.style.display = 'none';
+                            return;
+                        }
+
+                        var feats = getUbsFeatures();
+                        var matches = [];
+                        for (var i = 0; i < feats.length; i++) {
+                            var name = feats[i].get('NOME_UBS');
+                            if (name && name.toUpperCase().indexOf(val) !== -1) {
+                                if (matches.indexOf(name) === -1) {
+                                    matches.push(name);
+                                    if (matches.length >= 15) break;
+                                }
+                            }
+                        }
+
+                        if (matches.length > 0) {
+                            matches.forEach(function(m) {
+                                var div = document.createElement('div');
+                                div.className = 'ubs-suggestion-item';
+                                div.innerText = m;
+                                div.addEventListener('click', function() {
+                                    searchInput.value = m;
+                                    searchAndZoom(m);
+                                });
+                                suggestionsBox.appendChild(div);
+                            });
+                            suggestionsBox.style.display = 'block';
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    });
+
+                    searchBtn.addEventListener('click', function() {
+                        searchAndZoom(searchInput.value);
+                    });
+
+                    searchInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            searchAndZoom(searchInput.value);
+                        }
+                    });
+
+                    document.addEventListener('click', function(e) {
+                        if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    });
+                }
+
+                // 3. Contrair/Expandir categorias na legenda conforme visibilidade da camada
+                function updateLegendVisibility() {
+                    var layerItems = document.querySelectorAll('.layer-switcher li.layer');
+                    layerItems.forEach(function(li) {
+                        var cb = li.querySelector('input[type="checkbox"]');
+                        if (!cb) return;
+                        var legendBlock = li.querySelector('.layer-legend-items');
+                        if (legendBlock) {
+                            legendBlock.style.display = cb.checked ? 'block' : 'none';
+                        }
+                    });
+                }
+
+                updateLegendVisibility();
+                document.addEventListener('change', updateLegendVisibility);
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.closest('.layer-switcher')) {
+                        setTimeout(updateLegendVisibility, 20);
+                    }
+                });
+
+                var switcherPanel = document.querySelector('.layer-switcher');
+                if (switcherPanel) {
+                    var obs = new MutationObserver(function() {
+                        updateLegendVisibility();
+                    });
+                    obs.observe(switcherPanel, { childList: true, subtree: true });
+                }
+
+                // 4. Atualiza tamanho do canvas após carregar o banner
+                var bannerImg = document.querySelector('#top-banner img');
+                if (bannerImg) {
+                    bannerImg.addEventListener('load', function() {
+                        if (typeof map !== 'undefined' && map.updateSize) {
+                            map.updateSize();
+                        }
+                    });
+                }
+            });
+        </script>
+
+        <!-- Script de Rótulos das UBSs (Quebra a 12 caracteres, negrito, halo branco e decluttering ativado) -->
+        <script>
+            window.addEventListener('load', function() {
+                function wrapText(text, maxChars) {
+                    if (!text) return '';
+                    var words = text.split(' ');
+                    var lines = [];
+                    var currentLine = '';
+
+                    words.forEach(function(word) {
+                        if ((currentLine + ' ' + word).trim().length <= maxChars) {
+                            currentLine = (currentLine + ' ' + word).trim();
+                        } else {
+                            if (currentLine) lines.push(currentLine);
+                            if (word.length > maxChars) {
+                                for (var i = 0; i < word.length; i += maxChars) {
+                                    lines.push(word.substring(i, i + maxChars));
+                                }
+                                currentLine = '';
+                            } else {
+                                currentLine = word;
+                            }
+                        }
+                    });
+                    if (currentLine) lines.push(currentLine);
+                    return lines.join('\n');
+                }
+
+                setTimeout(function() {
+                    if (typeof lyr_readeabrangnciadeUBS_11 !== 'undefined') {
+                        var originalStyle = lyr_readeabrangnciadeUBS_11.getStyle();
+                        
+                        lyr_readeabrangnciadeUBS_11.setStyle(function(feature, resolution) {
+                            var baseStyle = typeof originalStyle === 'function' ? originalStyle(feature, resolution) : originalStyle;
+                            var styles = Array.isArray(baseStyle) ? baseStyle : [baseStyle];
+                            
+                            var nomeUbs = feature.get('NOME_UBS');
+                            
+                            if (nomeUbs) {
+                                var formattedText = wrapText(nomeUbs.toString(), 12);
+
+                                var textStyle = new ol.style.Style({
+                                    text: new ol.style.Text({
+                                        font: 'bold 8px "Segoe UI", Arial, sans-serif',
+                                        text: formattedText,
+                                        fill: new ol.style.Fill({
+                                            color: '#0f172a'
+                                        }),
+                                        stroke: new ol.style.Stroke({
+                                            color: '#ffffff',
+                                            width: 3.5
+                                        }),
+                                        overflow: false,
+                                        declutterMode: 'obstacle',
+                                        placement: 'point',
+                                        textAlign: 'center',
+                                        textBaseline: 'middle'
+                                    })
+                                });
+                                styles.push(textStyle);
+                            }
+                            
+                            return styles;
+                        });
+                        
+                        lyr_readeabrangnciadeUBS_11.set('declutter', true);
+                        if (typeof map !== 'undefined') {
+                            map.getLayers().forEach(function(layer) {
+                                if (layer instanceof ol.layer.Vector) {
+                                    layer.set('declutter', true);
+                                }
+                            });
+                            map.render();
+                        }
+                    }
+                }, 900);
+            });
+        </script>
+    </body>
+</html>
