@@ -222,7 +222,6 @@ lyr_MapabaseGoogleSatelite_02.setVisible(false);
 
 lyr_DailyLivingZglobal_1.setVisible(false);
 lyr_DailyLivinglocal_2.setVisible(false);
-lyr_Desertosalimentares_3.setVisible(false);
 lyr_Populaosemacessoalimentosfrescosem500metros_4.setVisible(false);
 lyr_Escoredeacessoalimentosfrescosem500metros_5.setVisible(false);
 lyr_Caminhabilidadeparmetrolocal_6.setVisible(false);
@@ -238,7 +237,6 @@ var layersList = [
     lyr_MapabaseGoogleSatelite_02,
     lyr_DailyLivingZglobal_1,
     lyr_DailyLivinglocal_2,
-    lyr_Desertosalimentares_3,
     lyr_Populaosemacessoalimentosfrescosem500metros_4,
     lyr_Escoredeacessoalimentosfrescosem500metros_5,
     lyr_Caminhabilidadeparmetrolocal_6,
@@ -282,7 +280,6 @@ var hexAliases = {
 var hexLayers = [
     lyr_DailyLivingZglobal_1,
     lyr_DailyLivinglocal_2,
-    lyr_Desertosalimentares_3,
     lyr_Populaosemacessoalimentosfrescosem500metros_4,
     lyr_Escoredeacessoalimentosfrescosem500metros_5,
     lyr_Caminhabilidadeparmetrolocal_6,
