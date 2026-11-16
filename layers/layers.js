@@ -88,23 +88,6 @@ var lyr_DailyLivinglocal_2 = new ol.layer.Vector({
     <img src="styles/legend/DailyLivinglocal_2_5.png" /> 2,5 - 3</div>'
 });
 
-
-
-var lyr_Populaosemacessoalimentosfrescosem500metros_4 = new ol.layer.Vector({
-    declutter: false,
-    source: getHexSource(typeof json_Populaosemacessoalimentosfrescosem500metros_4 !== 'undefined' ? json_Populaosemacessoalimentosfrescosem500metros_4 : undefined),
-    style: style_Populaosemacessoalimentosfrescosem500metros_4,
-    popuplayertitle: 'População sem acesso à alimentos frescos em 500 metros',
-    interactive: true,
-    title: 'População sem acesso à alimentos frescos em 500 metros<div class="layer-legend-items">\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_0.png" /> 5 - 769<br />\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_1.png" /> 769 - 1532<br />\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_2.png" /> 1532 - 2296<br />\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_3.png" /> 2296 - 3060<br />\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_4.png" /> 3060 - 3823<br />\
-    <img src="styles/legend/Populaosemacessoalimentosfrescosem500metros_4_5.png" /> 3823 - 4587</div>'
-});
-
 var lyr_Escoredeacessoalimentosfrescosem500metros_5 = new ol.layer.Vector({
     declutter: false,
     source: getHexSource(typeof json_Escoredeacessoalimentosfrescosem500metros_5 !== 'undefined' ? json_Escoredeacessoalimentosfrescosem500metros_5 : undefined),
@@ -176,7 +159,7 @@ var lyr_Densidadepopulacional_8 = new ol.layer.Vector({
     <img src="styles/legend/Densidadepopulacional_8_13.png" /> 131925 - 142064</div>'
 });
 
-// 4. Camadas de Limites Administrativos da Saúde (9 a 11)
+// 4. Camadas de Limites Administrativos da Saúde
 var format_CoordenadoriaRegionaldeSade_9 = new ol.format.GeoJSON();
 var features_CoordenadoriaRegionaldeSade_9 = format_CoordenadoriaRegionaldeSade_9.readFeatures(json_CoordenadoriaRegionaldeSade_9, {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
 var jsonSource_CoordenadoriaRegionaldeSade_9 = new ol.source.Vector({ attributions: ' ' });
@@ -223,7 +206,6 @@ lyr_MapabaseGoogleSatelite_02.setVisible(false);
 
 lyr_DailyLivingZglobal_1.setVisible(false);
 lyr_DailyLivinglocal_2.setVisible(false);
-lyr_Populaosemacessoalimentosfrescosem500metros_4.setVisible(false);
 lyr_Escoredeacessoalimentosfrescosem500metros_5.setVisible(false);
 lyr_Caminhabilidadeparmetrolocal_6.setVisible(false);
 lyr_Caminhabilidadeparmetroglobal_7.setVisible(true);
@@ -238,7 +220,6 @@ var layersList = [
     lyr_MapabaseGoogleSatelite_02,
     lyr_DailyLivingZglobal_1,
     lyr_DailyLivinglocal_2,
-    lyr_Populaosemacessoalimentosfrescosem500metros_4,
     lyr_Escoredeacessoalimentosfrescosem500metros_5,
     lyr_Caminhabilidadeparmetrolocal_6,
     lyr_Caminhabilidadeparmetroglobal_7,
@@ -281,7 +262,6 @@ var hexAliases = {
 var hexLayers = [
     lyr_DailyLivingZglobal_1,
     lyr_DailyLivinglocal_2,
-    lyr_Populaosemacessoalimentosfrescosem500metros_4,
     lyr_Escoredeacessoalimentosfrescosem500metros_5,
     lyr_Caminhabilidadeparmetrolocal_6,
     lyr_Caminhabilidadeparmetroglobal_7,
