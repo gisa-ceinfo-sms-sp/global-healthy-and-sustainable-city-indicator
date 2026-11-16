@@ -88,15 +88,6 @@ var lyr_DailyLivinglocal_2 = new ol.layer.Vector({
     <img src="styles/legend/DailyLivinglocal_2_5.png" /> 2,5 - 3</div>'
 });
 
-var lyr_Desertosalimentares_3 = new ol.layer.Vector({
-    declutter: false,
-    source: getHexSource(typeof json_Desertosalimentares_3 !== 'undefined' ? json_Desertosalimentares_3 : undefined),
-    style: style_Desertosalimentares_3,
-    popuplayertitle: 'Desertos alimentares',
-    interactive: true,
-    opacity: 0.500000,
-    title: '<img src="styles/legend/Desertosalimentares_3.png" /> Desertos alimentares'
-});
 
 var lyr_Populaosemacessoalimentosfrescosem500metros_4 = new ol.layer.Vector({
     declutter: false,
