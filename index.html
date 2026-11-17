@@ -160,7 +160,7 @@
                 color: #0284c7;
             }
 
-            /* 5. Botão "i" no Canto Inferior Direito (Janela Larga com Nota Técnica) */
+            /* 5. Botão "i" no Canto Inferior Direito (Janela Larga com Resumo Científico e Metadados Retráteis) */
             #custom-info-container {
                 position: absolute;
                 bottom: 28px;
@@ -199,13 +199,13 @@
                 border: 1px solid #cbd5e1;
                 border-left: 4px solid #0284c7;
                 border-radius: 6px;
-                padding: 16px 32px 16px 18px;
+                padding: 16px 28px 16px 18px;
                 font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-                font-size: 12.5px;
-                line-height: 1.55;
-                max-width: 620px;
-                width: 560px;
-                max-height: 70vh;
+                font-size: 12px;
+                line-height: 1.5;
+                max-width: 650px;
+                width: 580px;
+                max-height: 75vh;
                 overflow-y: auto;
                 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
                 position: absolute;
@@ -240,9 +240,9 @@
             .tech-note-table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                font-size: 11.5px;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                font-size: 11px;
             }
             .tech-note-table th, .tech-note-table td {
                 border: 1px solid #cbd5e1;
@@ -253,6 +253,36 @@
                 background-color: #f1f5f9;
                 color: #0f172a;
                 font-weight: 600;
+            }
+
+            /* Estilo do Acordeão de Metadados */
+            .metadata-toggle-btn {
+                background-color: #f1f5f9;
+                color: #0369a1;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                padding: 6px 12px;
+                font-size: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                margin-top: 12px;
+                margin-bottom: 8px;
+                transition: background-color 0.2s;
+            }
+            .metadata-toggle-btn:hover {
+                background-color: #e2e8f0;
+            }
+            #metadata-content {
+                display: none;
+                background-color: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 4px;
+                padding: 10px;
+                font-size: 11px;
+                margin-top: 6px;
             }
 
             /* Controles OpenLayers Clean */
@@ -377,32 +407,53 @@
 
             <!-- Botão "i" no Canto Inferior Direito -->
             <div id="custom-info-container">
-                <div id="custom-info-btn" title="Clique para ver informações sobre os dados e nota técnica">i</div>
+                <div id="custom-info-btn" title="Clique para ver informações sobre os indicadores e diretrizes metodológicas">i</div>
                 <div id="custom-info-panel">
                     <span id="custom-info-close" title="Fechar">×</span>
-                    <strong>Global indicator data from the Global Healthy and Sustainable City Indicator Study Collaboration</strong><br>
-                    21 June 2021<br>
-                    Output data prepared for analysis of 25 diverse global cities included in the Global Healthy and Sustainable City Indicator Study Collaboration study. The dataset will be described in detail in a forthcoming publication (under review, September 2021).<br>
-                    Data outputs were generated through use of the global-indicators software tool, designed for this study and available from:<br>
-                    <a href="https://github.com/global-healthy-liveable-cities/global-indicators" target="_blank" rel="noopener noreferrer">https://github.com/global-healthy-liveable-cities/global-indicators</a><br>
-                    Further detail on the methods used is provided in the following publication:<br>
-                    Liu, S., Higgs, C., Arundel, J., Boeing, G., Cerdera, N., Moctezuma, D., Cerin, E., Adlakha, D., Lowe, M. and Giles-Corti, B. (2021), A Generalized Framework for Measuring Pedestrian Accessibility around the World Using Open Data. Geogr Anal. <a href="https://doi.org/10.1111/gean.12290" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/gean.12290</a><br>
-                    This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
                     
-                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 14px 0;">
+                    <h3 style="font-size: 15px; color: #0369a1; margin: 0 0 8px 0;">Painel de Indicadores Urbanos e Saúde (São Paulo)</h3>
+                    <p style="margin: 0 0 10px 0;">Este geoportal consolida indicadores espaciais estruturados sob as diretrizes científicas da <strong>The Lancet Series on Urban Design, Transport and Health</strong> e do <strong>Global Observatory of Healthy and Sustainable Cities</strong>, avaliando o impacto do desenho urbano sobre a saúde pública na capital paulista.</p>
+                    
+                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Resumo dos Indicadores Temáticos:</h4>
+                    <ul style="margin: 0 0 10px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li><strong>Daily Living (Z-global e Local):</strong> Mede o acesso por caminhada a destinos essenciais de cotidiano (comércio, serviços e transporte) em raios de proximidade. O índice em Z-Score compara São Paulo com o padrão de referência de 25 cidades globais e com a média intraurbana local.</li>
+                        <li><strong>Acesso a Alimentos Frescos (500m):</strong> Avalia a proporção da população com cobertura caminhável a feiras, sacolões e mercados de hortifrútis, combatendo desertos alimentares e promovendo segurança nutricional.</li>
+                        <li><strong>Caminhabilidade (Parâmetros Local e Global):</strong> Índice composto por densidade de interseções viárias, densidade residencial e diversidade de destinos, mensurando a propensão ao deslocamento a pé e vida ativa.</li>
+                        <li><strong>Densidade Populacional:</strong> Concentração demográfica (hab./km²) que fundamenta a sustentabilidade de redes de transporte público e serviços de proximidade.</li>
+                        <li><strong>Rede de Atenção à Saúde (CRS, STS e UBS):</strong> Unidades territoriais e áreas de abrangência das Unidades Básicas de Saúde da SMS-SP para planejamento e vigilância epidemiológica.</li>
+                    </ul>
+
+                    <p style="margin: 0 0 10px 0;">
+                        📄 Consulte o desempenho detalhado da capital no 
+                        <a href="https://www.healthysustainablecities.org/wp-content/uploads/2022/05/6-Scorecard_Sao-Paulo.png" target="_blank" rel="noopener noreferrer">Scorecard Oficial de São Paulo (Abrir em nova guia)</a>.
+                    </p>
+
+                    <!-- Botão Acordeão para Metadados Originais -->
+                    <button id="metadata-toggle-btn" class="metadata-toggle-btn">
+                        <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas Originais
+                    </button>
+                    
+                    <div id="metadata-content">
+                        <strong>Global indicator data from the Global Healthy and Sustainable City Indicator Study Collaboration</strong><br>
+                        21 June 2021<br>
+                        Output data prepared for analysis of 25 diverse global cities included in the Global Healthy and Sustainable City Indicator Study Collaboration study. The dataset will be described in detail in a forthcoming publication (under review, September 2021).<br>
+                        Data outputs were generated through use of the global-indicators software tool, designed for this study and available from:<br>
+                        <a href="https://github.com/global-healthy-liveable-cities/global-indicators" target="_blank" rel="noopener noreferrer">https://github.com/global-healthy-liveable-cities/global-indicators</a><br>
+                        Further detail on the methods used is provided in the following publication:<br>
+                        Liu, S., Higgs, C., Arundel, J., Boeing, G., Cerdera, N., Moctezuma, D., Cerin, E., Adlakha, D., Lowe, M. and Giles-Corti, B. (2021), A Generalized Framework for Measuring Pedestrian Accessibility around the World Using Open Data. Geogr Anal. <a href="https://doi.org/10.1111/gean.12290" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/gean.12290</a><br>
+                        This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
 
                     <!-- Nota Técnica Incorporada: Daily Living Z-Score -->
-                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
-                    <p style="margin: 0 0 8px 0;">O <strong>Z-Score</strong> é uma medida estatística que compara a pontuação de uma área (ou bairro) com a média geral de todas as áreas estudadas (normalmente, 25 grandes cidades globais no caso desta série da Lancet):</p>
-                    <ul style="margin: 0 0 10px 0; padding-left: 18px;">
-                        <li><strong>Z-Score de 0:</strong> A área está na média do estudo.</li>
-                        <li><strong>Z-Score Positivo:</strong> A área é melhor que a média.</li>
-                        <li><strong>Z-Score Negativo:</strong> A área é pior que a média.</li>
+                    <h3 style="font-size: 13.5px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
+                    <p style="margin: 0 0 6px 0;">O <strong>Z-Score</strong> compara a pontuação de cada hexágono com a média geral de referência global:</p>
+                    <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li><strong>Z-Score 0:</strong> Média do estudo internacional.</li>
+                        <li><strong>Z-Score Positivo:</strong> Desempenho acima da média.</li>
+                        <li><strong>Z-Score Negativo:</strong> Desempenho abaixo da média.</li>
                     </ul>
-                    <p style="margin: 0 0 8px 0;">O <em>"Daily Living Z-Score"</em> (ou índice de caminhabilidade/acessibilidade) é um indicador composto que mede o quão bem o ambiente construído (densidade populacional e de destinos, conectividade de ruas e acesso a transporte público) apoia um estilo de vida ativo e saudável nas atividades diárias[cite: 27].</p>
-                    
-                    <h4 style="font-size: 13px; color: #1e293b; margin: 10px 0 4px 0;">Interpretação do Intervalo em São Paulo</h4>
-                    <p style="margin: 0 0 6px 0;">O fato de São Paulo variar de um valor negativo expressivo a um valor positivo alto indica uma grande heterogeneidade espacial e iniquidade no planejamento urbano da cidade[cite: 27]:</p>
                     
                     <table class="tech-note-table">
                         <thead>
@@ -415,18 +466,16 @@
                         <tbody>
                             <tr>
                                 <td><strong>+2.15</strong> (Máximo)</td>
-                                <td>Pontuação muito acima da média global.</td>
-                                <td>Bairros com excelente planejamento. Áreas densas, alta conectividade, ampla acessibilidade a destinos e ótimo transporte público. Permite caminhadas e uso de bicicleta, promovendo saúde e sustentabilidade[cite: 27].</td>
+                                <td>Padrão muito acima da média global.</td>
+                                <td>Áreas densas, alta conectividade viária, ampla acessibilidade a destinos e transporte. Estilo de vida ativo e sustentável.</td>
                             </tr>
                             <tr>
                                 <td><strong>-1.12</strong> (Mínimo)</td>
-                                <td>Pontuação abaixo da média global.</td>
-                                <td>Bairros com planejamento deficiente. Baixa densidade, pouca conectividade (subúrbios dispersos) e baixo acesso a destinos/transporte. Alta dependência de veículos particulares, aumentando sedentarismo e poluição[cite: 27].</td>
+                                <td>Padrão abaixo da média global.</td>
+                                <td>Baixa densidade, dispersão urbana e menor acesso a serviços a pé. Maior dependência de automóveis e vulnerabilidade ao sedentarismo.</td>
                             </tr>
                         </tbody>
                     </table>
-                    
-                    <p style="margin: 6px 0 0 0;">Em resumo, o intervalo mostra que São Paulo contém, simultaneamente, bolsões de excelência urbana comparáveis aos melhores padrões globais (Z-score 2.15) e extensas áreas de exclusão ou planejamento de baixa qualidade (Z-score -1.12) que promovem estilos de vida pouco saudáveis[cite: 27].</p>
                 </div>
             </div>
 
@@ -457,7 +506,6 @@
         <!-- Camadas de Dados -->
         <script src="./layers/DailyLivingZglobal_1.js"></script>
         <script src="./layers/DailyLivinglocal_2.js"></script>
-        <script src="./layers/Desertosalimentares_3.js"></script>
         <script src="./layers/Populaosemacessoalimentosfrescosem500metros_4.js"></script>
         <script src="./layers/Escoredeacessoalimentosfrescosem500metros_5.js"></script>
         <script src="./layers/Caminhabilidadeparmetrolocal_6.js"></script>
@@ -467,10 +515,9 @@
         <script src="./layers/SupervisoTcnicadeSade_10.js"></script>
         <script src="./layers/readeabrangnciadeUBS_11.js"></script>
 
-        <!-- Estilos das 11 Camadas -->
+        <!-- Estilos das Camadas -->
         <script src="./styles/DailyLivingZglobal_1_style.js"></script>
         <script src="./styles/DailyLivinglocal_2_style.js"></script>
-        <script src="./styles/Desertosalimentares_3_style.js"></script>
         <script src="./styles/Populaosemacessoalimentosfrescosem500metros_4_style.js"></script>
         <script src="./styles/Escoredeacessoalimentosfrescosem500metros_5_style.js"></script>
         <script src="./styles/Caminhabilidadeparmetrolocal_6_style.js"></script>
@@ -485,13 +532,16 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" Larga com Nota Técnica e Legendas Retráteis) -->
+        <!-- Scripts de Customização (Busca UBS, Janela "i" com Resumo Lancet e Acordeão de Metadados) -->
         <script>
             window.addEventListener('load', function() {
-                // 1. Controle do Botão "i" (Canto Inferior Direito)
+                // 1. Controle do Botão "i" e Acordeão de Metadados
                 var infoBtn = document.getElementById('custom-info-btn');
                 var infoPanel = document.getElementById('custom-info-panel');
                 var infoClose = document.getElementById('custom-info-close');
+                var metadataToggleBtn = document.getElementById('metadata-toggle-btn');
+                var metadataContent = document.getElementById('metadata-content');
+                var metadataIcon = document.getElementById('metadata-icon');
 
                 if (infoBtn && infoPanel && infoClose) {
                     infoBtn.addEventListener('click', function(e) {
@@ -511,6 +561,18 @@
                     document.addEventListener('click', function() {
                         if (infoPanel.style.display === 'block') {
                             infoPanel.style.display = 'none';
+                        }
+                    });
+                }
+
+                if (metadataToggleBtn && metadataContent) {
+                    metadataToggleBtn.addEventListener('click', function() {
+                        if (metadataContent.style.display === 'block') {
+                            metadataContent.style.display = 'none';
+                            metadataIcon.className = 'fas fa-chevron-down';
+                        } else {
+                            metadataContent.style.display = 'block';
+                            metadataIcon.className = 'fas fa-chevron-up';
                         }
                     });
                 }
@@ -643,7 +705,7 @@
             });
         </script>
 
-        <!-- Script de Rótulos das UBSs (Quebra a 12 caracteres, negrito, halo branco e decluttering ativado) -->
+        <!-- Script de Rótulos das UBSs -->
         <script>
             window.addEventListener('load', function() {
                 function wrapText(text, maxChars) {
