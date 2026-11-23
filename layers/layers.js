@@ -142,9 +142,9 @@ var lyr_Densidadepopulacional_8 = new ol.layer.Vector({
     declutter: false,
     source: getHexSource(typeof json_Densidadepopulacional_8 !== 'undefined' ? json_Densidadepopulacional_8 : undefined),
     style: style_Densidadepopulacional_8,
-    popuplayertitle: 'Densidade populacional',
+    popuplayertitle: 'Densidade populacional (habitantes/km²)',
     interactive: true,
-    title: 'Densidade populacional<div class="layer-legend-items">\
+    title: 'Densidade populacional (habitantes/km²)<div class="layer-legend-items">\
     <img src="styles/legend/Densidadepopulacional_8_0.png" /> 124 - 10263<br />\
     <img src="styles/legend/Densidadepopulacional_8_1.png" /> 10263 - 20401<br />\
     <img src="styles/legend/Densidadepopulacional_8_2.png" /> 20401 - 30540<br />\
