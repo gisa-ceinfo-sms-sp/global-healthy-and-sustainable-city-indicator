@@ -74,6 +74,7 @@ var lyr_DailyLivingZglobal_1 = new ol.layer.Vector({
 });
 
 var lyr_DailyLivinglocal_2 = new ol.layer.Vector({
+    'opacity': 0.500000,
     declutter: false,
     source: getHexSource(typeof json_DailyLivinglocal_2 !== 'undefined' ? json_DailyLivinglocal_2 : undefined),
     style: style_DailyLivinglocal_2,
@@ -137,6 +138,7 @@ var lyr_Caminhabilidadeparmetroglobal_7 = new ol.layer.Vector({
 });
 
 var lyr_Densidadepopulacional_8 = new ol.layer.Vector({
+    'opacity': 0.500000,
     declutter: false,
     source: getHexSource(typeof json_Densidadepopulacional_8 !== 'undefined' ? json_Densidadepopulacional_8 : undefined),
     style: style_Densidadepopulacional_8,
