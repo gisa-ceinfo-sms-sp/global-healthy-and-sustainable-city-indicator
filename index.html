@@ -494,17 +494,17 @@
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WMS):
                 </label>              
-                    <select id="geosampa-layer-select">
+                <select id="geosampa-layer-select">
                     <option value="">-- Selecione uma camada --</option>
                     <optgroup label="Abastecimento">
-                        <option value="geosampa:feira_livre">Feiras Livres</option>
-                        <option value="geosampa:sacolao">Sacolões Municipais</option>
-                        <option value="geosampa:mercado_municipal">Mercados Municipais</option>
+                        <option value="abastecimento:feira_livre">Feiras Livres</option>
+                        <option value="abastecimento:sacolao">Sacolões Municipais</option>
+                        <option value="abastecimento:mercado_municipal">Mercados Municipais</option>
                     </optgroup>
                     <optgroup label="Segurança Alimentar e Nutricional">
-                        <option value="geosampa:bom_prato">Bom Prato</option>
-                        <option value="geosampa:cozinha_cidada">Rede Cozinha Cidadã</option>
-                        <option value="geosampa:armazem_solidario">Armazém Solidário</option>
+                        <option value="seguranca_alimentar:bom_prato">Bom Prato</option>
+                        <option value="seguranca_alimentar:cozinha_cidada">Rede Cozinha Cidadã</option>
+                        <option value="seguranca_alimentar:armazem_solidario">Armazém Solidário</option>
                     </optgroup>
                 </select>
                 <div style="display: flex; gap: 6px;">
@@ -893,7 +893,8 @@
             });
         </script>
 
-<!-- Script Dinâmico para Camadas WMS do GeoSampa -->
+
+        <!-- Script Dinâmico Direto para Camadas WMS do GeoSampa -->
         <script>
             window.addEventListener('load', function() {
                 var addBtn = document.getElementById('geosampa-add-btn');
@@ -902,48 +903,6 @@
                 var activeListEl = document.getElementById('geosampa-active-list');
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
-
-                // Mapeamento de palavras-chave para confirmação automática no GetCapabilities do GeoSampa
-                var keywordMap = {
-                    'geosampa:equipamento_abastecimento_feira_livre': ['feira_livre', 'feira'],
-                    'geosampa:equipamento_abastecimento_sacolao': ['sacolao', 'sacoloes'],
-                    'geosampa:equipamento_abastecimento_mercado': ['mercado'],
-                    'geosampa:equipamento_seguranca_alimentar_bom_prato': ['bom_prato'],
-                    'geosampa:equipamento_seguranca_alimentar_cozinha_cidada': ['cozinha_cidada', 'cozinha'],
-                    'geosampa:equipamento_seguranca_alimentar_armazem_solidario': ['armazem_solidario', 'armazem']
-                };
-
-                // Consulta o GetCapabilities para sincronizar os nomes reais das camadas no GeoServer
-                fetch(wmsUrl + '?service=WMS&version=1.3.0&request=GetCapabilities')
-                    .then(function(response) { return response.text(); })
-                    .then(function(xmlText) {
-                        var parser = new DOMParser();
-                        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                        var layerNodes = xmlDoc.querySelectorAll('Layer > Name');
-                        var availableNames = [];
-                        layerNodes.forEach(function(node) {
-                            if (node.textContent) availableNames.push(node.textContent.trim());
-                        });
-
-                        // Atualiza os values do <select> caso o nome no servidor tenha variação
-                        Array.from(selectEl.options).forEach(function(opt) {
-                            if (!opt.value) return;
-                            if (availableNames.indexOf(opt.value) === -1 && keywordMap[opt.value]) {
-                                var keys = keywordMap[opt.value];
-                                var matched = availableNames.find(function(srvName) {
-                                    var lower = srvName.toLowerCase();
-                                    return (lower.indexOf('abastecimento') !== -1 || lower.indexOf('alimentar') !== -1 || lower.indexOf('equipamento') !== -1) &&
-                                           keys.some(function(k) { return lower.indexOf(k) !== -1; });
-                                });
-                                if (matched) {
-                                    opt.value = matched;
-                                }
-                            }
-                        });
-                    })
-                    .catch(function(err) {
-                        console.warn('Aviso GetCapabilities GeoSampa (usando nomes padrão):', err);
-                    });
 
                 function renderActiveBadges() {
                     activeListEl.innerHTML = '';
@@ -968,23 +927,27 @@
                         var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
-                        if (!layerName) return;
-                        if (addedWmsLayers[layerName]) return; // Evita duplicar a mesma camada
+                        if (!layerName) {
+                            alert('Por favor, selecione uma camada.');
+                            return;
+                        }
+                        if (addedWmsLayers[layerName]) return; // Evita duplicar
 
                         var wmsLayer = new ol.layer.Tile({
                             'title': 'GeoSampa: ' + layerText,
                             'opacity': 0.900000,
-                            zIndex: 500, // Garante exibição acima da malha hexagonal
+                            zIndex: 500, // Acima da malha hexagonal
                             source: new ol.source.TileWMS({
                                 url: wmsUrl,
                                 params: {
                                     'LAYERS': layerName,
                                     'TILED': true,
-                                    'VERSION': '1.1.1',
+                                    'VERSION': '1.1.0',
                                     'FORMAT': 'image/png',
                                     'TRANSPARENT': true
                                 },
-                                serverType: 'geoserver'
+                                serverType: 'geoserver',
+                                crossOrigin: 'anonymous'
                             })
                         });
 
