@@ -947,28 +947,29 @@
 
 
                // 6. Consulta de Atributos via WFS (GeoJSON) ao Clicar no Mapa
-                <!-- Script Definitivo de Consulta WFS para Camadas do GeoSampa -->
+                <!-- Script Definitivo de Consulta WFS com Tratamento de CORS e Evento Otimizado -->
         <script>
             window.addEventListener('load', function() {
                 if (typeof map !== 'undefined') {
-                    map.on('singleclick', function(evt) {
-                        var viewResolution = map.getView().getResolution();
-                        var projection = map.getView().getProjection();
-                        var clickedCoord = evt.coordinate;
-
-                        // Verifica se alguma camada WMS do GeoSampa foi adicionada e está ativa
+                    // Usamos 'click' em vez de 'singleclick' para garantir a captura imediata
+                    map.on('click', function(evt) {
+                        // Verifica se há alguma camada WMS do GeoSampa ativa
                         if (typeof addedWmsLayers !== 'undefined') {
                             var activeLayerKeys = Object.keys(addedWmsLayers);
-                            if (activeLayerKeys.length === 0) return; // Se nenhuma camada WMS está ativa, deixa o popup padrão do qgis2web agir
+                            if (activeLayerKeys.length === 0) return; // Deixa o qgis2web agir se nenhuma camada WMS estiver ativa
 
-                            // Pega a última camada WMS adicionada para consulta
+                            // Pega a última camada WMS adicionada
                             var currentKey = activeLayerKeys[activeLayerKeys.length - 1];
                             var layerData = addedWmsLayers[currentKey];
                             var layerName = currentKey; // Ex: geoportal:equipamento_feira_livre
                             var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wfs';
 
-                            // Cria um buffer espacial milimétrico ao redor do clique para identificar o ponto exato
-                            var buffer = viewResolution * 12;
+                            var viewResolution = map.getView().getResolution();
+                            var projection = map.getView().getProjection();
+                            var clickedCoord = evt.coordinate;
+
+                            // Cria um buffer de tolerância espacial ao redor do pixel do clique
+                            var buffer = viewResolution * 15;
                             var bboxFilter = [
                                 clickedCoord[0] - buffer,
                                 clickedCoord[1] - buffer,
@@ -976,6 +977,7 @@
                                 clickedCoord[1] + buffer
                             ].join(',');
 
+                            // Monta a URL WFS solicitando GeoJSON com formato compatível
                             var wfsUrl = wmsUrl + '?' +
                                 'service=WFS&version=1.0.0&request=GetFeature&' +
                                 'typeName=' + encodeURIComponent(layerName) + '&' +
@@ -984,13 +986,17 @@
                                 'srsName=' + projection.getCode() + '&' +
                                 'bbox=' + bboxFilter + ',' + projection.getCode();
 
+                            // Executa o fetch com tratamento de erro visível no console
                             fetch(wfsUrl)
-                                .then(function(res) { return res.json(); })
+                                .then(function(res) {
+                                    if (!res.ok) throw new Error('Falha na rede WFS: ' + res.status);
+                                    return res.json();
+                                })
                                 .then(function(data) {
                                     if (data && data.features && data.features.length > 0) {
                                         var props = data.features[0].properties;
 
-                                        // Constrói a tabela de atributos de forma limpa
+                                        // Monta a tabela limpa de atributos
                                         var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px; border-bottom: 2px solid #0284c7; padding-bottom: 3px;">' + layerData.title + '</div>';
                                         htmlTable += '<table>';
                                         for (var key in props) {
@@ -1008,16 +1014,18 @@
                                                 overlay.setPosition(clickedCoord);
                                             }
                                         }
+                                    } else {
+                                        console.log('Nenhuma feição encontrada neste raio de clique.');
                                     }
                                 })
                                 .catch(function(err) {
-                                    console.warn('Erro ao consultar WFS do GeoSampa:', err);
+                                    console.warn('Aviso de requisição WFS (possível restrição CORS do GeoServer da PMSP):', err);
                                 });
                         }
                     });
                 }
             });
-        </script>
+        
             
         </script>
     </body>
