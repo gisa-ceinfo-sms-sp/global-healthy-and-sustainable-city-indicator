@@ -918,6 +918,52 @@
                     }
                 }, 900);
             });
+
+// 6. Consulta de Atributos WMS (GetFeatureInfo) ao Clicar no Mapa
+                if (typeof map !== 'undefined') {
+                    map.on('singleclick', function(evt) {
+                        var viewResolution = map.getView().getResolution();
+                        
+                        // Percorre todas as camadas visíveis no mapa
+                        map.getLayers().forEach(function(layer) {
+                            if (layer instanceof ol.layer.Image) {
+                                var source = layer.getSource();
+                                if (source instanceof ol.source.ImageWMS) {
+                                    var url = source.getGetFeatureInfoUrl(
+                                        evt.coordinate,
+                                        viewResolution,
+                                        map.getView().getProjection(),
+                                        { 'INFO_FORMAT': 'text/html', 'FEATURE_COUNT': 5 }
+                                    );
+                                    
+                                    if (url) {
+                                        // Faz a requisição AJAX para buscar os dados do GeoServer
+                                        fetch(url)
+                                            .then(function(response) { return response.text(); })
+                                            .then(function(html) {
+                                                if (html.trim().length > 15 && html.indexOf('<html>') !== -1) {
+                                                    // Abre o popup nativo do mapa com os atributos retornados pelo GeoSampa
+                                                    var popupContent = document.getElementById('popup-content');
+                                                    var popup = document.getElementById('popup');
+                                                    if (popupContent && popup) {
+                                                        popupContent.innerHTML = '<div style="font-weight:600; color:#0369a1; margin-bottom:4px;">' + layer.get('title') + '</div>' + html;
+                                                        // Posiciona o popup no local do clique
+                                                        if (typeof overlay !== 'undefined') {
+                                                            overlay.setPosition(evt.coordinate);
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                            .catch(function(err) {
+                                                console.warn('Erro ao buscar GetFeatureInfo:', err);
+                                            });
+                                    }
+                                }
+                            }
+                        });
+                    });
+                }
+            
         </script>
     </body>
 </html>
