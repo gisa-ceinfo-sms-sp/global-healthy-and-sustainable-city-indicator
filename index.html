@@ -390,6 +390,86 @@
                     width: 180px;
                 }
             }
+
+            /* Painel Seletor GeoSampa WMS */
+            #geosampa-selector-container {
+                position: absolute;
+                top: 52px;
+                left: 50px;
+                z-index: 2000;
+                background: rgba(255, 255, 255, 0.96);
+                padding: 10px 12px;
+                border-radius: 6px;
+                box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+                border: 1px solid #cbd5e1;
+                width: 280px;
+            }
+            #geosampa-layer-select {
+                width: 100%;
+                padding: 6px;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                font-size: 12px;
+                background: #fff;
+                color: #1e293b;
+                margin-bottom: 8px;
+                outline: none;
+            }
+            #geosampa-add-btn {
+                background: #ffffff;
+                color: #16a34a;
+                border: 1px solid #16a34a;
+                border-radius: 4px;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                transition: all 0.2s;
+            }
+            #geosampa-add-btn:hover {
+                background: #16a34a;
+                color: #ffffff;
+            }
+            #geosampa-clear-btn {
+                background: #f8fafc;
+                color: #64748b;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                padding: 5px 8px;
+                cursor: pointer;
+                font-size: 11.5px;
+                font-weight: 600;
+                transition: all 0.2s;
+            }
+            #geosampa-clear-btn:hover {
+                background: #fee2e2;
+                color: #dc2626;
+                border-color: #fca5a5;
+            }
+            .wms-badge-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #f1f5f9;
+                padding: 3px 6px;
+                border-radius: 4px;
+                margin-top: 4px;
+                border-left: 3px solid #16a34a;
+            }
+            .wms-remove-x {
+                color: #dc2626;
+                font-weight: bold;
+                cursor: pointer;
+                padding-left: 6px;
+            }
+
+            @media (max-width: 768px) {
+                #geosampa-selector-container {
+                    top: 96px;
+                    left: 8px;
+                    width: 240px;
+                }
+            }
         </style>
         <title>Indicadores de Caminhabilidade, Acesso Alimentar e Saúde</title>
     </head>
@@ -409,6 +489,31 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
+<!-- Painel Seletor de Camadas GeoSampa WMS (Abastecimento e Segurança Alimentar) -->
+            <div id="geosampa-selector-container">
+                <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
+                    Camadas GeoSampa (WMS):
+                </label>
+                <select id="geosampa-layer-select">
+                    <option value="">-- Selecione uma camada --</option>
+                    <optgroup label="Abastecimento">
+                        <option value="geosampa:equipamento_abastecimento_feira_livre">Feiras Livres</option>
+                        <option value="geosampa:equipamento_abastecimento_sacolao">Sacolões Municipais</option>
+                        <option value="geosampa:equipamento_abastecimento_mercado">Mercados Municipais</option>
+                    </optgroup>
+                    <optgroup label="Segurança Alimentar e Nutricional">
+                        <option value="geosampa:equipamento_seguranca_alimentar_bom_prato">Bom Prato</option>
+                        <option value="geosampa:equipamento_seguranca_alimentar_cozinha_cidada">Rede Cozinha Cidadã</option>
+                        <option value="geosampa:equipamento_seguranca_alimentar_armazem_solidario">Armazém Solidário</option>
+                    </optgroup>
+                </select>
+                <div style="display: flex; gap: 6px;">
+                    <button id="geosampa-add-btn" style="flex: 1;">Adicionar Camada</button>
+                    <button id="geosampa-clear-btn" title="Remover camadas WMS adicionadas">Limpar</button>
+                </div>
+                <div id="geosampa-active-list" style="margin-top: 6px; font-size: 11px; color: #475569;"></div>
+            </div>
+            
             <!-- Botão "i" no Canto Inferior Direito -->
             <div id="custom-info-container">
                 <div id="custom-info-btn" title="Clique para ver informações sobre os indicadores e diretrizes metodológicas">i</div>
@@ -787,5 +892,123 @@
                 }, 900);
             });
         </script>
+
+<!-- Script Dinâmico para Camadas WMS do GeoSampa -->
+        <script>
+            window.addEventListener('load', function() {
+                var addBtn = document.getElementById('geosampa-add-btn');
+                var clearBtn = document.getElementById('geosampa-clear-btn');
+                var selectEl = document.getElementById('geosampa-layer-select');
+                var activeListEl = document.getElementById('geosampa-active-list');
+                var addedWmsLayers = {};
+                var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
+
+                // Mapeamento de palavras-chave para confirmação automática no GetCapabilities do GeoSampa
+                var keywordMap = {
+                    'geosampa:equipamento_abastecimento_feira_livre': ['feira_livre', 'feira'],
+                    'geosampa:equipamento_abastecimento_sacolao': ['sacolao', 'sacoloes'],
+                    'geosampa:equipamento_abastecimento_mercado': ['mercado'],
+                    'geosampa:equipamento_seguranca_alimentar_bom_prato': ['bom_prato'],
+                    'geosampa:equipamento_seguranca_alimentar_cozinha_cidada': ['cozinha_cidada', 'cozinha'],
+                    'geosampa:equipamento_seguranca_alimentar_armazem_solidario': ['armazem_solidario', 'armazem']
+                };
+
+                // Consulta o GetCapabilities para sincronizar os nomes reais das camadas no GeoServer
+                fetch(wmsUrl + '?service=WMS&version=1.3.0&request=GetCapabilities')
+                    .then(function(response) { return response.text(); })
+                    .then(function(xmlText) {
+                        var parser = new DOMParser();
+                        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        var layerNodes = xmlDoc.querySelectorAll('Layer > Name');
+                        var availableNames = [];
+                        layerNodes.forEach(function(node) {
+                            if (node.textContent) availableNames.push(node.textContent.trim());
+                        });
+
+                        // Atualiza os values do <select> caso o nome no servidor tenha variação
+                        Array.from(selectEl.options).forEach(function(opt) {
+                            if (!opt.value) return;
+                            if (availableNames.indexOf(opt.value) === -1 && keywordMap[opt.value]) {
+                                var keys = keywordMap[opt.value];
+                                var matched = availableNames.find(function(srvName) {
+                                    var lower = srvName.toLowerCase();
+                                    return (lower.indexOf('abastecimento') !== -1 || lower.indexOf('alimentar') !== -1 || lower.indexOf('equipamento') !== -1) &&
+                                           keys.some(function(k) { return lower.indexOf(k) !== -1; });
+                                });
+                                if (matched) {
+                                    opt.value = matched;
+                                }
+                            }
+                        });
+                    })
+                    .catch(function(err) {
+                        console.warn('Aviso GetCapabilities GeoSampa (usando nomes padrão):', err);
+                    });
+
+                function renderActiveBadges() {
+                    activeListEl.innerHTML = '';
+                    Object.keys(addedWmsLayers).forEach(function(key) {
+                        var item = addedWmsLayers[key];
+                        var div = document.createElement('div');
+                        div.className = 'wms-badge-item';
+                        div.innerHTML = '<span>' + item.title + '</span><span class="wms-remove-x" title="Remover camada">×</span>';
+                        div.querySelector('.wms-remove-x').addEventListener('click', function() {
+                            if (typeof map !== 'undefined') {
+                                map.removeLayer(item.layer);
+                            }
+                            delete addedWmsLayers[key];
+                            renderActiveBadges();
+                        });
+                        activeListEl.appendChild(div);
+                    });
+                }
+
+                if (addBtn && selectEl) {
+                    addBtn.addEventListener('click', function() {
+                        var layerName = selectEl.value;
+                        var layerText = selectEl.options[selectEl.selectedIndex].text;
+
+                        if (!layerName) return;
+                        if (addedWmsLayers[layerName]) return; // Evita duplicar a mesma camada
+
+                        var wmsLayer = new ol.layer.Tile({
+                            'title': 'GeoSampa: ' + layerText,
+                            'opacity': 0.900000,
+                            zIndex: 500, // Garante exibição acima da malha hexagonal
+                            source: new ol.source.TileWMS({
+                                url: wmsUrl,
+                                params: {
+                                    'LAYERS': layerName,
+                                    'TILED': true,
+                                    'VERSION': '1.1.1',
+                                    'FORMAT': 'image/png',
+                                    'TRANSPARENT': true
+                                },
+                                serverType: 'geoserver'
+                            })
+                        });
+
+                        if (typeof map !== 'undefined') {
+                            map.addLayer(wmsLayer);
+                            addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
+                            renderActiveBadges();
+                        }
+                    });
+                }
+
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        Object.keys(addedWmsLayers).forEach(function(key) {
+                            if (typeof map !== 'undefined') {
+                                map.removeLayer(addedWmsLayers[key].layer);
+                            }
+                        });
+                        addedWmsLayers = {};
+                        renderActiveBadges();
+                    });
+                }
+            });
+        </script>
+        
     </body>
 </html>
