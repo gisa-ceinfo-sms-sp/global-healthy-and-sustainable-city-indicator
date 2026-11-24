@@ -489,23 +489,13 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-<!-- Painel Seletor de Camadas GeoSampa WMS (Abastecimento e Segurança Alimentar) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Abastecimento e Segurança Alimentar|Sincronizado via GetCapabilities) -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WMS):
                 </label>              
                 <select id="geosampa-layer-select">
-                    <option value="">-- Selecione uma camada --</option>
-                    <optgroup label="Abastecimento">
-                        <option value="abastecimento:feira_livre">Feiras Livres</option>
-                        <option value="abastecimento:sacolao">Sacolões Municipais</option>
-                        <option value="abastecimento:mercado_municipal">Mercados Municipais</option>
-                    </optgroup>
-                    <optgroup label="Segurança Alimentar e Nutricional">
-                        <option value="seguranca_alimentar:bom_prato">Bom Prato</option>
-                        <option value="seguranca_alimentar:cozinha_cidada">Rede Cozinha Cidadã</option>
-                        <option value="seguranca_alimentar:armazem_solidario">Armazém Solidário</option>
-                    </optgroup>
+                    <option value="">Carregando catálogo do GeoSampa...</option>
                 </select>
                 <div style="display: flex; gap: 6px;">
                     <button id="geosampa-add-btn" style="flex: 1;">Adicionar Camada</button>
@@ -895,6 +885,7 @@
 
 
         <!-- Script Dinâmico Direto para Camadas WMS do GeoSampa -->
+       <!-- Script Dinâmico com Descoberta Real no GetCapabilities do GeoSampa -->
         <script>
             window.addEventListener('load', function() {
                 var addBtn = document.getElementById('geosampa-add-btn');
@@ -903,6 +894,67 @@
                 var activeListEl = document.getElementById('geosampa-active-list');
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
+
+                // Lista de reserva com o workspace oficial 'geoportal:' caso o navegador bloqueie o XML por CORS
+                var fallbackLayers = [
+                    { name: 'geoportal:feira_livre', title: 'Feiras Livres' },
+                    { name: 'geoportal:sacolao', title: 'Sacolões Municipais' },
+                    { name: 'geoportal:mercado_municipal', title: 'Mercados Municipais' },
+                    { name: 'geoportal:bom_prato', title: 'Bom Prato' },
+                    { name: 'geoportal:cozinha_cidada', title: 'Rede Cozinha Cidadã' },
+                    { name: 'geoportal:armazem_solidario', title: 'Armazém Solidário' }
+                ];
+
+                function populateSelect(layersArray) {
+                    selectEl.innerHTML = '<option value="">-- Selecione uma camada --</option>';
+                    layersArray.forEach(function(lyr) {
+                        var opt = document.createElement('option');
+                        opt.value = lyr.name;
+                        opt.textContent = lyr.title;
+                        selectEl.appendChild(opt);
+                    });
+                }
+
+                // Tenta buscar as denominações exatas diretamente no GetCapabilities do GeoSampa
+                var capUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities';
+                var keywords = ['feira', 'sacol', 'mercado', 'bom_prato', 'bom prato', 'cozinha', 'armaz', 'abastecimento', 'alimentar'];
+
+                fetch(capUrl)
+                    .then(function(res) {
+                        if (!res.ok) throw new Error('Erro HTTP ' + res.status);
+                        return res.text();
+                    })
+                    .then(function(xmlText) {
+                        var parser = new DOMParser();
+                        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        var layerElements = xmlDoc.querySelectorAll('Layer > Layer');
+                        var matchedLayers = [];
+
+                        layerElements.forEach(function(el) {
+                            var nameNode = el.querySelector('Name');
+                            var titleNode = el.querySelector('Title');
+                            if (nameNode && titleNode) {
+                                var rawName = nameNode.textContent.trim();
+                                var rawTitle = titleNode.textContent.trim();
+                                var searchStr = (rawName + ' ' + rawTitle).toLowerCase();
+
+                                if (keywords.some(function(kw) { return searchStr.indexOf(kw) !== -1; })) {
+                                    matchedLayers.push({ name: rawName, title: rawTitle });
+                                }
+                            }
+                        });
+
+                        if (matchedLayers.length > 0) {
+                            matchedLayers.sort(function(a, b) { return a.title.localeCompare(b.title); });
+                            populateSelect(matchedLayers);
+                        } else {
+                            populateSelect(fallbackLayers);
+                        }
+                    })
+                    .catch(function() {
+                        // Se houver bloqueio CORS no navegador, carrega imediatamente o workspace 'geoportal:'
+                        populateSelect(fallbackLayers);
+                    });
 
                 function renderActiveBadges() {
                     activeListEl.innerHTML = '';
@@ -927,27 +979,22 @@
                         var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
-                        if (!layerName) {
-                            alert('Por favor, selecione uma camada.');
-                            return;
-                        }
-                        if (addedWmsLayers[layerName]) return; // Evita duplicar
+                        if (!layerName) return;
+                        if (addedWmsLayers[layerName]) return;
 
-                        var wmsLayer = new ol.layer.Tile({
+                        // Usa ImageWMS (requisição única por tela) que evita falhas de grid/tile no GeoServer da PMSP
+                        var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa: ' + layerText,
-                            'opacity': 0.900000,
-                            zIndex: 500, // Acima da malha hexagonal
-                            source: new ol.source.TileWMS({
+                            'opacity': 0.95,
+                            zIndex: 600,
+                            source: new ol.source.ImageWMS({
                                 url: wmsUrl,
                                 params: {
                                     'LAYERS': layerName,
-                                    'TILED': true,
-                                    'VERSION': '1.1.0',
                                     'FORMAT': 'image/png',
                                     'TRANSPARENT': true
                                 },
-                                serverType: 'geoserver',
-                                crossOrigin: 'anonymous'
+                                serverType: 'geoserver'
                             })
                         });
 
