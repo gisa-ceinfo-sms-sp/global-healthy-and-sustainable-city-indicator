@@ -320,6 +320,7 @@
                 overflow-y: auto;
             }
 
+            /* Estilização dos Popups Corrigida */
             .ol-popup {
                 background-color: #ffffff !important;
                 border-radius: 8px !important;
@@ -328,8 +329,8 @@
                 padding: 14px 16px !important;
                 min-width: 280px;
                 max-width: 380px;
-                max-height: 420px;
-                overflow-y: auto;
+                max-height: 400px;
+                overflow-y: auto !important; /* Apenas o container principal gerencia a rolagem */
                 font-size: 12.5px;
                 color: #334155;
             }
@@ -338,9 +339,34 @@
                 top: 8px !important;
                 right: 10px !important;
                 text-decoration: none;
+                position: absolute;
+                z-index: 10;
             }
             .ol-popup-closer:hover {
                 color: #0284c7 !important;
+            }
+            #popup-content {
+                overflow-y: visible !important; /* Evita o segundo scroll interno */
+                max-height: none !important;
+            }
+            #popup-content table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 8px;
+            }
+            #popup-content th, #popup-content td {
+                padding: 5px 6px;
+                border-bottom: 1px solid #f1f5f9;
+                text-align: left;
+                vertical-align: top;
+            }
+            #popup-content th {
+                color: #0369a1;
+                font-weight: 600;
+                width: 45%;
+            }
+            #popup-content tr:hover {
+                background-color: #f8fafc;
             }
 
             /* Painel Seletor GeoSampa WMS */
@@ -921,79 +947,77 @@
 
 
                // 6. Consulta de Atributos via WFS (GeoJSON) ao Clicar no Mapa
+                <!-- Script Definitivo de Consulta WFS para Camadas do GeoSampa -->
+        <script>
+            window.addEventListener('load', function() {
                 if (typeof map !== 'undefined') {
                     map.on('singleclick', function(evt) {
                         var viewResolution = map.getView().getResolution();
                         var projection = map.getView().getProjection();
+                        var clickedCoord = evt.coordinate;
 
-                        // Percorre as camadas WMS ativas para consultar o WFS correspondente
-                        map.getLayers().forEach(function(layer) {
-                            if (layer instanceof ol.layer.Image) {
-                                var source = layer.getSource();
-                                if (source instanceof ol.source.ImageWMS) {
-                                    var params = source.getParams();
-                                    var layerName = params.LAYERS;
+                        // Verifica se alguma camada WMS do GeoSampa foi adicionada e está ativa
+                        if (typeof addedWmsLayers !== 'undefined') {
+                            var activeLayerKeys = Object.keys(addedWmsLayers);
+                            if (activeLayerKeys.length === 0) return; // Se nenhuma camada WMS está ativa, deixa o popup padrão do qgis2web agir
 
-                                    // Monta a URL da requisição WFS GetFeature em formato JSON
-                                    var wfsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wfs?' +
-                                        'service=WFS&version=1.1.0&request=GetFeature&' +
-                                        'typeName=' + layerName + '&' +
-                                        'outputFormat=application/json&' +
-                                        'srsName=' + projection.getCode() + '&' +
-                                        'bbox=' + map.getView().calculateExtent(map.getSize()).join(',') + ',' + projection.getCode();
+                            // Pega a última camada WMS adicionada para consulta
+                            var currentKey = activeLayerKeys[activeLayerKeys.length - 1];
+                            var layerData = addedWmsLayers[currentKey];
+                            var layerName = currentKey; // Ex: geoportal:equipamento_feira_livre
+                            var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wfs';
 
-                                    // Como a requisição espacial por bbox global pode ser pesada, usamos o GetFeatureInfo formatado limpo se preferir, 
-                                    // ou consultamos diretamente o WFS por proximidade do clique:
-                                    var pointCoord = evt.coordinate;
-                                    var buffer = viewResolution * 15; // Raio de tolerância em pixels ao redor do clique
-                                    var bboxFilter = [
-                                        pointCoord[0] - buffer,
-                                        pointCoord[1] - buffer,
-                                        pointCoord[0] + buffer,
-                                        pointCoord[1] + buffer
-                                    ].join(',');
+                            // Cria um buffer espacial milimétrico ao redor do clique para identificar o ponto exato
+                            var buffer = viewResolution * 12;
+                            var bboxFilter = [
+                                clickedCoord[0] - buffer,
+                                clickedCoord[1] - buffer,
+                                clickedCoord[0] + buffer,
+                                clickedCoord[1] + buffer
+                            ].join(',');
 
-                                    var preciseWfsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wfs?' +
-                                        'service=WFS&version=1.0.0&request=GetFeature&' +
-                                        'typeName=' + layerName + '&' +
-                                        'outputFormat=application/json&' +
-                                        'maxFeatures=1&' +
-                                        'bbox=' + bboxFilter + ',' + projection.getCode();
+                            var wfsUrl = wmsUrl + '?' +
+                                'service=WFS&version=1.0.0&request=GetFeature&' +
+                                'typeName=' + encodeURIComponent(layerName) + '&' +
+                                'outputFormat=application/json&' +
+                                'maxFeatures=1&' +
+                                'srsName=' + projection.getCode() + '&' +
+                                'bbox=' + bboxFilter + ',' + projection.getCode();
 
-                                    fetch(preciseWfsUrl)
-                                        .then(function(response) { return response.json(); })
-                                        .then(function(data) {
-                                            if (data && data.features && data.features.length > 0) {
-                                                var props = data.features[0].properties;
-                                                
-                                                // Constrói uma tabela HTML limpa e formatada com os atributos
-                                                var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px;">' + layer.get('title') + '</div>';
-                                                htmlTable += '<table>';
-                                                for (var key in props) {
-                                                    if (props.hasOwnProperty(key) && props[key] !== null && props[key] !== '') {
-                                                        htmlTable += '<tr><th>' + key + '</th><td>' + props[key] + '</td></tr>';
-                                                    }
-                                                }
-                                                htmlTable += '</table>';
+                            fetch(wfsUrl)
+                                .then(function(res) { return res.json(); })
+                                .then(function(data) {
+                                    if (data && data.features && data.features.length > 0) {
+                                        var props = data.features[0].properties;
 
-                                                var popupContent = document.getElementById('popup-content');
-                                                var popup = document.getElementById('popup');
-                                                if (popupContent && popup) {
-                                                    popupContent.innerHTML = htmlTable;
-                                                    if (typeof overlay !== 'undefined') {
-                                                        overlay.setPosition(evt.coordinate);
-                                                    }
-                                                }
+                                        // Constrói a tabela de atributos de forma limpa
+                                        var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px; border-bottom: 2px solid #0284c7; padding-bottom: 3px;">' + layerData.title + '</div>';
+                                        htmlTable += '<table>';
+                                        for (var key in props) {
+                                            if (props.hasOwnProperty(key) && props[key] !== null && props[key] !== '' && key !== 'geom' && key !== 'the_geom') {
+                                                htmlTable += '<tr><th>' + key + '</th><td>' + props[key] + '</td></tr>';
                                             }
-                                        })
-                                        .catch(function(err) {
-                                            console.warn('Erro na consulta WFS:', err);
-                                        });
-                                }
-                            }
-                        });
+                                        }
+                                        htmlTable += '</table>';
+
+                                        var popupContent = document.getElementById('popup-content');
+                                        var popupEl = document.getElementById('popup');
+                                        if (popupContent && popupEl) {
+                                            popupContent.innerHTML = htmlTable;
+                                            if (typeof overlay !== 'undefined') {
+                                                overlay.setPosition(clickedCoord);
+                                            }
+                                        }
+                                    }
+                                })
+                                .catch(function(err) {
+                                    console.warn('Erro ao consultar WFS do GeoSampa:', err);
+                                });
+                        }
                     });
                 }
+            });
+        </script>
             
         </script>
     </body>
