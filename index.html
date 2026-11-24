@@ -986,15 +986,18 @@
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa: ' + layerText,
                             'opacity': 0.95,
-                            zIndex: 600,
+                            zIndex: 600, // Acima da malha hexagonal
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
                                 params: {
                                     'LAYERS': layerName,
+                                    'VERSION': '1.3.0', // Versão padrão do GeoSampa
+                                    'CRS': 'EPSG:3857',   // Na versão 1.3.0, usa-se CRS em vez de SRS
                                     'FORMAT': 'image/png',
                                     'TRANSPARENT': true
                                 },
-                                serverType: 'geoserver'
+                                serverType: 'geoserver',
+                                ratio: 1
                             })
                         });
 
