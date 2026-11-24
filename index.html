@@ -95,7 +95,7 @@
             }
 
             .layer-legend-items img {
-        opacity: 0.5; /* Deixa as cores da legenda com 50% de transparência */
+                opacity: 0.5;
             }
 
             /* 4. Barra de Busca de UBS (Canto Superior Esquerdo) */
@@ -164,7 +164,7 @@
                 color: #0284c7;
             }
 
-            /* 5. Botão "i" no Canto Inferior Direito (Janela Larga com Resumo Científico e Metadados Retráteis) */
+            /* 5. Botão "i" no Canto Inferior Direito */
             #custom-info-container {
                 position: absolute;
                 bottom: 28px;
@@ -240,7 +240,6 @@
                 color: #0284c7;
             }
 
-            /* Estilização da Tabela no Painel Técnico */
             .tech-note-table {
                 width: 100%;
                 border-collapse: collapse;
@@ -259,7 +258,6 @@
                 font-weight: 600;
             }
 
-            /* Estilo do Acordeão de Metadados */
             .metadata-toggle-btn {
                 background-color: #f1f5f9;
                 color: #0369a1;
@@ -306,14 +304,7 @@
                 background-color: #e0f2fe !important;
                 color: #0284c7 !important;
             }
-            .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-                color: #444444 !important;
-            }
-            .search-layer-input-search {
-                background-color: #f8f8f8 !important;
-            }
 
-            /* Painel de Camadas (LayerSwitcher) no canto superior direito */
             .ol-control.layer-switcher {
                 top: 8px !important;
                 right: 8px !important;
@@ -329,7 +320,6 @@
                 overflow-y: auto;
             }
 
-            /* Estilização dos Popups */
             .ol-popup {
                 background-color: #ffffff !important;
                 border-radius: 8px !important;
@@ -351,44 +341,6 @@
             }
             .ol-popup-closer:hover {
                 color: #0284c7 !important;
-            }
-            #popup-content table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 8px;
-            }
-            #popup-content th, #popup-content td {
-                padding: 5px 6px;
-                border-bottom: 1px solid #f1f5f9;
-                text-align: left;
-                vertical-align: top;
-            }
-            #popup-content th {
-                color: #0369a1;
-                font-weight: 600;
-                width: 58%;
-            }
-            #popup-content tr:hover {
-                background-color: #f8fafc;
-            }
-
-            @media (max-width: 768px) {
-                #map-footer {
-                    font-size: 10px;
-                    padding: 4px 10px;
-                }
-                #custom-info-panel {
-                    width: calc(100vw - 32px);
-                    max-width: none;
-                    right: -4px;
-                }
-                #ubs-search-container {
-                    top: 50px;
-                    left: 8px;
-                }
-                #ubs-search-input {
-                    width: 180px;
-                }
             }
 
             /* Painel Seletor GeoSampa WMS */
@@ -489,7 +441,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Abastecimento e Segurança Alimentar|Sincronizado via GetCapabilities) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Abastecimento e Segurança Alimentar) -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WMS):
@@ -555,7 +507,6 @@
 
                     <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
 
-                    <!-- Nota Técnica Incorporada: Daily Living Z-Score -->
                     <h3 style="font-size: 13.5px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
                     <p style="margin: 0 0 6px 0;">O <strong>Z-Score</strong> compara a pontuação de cada hexágono com a média geral de referência global:</p>
                     <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 11.5px;">
@@ -641,7 +592,7 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" com Resumo Lancet e Acordeão de Metadados) -->
+        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WMS Direto do GeoSampa) -->
         <script>
             window.addEventListener('load', function() {
                 // 1. Controle do Botão "i" e Acordeão de Metadados
@@ -686,7 +637,7 @@
                     });
                 }
 
-                // 2. Funcionalidade de Busca por Nome da UBS (NOME_UBS) na camada 11
+                // 2. Funcionalidade de Busca por Nome da UBS
                 var searchInput = document.getElementById('ubs-search-input');
                 var searchBtn = document.getElementById('ubs-search-btn');
                 var suggestionsBox = document.getElementById('ubs-suggestions');
@@ -773,7 +724,7 @@
                     });
                 }
 
-                // 3. Contrair/Expandir categorias na legenda conforme visibilidade da camada
+                // 3. Contrair/Expandir categorias na legenda
                 function updateLegendVisibility() {
                     var layerItems = document.querySelectorAll('.layer-switcher li.layer');
                     layerItems.forEach(function(li) {
@@ -802,7 +753,83 @@
                     obs.observe(switcherPanel, { childList: true, subtree: true });
                 }
 
-                // 4. Atualiza tamanho do canvas após carregar o banner
+                // 4. Seletor WMS Direto do GeoSampa (Estável e com Nomes Oficiais)
+                var addBtn = document.getElementById('geosampa-add-btn');
+                var clearBtn = document.getElementById('geosampa-clear-btn');
+                var selectEl = document.getElementById('geosampa-layer-select');
+                var activeListEl = document.getElementById('geosampa-active-list');
+                var addedWmsLayers = {};
+                var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
+
+                function renderActiveBadges() {
+                    activeListEl.innerHTML = '';
+                    Object.keys(addedWmsLayers).forEach(function(key) {
+                        var item = addedWmsLayers[key];
+                        var div = document.createElement('div');
+                        div.className = 'wms-badge-item';
+                        div.innerHTML = '<span>' + item.title + '</span><span class="wms-remove-x" title="Remover camada">×</span>';
+                        div.querySelector('.wms-remove-x').addEventListener('click', function() {
+                            if (typeof map !== 'undefined') {
+                                map.removeLayer(item.layer);
+                            }
+                            delete addedWmsLayers[key];
+                            renderActiveBadges();
+                        });
+                        activeListEl.appendChild(div);
+                    });
+                }
+
+                if (addBtn && selectEl) {
+                    addBtn.addEventListener('click', function() {
+                        var layerName = selectEl.value;
+                        var layerText = selectEl.options[selectEl.selectedIndex].text;
+
+                        if (!layerName) {
+                            alert('Por favor, selecione uma camada.');
+                            return;
+                        }
+                        if (addedWmsLayers[layerName]) return; // Evita duplicar
+
+                        // Utiliza ImageWMS com versão 1.3.0 e projeção CRS em EPSG:3857 alinhada ao OpenLayers
+                        var wmsLayer = new ol.layer.Image({
+                            'title': 'GeoSampa: ' + layerText,
+                            'opacity': 0.95,
+                            zIndex: 600, // Acima das malhas hexagonais
+                            source: new ol.source.ImageWMS({
+                                url: wmsUrl,
+                                params: {
+                                    'LAYERS': layerName,
+                                    'VERSION': '1.3.0',
+                                    'CRS': 'EPSG:3857',
+                                    'FORMAT': 'image/png',
+                                    'TRANSPARENT': true
+                                },
+                                serverType: 'geoserver',
+                                ratio: 1
+                            })
+                        });
+
+                        if (typeof map !== 'undefined') {
+                            map.addLayer(wmsLayer);
+                            addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
+                            renderActiveBadges();
+                        }
+                    });
+                }
+
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function() {
+                        Object.keys(addedWmsLayers).forEach(function(key) {
+                            if (typeof map !== 'undefined') {
+                                map.removeLayer(addedWmsLayers[key].layer);
+                            }
+                        });
+                        addedWmsLayers = {};
+                        renderActiveBadges();
+                    });
+                }
+
+                // 5. Atualiza tamanho do canvas após carregar o banner
                 var bannerImg = document.querySelector('#top-banner img');
                 if (bannerImg) {
                     bannerImg.addEventListener('load', function() {
@@ -892,146 +919,5 @@
                 }, 900);
             });
         </script>
-
-
-        <!-- Script Dinâmico Direto para Camadas WMS do GeoSampa -->
-       <!-- Script Dinâmico com Descoberta Real no GetCapabilities do GeoSampa -->
-        <script>
-            window.addEventListener('load', function() {
-                var addBtn = document.getElementById('geosampa-add-btn');
-                var clearBtn = document.getElementById('geosampa-clear-btn');
-                var selectEl = document.getElementById('geosampa-layer-select');
-                var activeListEl = document.getElementById('geosampa-active-list');
-                var addedWmsLayers = {};
-                var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
-
-                // Lista de reserva com o workspace oficial 'geoportal:' caso o navegador bloqueie o XML por CORS
-                var fallbackLayers = [
-                    { name: 'geoportal:feira_livre', title: 'Feiras Livres' },
-                    { name: 'geoportal:sacolao', title: 'Sacolões Municipais' },
-                    { name: 'geoportal:mercado_municipal', title: 'Mercados Municipais' },
-                    { name: 'geoportal:bom_prato', title: 'Bom Prato' },
-                    { name: 'geoportal:cozinha_cidada', title: 'Rede Cozinha Cidadã' },
-                    { name: 'geoportal:armazem_solidario', title: 'Armazém Solidário' }
-                ];
-
-                function populateSelect(layersArray) {
-                    selectEl.innerHTML = '<option value="">-- Selecione uma camada --</option>';
-                    layersArray.forEach(function(lyr) {
-                        var opt = document.createElement('option');
-                        opt.value = lyr.name;
-                        opt.textContent = lyr.title;
-                        selectEl.appendChild(opt);
-                    });
-                }
-
-                // Tenta buscar as denominações exatas diretamente no GetCapabilities do GeoSampa
-                var capUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms?service=WMS&version=1.3.0&request=GetCapabilities';
-                var keywords = ['feira', 'sacol', 'mercado', 'bom_prato', 'bom prato', 'cozinha', 'armaz', 'abastecimento', 'alimentar'];
-
-                fetch(capUrl)
-                    .then(function(res) {
-                        if (!res.ok) throw new Error('Erro HTTP ' + res.status);
-                        return res.text();
-                    })
-                    .then(function(xmlText) {
-                        var parser = new DOMParser();
-                        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                        var layerElements = xmlDoc.querySelectorAll('Layer > Layer');
-                        var matchedLayers = [];
-
-                        layerElements.forEach(function(el) {
-                            var nameNode = el.querySelector('Name');
-                            var titleNode = el.querySelector('Title');
-                            if (nameNode && titleNode) {
-                                var rawName = nameNode.textContent.trim();
-                                var rawTitle = titleNode.textContent.trim();
-                                var searchStr = (rawName + ' ' + rawTitle).toLowerCase();
-
-                                if (keywords.some(function(kw) { return searchStr.indexOf(kw) !== -1; })) {
-                                    matchedLayers.push({ name: rawName, title: rawTitle });
-                                }
-                            }
-                        });
-
-                        if (matchedLayers.length > 0) {
-                            matchedLayers.sort(function(a, b) { return a.title.localeCompare(b.title); });
-                            populateSelect(matchedLayers);
-                        } else {
-                            populateSelect(fallbackLayers);
-                        }
-                    })
-                    .catch(function() {
-                        // Se houver bloqueio CORS no navegador, carrega imediatamente o workspace 'geoportal:'
-                        populateSelect(fallbackLayers);
-                    });
-
-                function renderActiveBadges() {
-                    activeListEl.innerHTML = '';
-                    Object.keys(addedWmsLayers).forEach(function(key) {
-                        var item = addedWmsLayers[key];
-                        var div = document.createElement('div');
-                        div.className = 'wms-badge-item';
-                        div.innerHTML = '<span>' + item.title + '</span><span class="wms-remove-x" title="Remover camada">×</span>';
-                        div.querySelector('.wms-remove-x').addEventListener('click', function() {
-                            if (typeof map !== 'undefined') {
-                                map.removeLayer(item.layer);
-                            }
-                            delete addedWmsLayers[key];
-                            renderActiveBadges();
-                        });
-                        activeListEl.appendChild(div);
-                    });
-                }
-
-                if (addBtn && selectEl) {
-                    addBtn.addEventListener('click', function() {
-                        var layerName = selectEl.value;
-                        var layerText = selectEl.options[selectEl.selectedIndex].text;
-
-                        if (!layerName) return;
-                        if (addedWmsLayers[layerName]) return;
-
-                        // Usa ImageWMS (requisição única por tela) que evita falhas de grid/tile no GeoServer da PMSP
-                        var wmsLayer = new ol.layer.Image({
-                            'title': 'GeoSampa: ' + layerText,
-                            'opacity': 0.95,
-                            zIndex: 600,
-                            source: new ol.source.ImageWMS({
-                                url: wmsUrl,
-                                params: {
-                                    'LAYERS': layerName,
-                                    'VERSION': '1.3.0',
-                                    'CRS': 'EPSG:3857',
-                                    'FORMAT': 'image/png',
-                                    'TRANSPARENT': true
-                                },
-                                serverType: 'geoserver',
-                                ratio: 1
-                            })
-                        });
-
-                        if (typeof map !== 'undefined') {
-                            map.addLayer(wmsLayer);
-                            addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
-                            renderActiveBadges();
-                        }
-                    });
-                }
-
-                if (clearBtn) {
-                    clearBtn.addEventListener('click', function() {
-                        Object.keys(addedWmsLayers).forEach(function(key) {
-                            if (typeof map !== 'undefined') {
-                                map.removeLayer(addedWmsLayers[key].layer);
-                            }
-                        });
-                        addedWmsLayers = {};
-                        renderActiveBadges();
-                    });
-                }
-            });
-        </script>
-        
     </body>
 </html>
