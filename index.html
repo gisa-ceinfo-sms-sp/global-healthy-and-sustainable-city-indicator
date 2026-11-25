@@ -165,18 +165,18 @@
                 color: #0284c7;
             }
 
-            /* 5. Painel Seletor GeoSampa WMS (Reposicionado no Canto Superior Direito, Abaixo dos Controles do Mapa) */
+            /* 5. Painel Seletor GeoSampa WMS (Reposicionado para o Canto Superior Esquerdo, Abaixo da Busca de UBS, evitando conflito com o LayerSwitcher) */
             #geosampa-selector-container {
                 position: absolute;
-                top: 130px; /* Posicionado abaixo do LayerSwitcher e zoom nativo do OpenLayers */
-                right: 8px;
+                top: 52px;
+                left: 385px; /* Posicionado logo à direita da barra de busca de UBS */
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.96);
                 padding: 10px 12px;
                 border-radius: 6px;
                 box-shadow: 0 3px 12px rgba(0,0,0,0.15);
                 border: 1px solid #cbd5e1;
-                width: 290px;
+                width: 280px;
             }
             .geosampa-header-flex {
                 display: flex;
@@ -498,9 +498,10 @@
 
             @media (max-width: 768px) {
                 #geosampa-selector-container {
-                    top: 140px;
-                    right: 8px;
-                    width: 250px;
+                    top: 52px;
+                    left: 8px;
+                    right: auto;
+                    width: 240px;
                 }
             }
         </style>
@@ -522,7 +523,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Canto Superior Direito, Recolhível) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Reposicionado ao lado da busca, com botão de recolher) -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 12px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -879,7 +880,7 @@
                 }
 
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA E 50% OPACIDADE EM POLÍGONOS)
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA E 50% OPACIDADE)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -899,7 +900,6 @@
                         var badgeDiv = document.createElement('div');
                         badgeDiv.className = 'wms-badge-item';
                         
-                        // Linha principal do badge (Título + Botão Legenda + Botão Remover)
                         var rowDiv = document.createElement('div');
                         rowDiv.className = 'wms-badge-row';
                         
@@ -926,18 +926,15 @@
                         rowDiv.appendChild(actionsDiv);
                         badgeDiv.appendChild(rowDiv);
                         
-                        // Container da Imagem da Legenda (GetLegendGraphic do WMS)
                         var legendContainer = document.createElement('div');
                         legendContainer.className = 'wms-legend-container';
                         
                         var legendImg = document.createElement('img');
-                        // URL oficial do GeoSampa GetLegendGraphic ajustada para 50% de opacidade visual simulada e tamanho ideal
                         legendImg.src = wmsUrl + '?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&layer=' + encodeURIComponent(key);
                         legendImg.alt = 'Legenda da Camada';
                         legendContainer.appendChild(legendImg);
                         badgeDiv.appendChild(legendContainer);
                         
-                        // Evento para alternar exibição da legenda da camada específica
                         legendToggleLink.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
@@ -950,7 +947,6 @@
                             }
                         });
                         
-                        // Evento para remover a camada individualmente
                         removeX.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
@@ -984,10 +980,10 @@
                             return;
                         }
 
-                        // Camada ImageWMS com opacidade de 0.5 (50%) para camadas de polígonos/áreas
+                        // Camada ImageWMS com opacidade de 0.5 (50%)
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa (WMS): ' + layerText,
-                            'opacity': 0.5, // Ajustado para 50% de transparência conforme solicitado
+                            'opacity': 0.5, // 50% de transparência solicitada
                             zIndex: 600,
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
@@ -1041,7 +1037,6 @@
                         var projection = map.getView().getProjection();
                         var clickedCoord = evt.coordinate;
 
-                        // Varre as camadas WMS ativas para interrogar os atributos
                         for (var i = activeKeys.length - 1; i >= 0; i--) {
                             var key = activeKeys[i];
                             var item = addedWmsLayers[key];
