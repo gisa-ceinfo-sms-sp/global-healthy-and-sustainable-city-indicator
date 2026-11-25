@@ -99,77 +99,11 @@
                 opacity: 0.5;
             }
 
-            /* 4. Barra de Busca Rápida de UBS (Reposicionada no Canto Superior Esquerdo, abaixo dos botões de zoom) */
-            #ubs-search-container {
+            /* 4. Painel Seletor de Camadas GeoSampa WMS (Posicionado à Esquerda, após os controles nativos) */
+            #geosampa-selector-container {
                 position: absolute;
                 top: 8px;
                 left: 50px;
-                z-index: 2000;
-                background: rgba(255, 255, 255, 0.95);
-                padding: 4px 8px;
-                border-radius: 6px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-                border: 1px solid #cbd5e1;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-            #ubs-search-input {
-                border: none;
-                outline: none;
-                font-size: 13px;
-                padding: 4px;
-                width: 220px;
-                background: transparent;
-                color: #1e293b;
-            }
-            #ubs-search-input::placeholder {
-                color: #64748b;
-            }
-            #ubs-search-btn {
-                background: #0284c7;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 600;
-            }
-            #ubs-search-btn:hover {
-                background: #0369a1;
-            }
-            #ubs-suggestions {
-                position: absolute;
-                top: 38px;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                max-height: 200px;
-                overflow-y: auto;
-                display: none;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                z-index: 2001;
-            }
-            .ubs-suggestion-item {
-                padding: 6px 10px;
-                font-size: 12px;
-                cursor: pointer;
-                color: #334155;
-                border-bottom: 1px solid #f1f5f9;
-            }
-            .ubs-suggestion-item:hover {
-                background: #e0f2fe;
-                color: #0284c7;
-            }
-
-            /* 5. Painel Seletor de Camadas GeoSampa WMS (Reposicionado no Canto Superior Direito, abaixo do LayerSwitcher) */
-            #geosampa-selector-container {
-                position: absolute;
-                top: 135px; /* Abaixo do menu de camadas padrão do qgis2web */
-                right: 8px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.96);
                 padding: 8px 10px;
@@ -177,6 +111,8 @@
                 box-shadow: 0 3px 12px rgba(0,0,0,0.15);
                 border: 1px solid #cbd5e1;
                 width: 275px;
+                max-height: 82vh;
+                overflow-y: auto;
             }
             .geosampa-header-flex {
                 display: flex;
@@ -259,11 +195,13 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 4px;
             }
             .wms-badge-actions {
                 display: flex;
                 gap: 6px;
                 align-items: center;
+                flex-shrink: 0;
             }
             .wms-legend-toggle-link, .wms-metadata-link {
                 color: #0284c7;
@@ -294,6 +232,72 @@
                 cursor: pointer;
                 font-size: 13px;
                 margin-left: 2px;
+            }
+
+            /* 5. Barra de Busca Rápida de UBS (Posicionado à direita do Seletor GeoSampa) */
+            #ubs-search-container {
+                position: absolute;
+                top: 8px;
+                left: 355px;
+                z-index: 2000;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                border: 1px solid #cbd5e1;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            #ubs-search-input {
+                border: none;
+                outline: none;
+                font-size: 13px;
+                padding: 4px;
+                width: 220px;
+                background: transparent;
+                color: #1e293b;
+            }
+            #ubs-search-input::placeholder {
+                color: #64748b;
+            }
+            #ubs-search-btn {
+                background: #0284c7;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            #ubs-search-btn:hover {
+                background: #0369a1;
+            }
+            #ubs-suggestions {
+                position: absolute;
+                top: 38px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                max-height: 200px;
+                overflow-y: auto;
+                display: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 2001;
+            }
+            .ubs-suggestion-item {
+                padding: 6px 10px;
+                font-size: 12px;
+                cursor: pointer;
+                color: #334155;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .ubs-suggestion-item:hover {
+                background: #e0f2fe;
+                color: #0284c7;
             }
 
             /* 6. Painel de Informações Metodológicas (Botão "i") */
@@ -497,12 +501,16 @@
                 background-color: #f8fafc;
             }
 
-            @media (max-width: 768px) {
+            /* Responsividade para telas menores */
+            @media (max-width: 900px) {
+                #ubs-search-container {
+                    top: 52px;
+                    left: 50px;
+                }
                 #geosampa-selector-container {
-                    top: 140px;
-                    left: 8px;
-                    right: auto;
-                    width: 240px;
+                    top: 96px;
+                    left: 50px;
+                    width: 250px;
                 }
             }
         </style>
@@ -516,15 +524,7 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Barra de Busca Rápida de UBS (Canto Superior Esquerdo) -->
-            <div id="ubs-search-container">
-                <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
-                <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
-                <button id="ubs-search-btn" type="button">Ir</button>
-                <div id="ubs-suggestions"></div>
-            </div>
-
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Movido para o Canto Superior Direito, abaixo do LayerSwitcher) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Agora posicionado na esquerda, local original da busca UBS) -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -566,6 +566,14 @@
                     <div id="geosampa-active-list" style="margin-top: 5px;"></div>
                 </div>
             </div>
+
+            <!-- Barra de Busca Rápida de UBS (Agora posicionada à direita do Seletor GeoSampa) -->
+            <div id="ubs-search-container">
+                <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
+                <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
+                <button id="ubs-search-btn" type="button">Ir</button>
+                <div id="ubs-suggestions"></div>
+            </div>
             
             <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
             <div id="custom-info-container">
@@ -606,31 +614,6 @@
                         This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
                     </div>
 
-                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
-
-                    <!-- SEÇÃO SEPARADA EXCLUSIVAMENTE PARA OS ITENS DO GEOSAMPA (AO FIM DO PAINEL) -->
-                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
-                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
-                    
-                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
-                        <li style="margin-bottom: 6px;">
-                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Esporte e Lazer</a>)
-                        </li>
-                        <li>
-                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=abastecimento" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Abastecimento</a>)
-                        </li>
-                    </ul>
-
                     <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
 
                     <h3 style="font-size: 13.5px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
@@ -662,6 +645,31 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
+
+                    <!-- SEÇÃO SEPARADA EXCLUSIVAMENTE PARA OS ITENS DO GEOSAMPA (AO FIM DO PAINEL) -->
+                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
+                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
+                    
+                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li style="margin-bottom: 6px;">
+                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Esporte e Lazer</a>)
+                        </li>
+                        <li>
+                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=abastecimento" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Abastecimento</a>)
+                        </li>
+                    </ul>
                 </div>
             </div>
 
