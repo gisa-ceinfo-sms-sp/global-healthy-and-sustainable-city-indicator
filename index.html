@@ -823,45 +823,41 @@
                             alert('Por favor, selecione uma camada.');
                             return;
                         }
-                        if (addedWmsLayers[layerName]) return; // Evita duplicar
+                        if (addedWmsLayers[layerName]) {
+                            alert('Esta camada já foi adicionada.');
+                            return;
+                        }
 
-                        // Fonte vetorial WFS utilizando JSONP para contornar o CORS do GeoServer
+                        // URL base do WFS oficial do GeoSampa
+                        var wfsUrl = 'https://wfs.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/wfs';
+
                         var vectorSource = new ol.source.Vector({
                             format: new ol.format.GeoJSON(),
                             loader: function(extent, resolution, projection) {
                                 var proj = projection.getCode();
-                                var callbackName = 'wfs_cb_' + Math.floor(Math.random() * 1000000);
-                                
-                                window[callbackName] = function(response) {
-                                    try {
-                                        var features = vectorSource.getFormat().readFeatures(response, {
-                                            featureProjection: proj
-                                        });
-                                        vectorSource.addFeatures(features);
-                                    } catch (err) {
-                                        console.warn('Erro ao ler feições WFS:', err);
-                                    }
-                                    document.body.removeChild(script);
-                                    delete window[callbackName];
-                                };
-
                                 var url = wfsUrl + '?' +
                                     'service=WFS&' +
                                     'version=1.1.0&' +
                                     'request=GetFeature&' +
                                     'typeName=' + encodeURIComponent(layerName) + '&' +
-                                    'outputFormat=text/javascript&' +
-                                    'format_options=callback:' + callbackName + '&' +
+                                    'outputFormat=application/json&' +
                                     'srsName=' + proj;
 
-                                var script = document.createElement('script');
-                                script.src = url;
-                                script.onerror = function() {
-                                    console.warn('Erro ao carregar script JSONP do WFS para:', layerName);
-                                    document.body.removeChild(script);
-                                    delete window[callbackName];
-                                };
-                                document.body.appendChild(script);
+                                fetch(url)
+                                    .then(function(response) {
+                                        if (!response.ok) throw new Error('Erro HTTP: ' + response.status);
+                                        return response.json();
+                                    })
+                                    .then(function(geojson) {
+                                        var feats = vectorSource.getFormat().readFeatures(geojson, {
+                                            featureProjection: proj
+                                        });
+                                        vectorSource.addFeatures(feats);
+                                    })
+                                    .catch(function(err) {
+                                        console.warn('Falha no carregamento WFS (verifique restrições de rede/CORS):', err);
+                                        alert('Não foi possível carregar os dados vetoriais desta camada devido a restrições de segurança do servidor.');
+                                    });
                             },
                             strategy: ol.loadingstrategy.all
                         });
