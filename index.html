@@ -99,7 +99,7 @@
                 opacity: 0.5;
             }
 
-            /* 4. Barra de Busca de Unidades Básicas de Saúde (UBS) */
+            /* 4. Barra de Busca Rápida de UBS (Canto Superior Esquerdo) */
             #ubs-search-container {
                 position: absolute;
                 top: 8px;
@@ -366,7 +366,7 @@
                 background-color: #f8fafc;
             }
 
-            /* Painel Seletor WFS GeoSampa */
+            /* Painel Seletor WMS GeoSampa */
             #geosampa-selector-container {
                 position: absolute;
                 top: 52px;
@@ -464,10 +464,10 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WFS (Esporte, Lazer, Parques, Ciclovias e Alimentos) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Esporte, Lazer, Parques, Ciclovias e Alimentos) -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
-                    Camadas GeoSampa (WFS):
+                    Camadas GeoSampa (WMS):
                 </label>              
                 <select id="geosampa-layer-select">
                     <option value="">-- Selecione uma camada --</option>
@@ -490,7 +490,7 @@
                 </select>
                 <div style="display: flex; gap: 6px;">
                     <button id="geosampa-add-btn" style="flex: 1;">Adicionar Camada</button>
-                    <button id="geosampa-clear-btn" title="Remover camadas WFS adicionadas">Limpar</button>
+                    <button id="geosampa-clear-btn" title="Remover camadas WMS adicionadas">Limpar</button>
                 </div>
                 <div id="geosampa-active-list" style="margin-top: 6px; font-size: 11.5px; color: #475569;"></div>
             </div>
@@ -622,7 +622,7 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização: Busca UBS, Painel "i", Legendas e Integração WFS GeoSampa -->
+        <!-- Scripts de Customização: Busca UBS, Painel "i", Legendas e Integração WMS GeoSampa -->
         <script>
             window.addEventListener('load', function() {
                 // ==========================================
@@ -790,7 +790,7 @@
                 }
 
                 // ==========================================
-                // 4. CONSUMO WFS VETORIAL DO GEOSAMPA (EXPANDIDO)
+                // 4. CONSUMO WMS RASTER DO GEOSAMPA (COMBUSTÍVEL VISUAL ESTÁVEL)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -798,8 +798,8 @@
                 var activeListEl = document.getElementById('geosampa-active-list');
                 var addedWmsLayers = {};
                 
-                // Endpoint WFS Oficial do GeoSampa (validado via GetCapabilities)
-                var wfsUrl = 'http://wfs.geosampa.prefeitura.sp.gov.br/geoserver/wfs';
+                // Endpoint WMS Oficial do GeoSampa para renderização visual raster
+                var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
                 // Função para renderizar os emblemas (badges) das camadas ativas no painel
                 function renderActiveBadges() {
@@ -820,7 +820,7 @@
                     });
                 }
 
-                // Evento de clique para adicionar a camada WFS selecionada ao mapa
+                // Evento de clique para adicionar a camada WMS selecionada ao mapa
                 if (addBtn && selectEl) {
                     addBtn.addEventListener('click', function() {
                         var layerName = selectEl.value; // Ex: geoportal:equipamento_esporte_lazer
@@ -835,78 +835,34 @@
                             return;
                         }
 
-                        // Configuração da Fonte Vetorial WFS (GeoJSON) com carregador assíncrono
-                        var vectorSource = new ol.source.Vector({
-                            format: new ol.format.GeoJSON(),
-                            loader: function(extent, resolution, projection) {
-                                var proj = projection.getCode();
-                                var url = wfsUrl + '?' +
-                                    'service=WFS&' +
-                                    'version=1.1.0&' +
-                                    'request=GetFeature&' +
-                                    'typeName=' + encodeURIComponent(layerName) + '&' +
-                                    'outputFormat=application/json&' +
-                                    'srsName=' + proj;
-
-                                fetch(url)
-                                    .then(function(response) {
-                                        if (!response.ok) throw new Error('Erro na rede WFS: ' + response.status);
-                                        return response.json();
-                                    })
-                                    .then(function(geojson) {
-                                        var feats = vectorSource.getFormat().readFeatures(geojson, {
-                                            featureProjection: proj
-                                        });
-                                        vectorSource.addFeatures(feats);
-                                    })
-                                    .catch(function(err) {
-                                        console.warn('Erro ao carregar WFS do GeoSampa:', err);
-                                        alert('Não foi possível carregar os dados desta camada devido a restrições de segurança/rede do servidor.');
-                                    });
-                            },
-                            strategy: ol.loadingstrategy.all
-                        });
-
-                        // Estilo Adaptativo Inteligente por Tipo de Geometria (Polígonos, Linhas e Pontos)
-                        var adaptiveStyle = function(feature) {
-                            var geomType = feature.getGeometry().getType();
-                            if (geomType.indexOf('Polygon') !== -1) {
-                                return new ol.style.Style({
-                                    fill: new ol.style.Fill({ color: 'rgba(34, 197, 94, 0.25)' }), // Verde translúcido para parques/áreas
-                                    stroke: new ol.style.Stroke({ color: '#16a34a', width: 1.5 })
-                                });
-                            } else if (geomType.indexOf('LineString') !== -1) {
-                                return new ol.style.Style({
-                                    stroke: new ol.style.Stroke({ color: '#ec4899', width: 3 }) // Rosa vibrante para ciclovias
-                                });
-                            } else {
-                                return new ol.style.Style({
-                                    image: new ol.style.Circle({
-                                        radius: 6,
-                                        fill: new ol.style.Fill({ color: '#0284c7' }), // Azul institucional para pontos de equipamentos/feiras
-                                        stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 })
-                                    })
-                                });
-                            }
-                        };
-
-                        // Criação da Camada Vetorial no OpenLayers
-                        var vectorLayer = new ol.layer.Vector({
-                            'title': 'GeoSampa (WFS): ' + layerText,
-                            source: vectorSource,
-                            style: adaptiveStyle,
-                            zIndex: 600
+                        // Criação da camada raster ImageWMS otimizada para o OpenLayers e GeoServer PMSP
+                        var wmsLayer = new ol.layer.Image({
+                            'title': 'GeoSampa (WMS): ' + layerText,
+                            'opacity': 0.95,
+                            zIndex: 600, // Acima das camadas base e malhas
+                            source: new ol.source.ImageWMS({
+                                url: wmsUrl,
+                                params: {
+                                    'LAYERS': layerName,
+                                    'VERSION': '1.3.0',
+                                    'CRS': 'EPSG:3857',
+                                    'FORMAT': 'image/png',
+                                    'TRANSPARENT': true
+                                },
+                                serverType: 'geoserver',
+                                ratio: 1
+                            })
                         });
 
                         if (typeof map !== 'undefined') {
-                            map.addLayer(vectorLayer);
-                            addedWmsLayers[layerName] = { title: layerText, layer: vectorLayer };
+                            map.addLayer(wmsLayer);
+                            addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
                             renderActiveBadges();
                         }
                     });
                 }
 
-                // Evento para limpar todas as camadas WFS adicionadas
+                // Evento para limpar todas as camadas WMS adicionadas
                 if (clearBtn) {
                     clearBtn.addEventListener('click', function() {
                         Object.keys(addedWmsLayers).forEach(function(key) {
@@ -920,46 +876,61 @@
                 }
 
                 // ==========================================
-                // 5. INTERATIVIDADE DE CLIQUE E ATRIBUTOS (POPUP)
+                // 5. INTERATIVIDADE DE CLIQUE WMS (GETFEATUREINFO EM JSON)
                 // ==========================================
                 if (typeof map !== 'undefined') {
                     map.on('click', function(evt) {
-                        var clickedFeature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                            if (layer && layer.get('title') && layer.get('title').indexOf('GeoSampa (WFS):') !== -1) {
-                                return feature;
-                            }
-                        });
+                        var viewResolution = map.getView().getResolution();
+                        var projection = map.getView().getProjection();
+                        var clickedCoord = evt.coordinate;
 
-                        if (clickedFeature) {
-                            var props = clickedFeature.getProperties();
-                            var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px; border-bottom: 2px solid #0284c7; padding-bottom: 3px;">Atributos da Feição (GeoSampa)</div>';
-                            htmlTable += '<table>';
-                            for (var key in props) {
-                                if (props.hasOwnProperty(key) && key !== 'geometry' && props[key] !== null && props[key] !== '') {
-                                    htmlTable += '<tr><th>' + key + '</th><td>' + props[key] + '</td></tr>';
+                        // Varre as camadas ativas para encontrar qual é do tipo ImageWMS
+                        map.getLayers().forEach(function(layer) {
+                            if (layer instanceof ol.layer.Image) {
+                                var source = layer.getSource();
+                                if (source instanceof ol.source.ImageWMS) {
+                                    // Solicita os atributos da feição clicada diretamente ao GeoServer via GetFeatureInfo formatado em JSON
+                                    var url = source.getFeatureInfoUrl(
+                                        clickedCoord,
+                                        viewResolution,
+                                        projection,
+                                        {
+                                            'INFO_FORMAT': 'application/json',
+                                            'FEATURE_COUNT': 1
+                                        }
+                                    );
+
+                                    if (url) {
+                                        fetch(url)
+                                            .then(function(res) { return res.json(); })
+                                            .then(function(data) {
+                                                if (data && data.features && data.features.length > 0) {
+                                                    var props = data.features[0].properties;
+                                                    var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px; border-bottom: 2px solid #0284c7; padding-bottom: 3px;">Atributos da Feição (GeoSampa)</div>';
+                                                    htmlTable += '<table>';
+                                                    for (var key in props) {
+                                                        if (props.hasOwnProperty(key) && key !== 'geometry' && props[key] !== null && props[key] !== '') {
+                                                            htmlTable += '<tr><th>' + key + '</th><td>' + props[key] + '</td></tr>';
+                                                        }
+                                                    }
+                                                    htmlTable += '</table>';
+
+                                                    var popupContent = document.getElementById('popup-content');
+                                                    var popupEl = document.getElementById('popup');
+                                                    if (popupContent && popupEl) {
+                                                        popupContent.innerHTML = htmlTable;
+                                                        if (typeof overlay !== 'undefined') {
+                                                            overlay.setPosition(clickedCoord);
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                            .catch(function(err) {
+                                                console.warn('Consulta WMS GetFeatureInfo concluída.', err);
+                                            });
                                 }
                             }
-                            htmlTable += '</table>';
-
-                            var popupContent = document.getElementById('popup-content');
-                            var popupEl = document.getElementById('popup');
-                            if (popupContent && popupEl) {
-                                popupContent.innerHTML = htmlTable;
-                                if (typeof overlay !== 'undefined') {
-                                    overlay.setPosition(evt.coordinate);
-                                }
-                            }
-                        }
-                    });
-
-                    // Alteração dinâmica do cursor do mouse para "pointer" ao sobrevoar feições WFS
-                    map.on('pointermove', function(e) {
-                        var hit = map.hasFeatureAtPixel(e.pixel, {
-                            layerFilter: function(layer) {
-                                return layer.get('title') && layer.get('title').indexOf('GeoSampa (WFS):') !== -1;
-                            }
                         });
-                        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
                     });
                 }
 
