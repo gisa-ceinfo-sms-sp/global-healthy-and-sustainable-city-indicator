@@ -119,7 +119,7 @@
                 outline: none;
                 font-size: 13px;
                 padding: 4px;
-                width: 240px;
+                width: 220px;
                 background: transparent;
                 color: #1e293b;
             }
@@ -165,32 +165,32 @@
                 color: #0284c7;
             }
 
-            /* 5. Painel Seletor de Camadas GeoSampa WMS (Canto Superior Esquerdo, ao lado da busca) */
+            /* 5. Painel Seletor de Camadas GeoSampa WMS (Posicionado ao lado da busca, sem conflitos) */
             #geosampa-selector-container {
                 position: absolute;
-                top: 52px;
-                left: 385px;
+                top: 8px;
+                left: 375px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.96);
-                padding: 10px 12px;
+                padding: 8px 10px;
                 border-radius: 6px;
                 box-shadow: 0 3px 12px rgba(0,0,0,0.15);
                 border: 1px solid #cbd5e1;
-                width: 280px;
+                width: 275px;
             }
             .geosampa-header-flex {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 6px;
+                margin-bottom: 4px;
             }
             #geosampa-toggle-collapse-btn {
                 background: #f1f5f9;
                 border: 1px solid #cbd5e1;
                 color: #475569;
                 border-radius: 4px;
-                width: 22px;
-                height: 22px;
+                width: 20px;
+                height: 20px;
                 font-weight: bold;
                 cursor: pointer;
                 display: flex;
@@ -207,13 +207,13 @@
             }
             #geosampa-layer-select {
                 width: 100%;
-                padding: 6px;
+                padding: 5px;
                 border: 1px solid #cbd5e1;
                 border-radius: 4px;
-                font-size: 12px;
+                font-size: 11.5px;
                 background: #fff;
                 color: #1e293b;
-                margin-bottom: 8px;
+                margin-bottom: 6px;
                 outline: none;
             }
             #geosampa-add-btn {
@@ -221,9 +221,9 @@
                 color: #16a34a;
                 border: 1px solid #16a34a;
                 border-radius: 4px;
-                padding: 5px 10px;
+                padding: 4px 8px;
                 cursor: pointer;
-                font-size: 12px;
+                font-size: 11.5px;
                 font-weight: 600;
                 transition: all 0.2s;
             }
@@ -236,9 +236,9 @@
                 color: #64748b;
                 border: 1px solid #cbd5e1;
                 border-radius: 4px;
-                padding: 5px 8px;
+                padding: 4px 6px;
                 cursor: pointer;
-                font-size: 11.5px;
+                font-size: 11px;
                 font-weight: 600;
                 transition: all 0.2s;
             }
@@ -249,11 +249,11 @@
             }
             .wms-badge-item {
                 background: #f1f5f9;
-                padding: 6px 8px;
+                padding: 5px 7px;
                 border-radius: 4px;
-                margin-top: 6px;
+                margin-top: 5px;
                 border-left: 3px solid #16a34a;
-                font-size: 11.5px;
+                font-size: 11px;
             }
             .wms-badge-row {
                 display: flex;
@@ -262,13 +262,13 @@
             }
             .wms-badge-actions {
                 display: flex;
-                gap: 8px;
+                gap: 6px;
                 align-items: center;
             }
             .wms-legend-toggle-link, .wms-metadata-link {
                 color: #0284c7;
                 cursor: pointer;
-                font-size: 11px;
+                font-size: 10.5px;
                 font-weight: 600;
                 text-decoration: underline;
             }
@@ -277,8 +277,8 @@
             }
             .wms-legend-container {
                 display: none;
-                margin-top: 6px;
-                padding-top: 6px;
+                margin-top: 5px;
+                padding-top: 5px;
                 border-top: 1px solid #e2e8f0;
                 text-align: center;
                 background: #ffffff;
@@ -292,8 +292,8 @@
                 color: #dc2626;
                 font-weight: bold;
                 cursor: pointer;
-                font-size: 14px;
-                margin-left: 4px;
+                font-size: 13px;
+                margin-left: 2px;
             }
 
             /* 6. Painel de Informações Metodológicas (Botão "i") */
@@ -524,11 +524,11 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Ao lado da busca) -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
-                    <label for="geosampa-layer-select" style="font-size: 12px; font-weight: 600; color: #1e293b; margin: 0;">
-                        Camadas GeoSampa (WMS):
+                    <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
+                        GeoSampa (WMS):
                     </label>
                     <button id="geosampa-toggle-collapse-btn" type="button" title="Minimizar / Expandir seletor">-</button>
                 </div>
@@ -559,11 +559,11 @@
                             <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
                         </optgroup>
                     </select>
-                    <div style="display: flex; gap: 6px;">
-                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
+                    <div style="display: flex; gap: 5px;">
+                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar</button>
                         <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
                     </div>
-                    <div id="geosampa-active-list" style="margin-top: 6px;"></div>
+                    <div id="geosampa-active-list" style="margin-top: 5px;"></div>
                 </div>
             </div>
             
@@ -576,7 +576,7 @@
                     <h3 style="font-size: 15px; color: #0369a1; margin: 0 0 8px 0;">Painel de Indicadores Urbanos e Saúde (São Paulo)</h3>
                     <p style="margin: 0 0 10px 0;">Este geoportal consolida indicadores espaciais estruturados sob as diretrizes científicas da <strong>The Lancet Series on Urban Design, Transport and Health</strong> e do <strong>Global Observatory of Healthy and Sustainable Cities</strong>, avaliando o impacto do desenho urbano sobre a saúde pública na capital paulista.</p>
                     
-                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Resumo dos Indicadores Temáticos:</h4>
+                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Resumo dos Indicadores Temáticos (Lancet):</h4>
                     <ul style="margin: 0 0 10px 0; padding-left: 18px; font-size: 11.5px;">
                         <li><strong>Daily Living (Z-global e Local):</strong> Mede o acesso por caminhada a destinos essenciais de cotidiano (comércio, serviços e transporte) em raios de proximidade. O índice em Z-Score compara São Paulo com o padrão de referência de 25 cidades globais e com a média intraurbana local.</li>
                         <li><strong>Acesso a Alimentos Frescos (500m):</strong> Avalia a proporção da população com cobertura caminhável a feiras, sacolões e mercados de hortifrútis, combatendo desertos alimentares e promovendo segurança nutricional.</li>
@@ -585,21 +585,36 @@
                         <li><strong>Rede de Atenção à Saúde (CRS, STS e UBS):</strong> Unidades territoriais e áreas de abrangência das Unidades Básicas de Saúde da SMS-SP para planejamento e vigilância epidemiológica.</li>
                     </ul>
 
-                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Notas Técnicas e Camadas de Apoio (GeoSampa):</h4>
-                    <ul style="margin: 0 0 10px 0; padding-left: 18px; font-size: 11.5px;">
-                        <li><strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
-                        <li><strong>Esporte, Lazer e Parques:</strong> Equipamentos esportivos municipais, centros esportivos, clubes da comunidade e áreas verdes de permanência que fomentam a prática de atividade física e o bem-estar comunitário. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
-                        <li><strong>Segurança Alimentar e Abastecimento:</strong> Equipamentos públicos voltados ao combate à insegurança alimentar, incluindo feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
-                    </ul>
-
                     <p style="margin: 0 0 10px 0;">
                         📄 Consulte o desempenho detalhado da capital no 
                         <a href="https://www.healthysustainablecities.org/Sao-Paulo/" target="_blank" rel="noopener noreferrer">Scorecard Oficial de São Paulo (Abrir em nova guia)</a>.
                     </p>
 
-                    <!-- Botão Acordeão para Metadados Originais -->
+                    <h3 style="font-size: 13.5px; color: #0369a1; margin: 16px 0 6px 0; border-top: 1px solid #cbd5e1; padding-top: 12px;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
+                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As seguintes notas técnicas detalham as fontes e parâmetros oficiais disponibilizados pelas bases geespaciais municipais integradas no painel:</p>
+                    
+                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li>
+                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Ficha de Metadados GeoSampa</a>)
+                        </li>
+                        <li style="margin-top: 6px;">
+                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
+                        </li>
+                        <li style="margin-top: 6px;">
+                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Portal GeoSampa</a>)
+                        </li>
+                        <li style="margin-top: 6px;">
+                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Portal GeoSampa</a>)
+                        </li>
+                    </ul>
+
+                    <!-- Botão Acordeão para Metadados Originais da Lancet -->
                     <button id="metadata-toggle-btn" class="metadata-toggle-btn" type="button">
-                        <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas Originais
+                        <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas (Global Indicators Study)
                     </button>
                     
                     <div id="metadata-content">
@@ -898,7 +913,14 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Lista de camadas conhecidas do GeoSampa que são de polígonos/áreas (para aplicar 50% de transparência)
+                // Mapeamento de links específicos de metadados oficiais do GeoSampa por camada
+                var geosampaMetadataLinks = {
+                    'geoportal:via_bicicleta': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b',
+                    // Outras camadas apontam por padrão para o portal de busca do GeoSampa caso não tenham URL UUID específica
+                    'default': 'http://geosampa.prefeitura.sp.gov.br/'
+                };
+
+                // Camadas de polígonos/áreas que recebem 50% de opacidade para não ocultar o mapa de calor/hexágonos
                 var polygonLayers = [
                     'geoportal:pde_parque_municipal',
                     'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
@@ -906,7 +928,7 @@
                     'geoportal:calcada'
                 ];
 
-                // Função para atualizar os emblemas (badges), link de metadados e legendas individuais
+                // Função para atualizar badges, links de legenda, metadados e remoção
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
@@ -926,21 +948,21 @@
                         var actionsDiv = document.createElement('div');
                         actionsDiv.className = 'wms-badge-actions';
                         
-                        // Link de Legenda
+                        // Botão de Legenda
                         var legendToggleLink = document.createElement('span');
                         legendToggleLink.className = 'wms-legend-toggle-link';
                         legendToggleLink.innerText = 'Legenda';
                         
-                        // Link de Metadados (Redireciona para o portal GeoSampa da PMSP)
+                        // Link para Metadados Oficiais
                         var metadataLink = document.createElement('a');
                         metadataLink.className = 'wms-metadata-link';
-                        metadataLink.href = 'http://geosampa.prefeitura.sp.gov.br/';
+                        metadataLink.href = geosampaMetadataLinks[key] || geosampaMetadataLinks['default'];
                         metadataLink.target = '_blank';
                         metadataLink.rel = 'noopener noreferrer';
                         metadataLink.innerText = 'Metadados';
-                        metadataLink.title = 'Consultar metadados oficiais no portal GeoSampa';
+                        metadataLink.title = 'Abrir ficha de metadados oficial do GeoSampa';
                         
-                        // Botão de remoção (×)
+                        // Botão de Exclusão (×)
                         var removeX = document.createElement('span');
                         removeX.className = 'wms-remove-x';
                         removeX.title = 'Remover camada';
@@ -1008,7 +1030,7 @@
                             return;
                         }
 
-                        // Opacidade inteligente: 50% (0.5) para polígonos/áreas e 100% (1.0) para pontos e linhas
+                        // Opacidade inteligente: 50% para polígonos/áreas e 100% para pontos e linhas
                         var layerOpacity = (polygonLayers.indexOf(layerName) !== -1) ? 0.5 : 1.0;
 
                         var wmsLayer = new ol.layer.Image({
