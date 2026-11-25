@@ -424,7 +424,7 @@
                 color: #dc2626;
                 border-color: #fca5a5;
             }
-            .-badge-item {
+            .wms-badge-item {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -467,7 +467,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WFS Vetorial com JSONP / Proxy Adaptado -->
+            <!-- Painel Seletor de Camadas GeoSampa WFS Vetorial -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WFS):
@@ -577,7 +577,7 @@
                 <strong>Fontes:</strong> <a href="https://prefeitura.sp.gov.br/web/saude/w/epidemiologia_e_informacao/geoprocessamento_e_informacoes_socioambientais/265388" target="_blank" rel="noopener noreferrer">Limites administrativos da Saúde - NGISA / CEInfo / SMS-SP - 2026 </a> | Camadas <a href="https://www.healthysustainablecities.org/resources/#data-hub" target="_blank" rel="noopener noreferrer">Global Healthy and Sustainable City Indicators - Lancet - 2022</a>
             </div>
             <div>
-                <strong>Elaboração:</strong> <a href="https://www.prefeitura.sp.gov.br/web/saude/epidemiologia_e_informacao/geoprocessamento_e_informacoes_socioambientais" target="_blank" rel="noopener noreferrer">Núcleo de Geoprocessamento e Informação Socioambiental</a> / <a href="https://www.prefeitura.sp.gov.br/web/saude/epidemiologia_e_informacao/" target="_blank" rel="noopener noreferrer">Coordenação de Epidemiologia e Informação</a> / <a href="https://www.prefeitura.sp.gov.br/web/saude" target="_blank" rel="noopener noreferrer">Secretaria Municipal da Saúde de São Paulo</a> - 2026
+                <strong>Elaboração:</strong> <a href="https://www.prefeitura.sp.gov.br/web/saude/epidemiologia_e_informacao/geoprocessamento_e_informacoes_socioambientais" target="_blank" rel="noopener noreferrer">Núcleo de Geoprocessamento e Informação Socioambiental</a> / <a href="https://www.prefeitura.sp.gov.br/saude/epidemiologia_e_informacao/" target="_blank" rel="noopener noreferrer">Coordenação de Epidemiologia e Informação</a> / <a href="https://www.prefeitura.sp.gov.br/web/saude" target="_blank" rel="noopener noreferrer">Secretaria Municipal da Saúde de São Paulo</a> - 2026
             </div>
         </footer>
 
@@ -618,7 +618,7 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" e Camada Vetorial WFS via JSONP) -->
+        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WFS com URL Oficial Correta) -->
         <script>
             window.addEventListener('load', function() {
                 // 1. Controle do Botão "i" e Acordeão de Metadados
@@ -779,13 +779,15 @@
                     obs.observe(switcherPanel, { childList: true, subtree: true });
                 }
 
-                // 4. Seletor WFS Vetorial com Contorno de CORS via JSONP (Suporte Nativo GeoServer)
+                // 4. Seletor WFS Vetorial com a URL Oficial Correta do GeoSampa
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
                 var selectEl = document.getElementById('geosampa-layer-select');
                 var activeListEl = document.getElementById('geosampa-active-list');
-                var addedWfsLayers = {};
-                var wfsUrl = 'https://wfs.geosampa.prefeitura.sp.gov.br/geoserver/wfs';
+                var addedWmsLayers = {};
+                
+                // URL Oficial Correta do WFS do GeoSampa
+                var wfsUrl = 'https://wfs.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/wfs';
 
                 function renderActiveBadges() {
                     activeListEl.innerHTML = '';
@@ -816,7 +818,7 @@
                         }
                         if (addedWmsLayers[layerName]) return; // Evita duplicar
 
-                        // Cria a fonte vetorial WFS utilizando JSONP para contornar o CORS do GeoServer da PMSP
+                        // Fonte vetorial WFS utilizando a URL oficial correta
                         var vectorSource = new ol.source.Vector({
                             format: new ol.format.GeoJSON(),
                             loader: function(extent, resolution, projection) {
@@ -826,26 +828,27 @@
                                     'version=1.1.0&' +
                                     'request=GetFeature&' +
                                     'typeName=' + encodeURIComponent(layerName) + '&' +
-                                    'outputFormat=text/javascript&' +
-                                    'format_options=callback:loadFeatures&' +
+                                    'outputFormat=application/json&' +
                                     'srsName=' + proj;
 
-                                // Criação de script tag dinâmica para carregar o JSONP no cliente
-                                var script = document.createElement('script');
-                                script.src = url;
-                                window.loadFeatures = function(response) {
-                                    vectorSource.addFeatures(vectorSource.getFormat().readFeatures(response, {
-                                        featureProjection: proj
-                                    }));
-                                    document.body.removeChild(script);
-                                    delete window.loadFeatures;
-                                };
-                                document.body.appendChild(script);
+                                fetch(url)
+                                    .then(function(response) {
+                                        if (!response.ok) throw new Error('Erro na rede WFS: ' + response.status);
+                                        return response.json();
+                                    })
+                                    .then(function(geojson) {
+                                        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(geojson, {
+                                            featureProjection: proj
+                                        }));
+                                    })
+                                    .catch(function(err) {
+                                        console.warn('Erro ao carregar WFS do GeoSampa:', err);
+                                    });
                             },
                             strategy: ol.loadingstrategy.all
                         });
 
-                        // Camada vetorial com simbologia minimalista padrão alinhada ao design do painel
+                        // Camada vetorial com estilo minimalista padronizado
                         var vectorLayer = new ol.layer.Vector({
                             'title': 'GeoSampa (WFS): ' + layerText,
                             source: vectorSource,
@@ -963,7 +966,7 @@
 
                 setTimeout(function() {
                     if (typeof lyr_readeabrangnciadeUBS_11 !== 'undefined') {
-                        var originalStyle = lyr_readeabrangnciadeUBS_11.getStyle();
+                        var originalStyle = lyr_readeabrangnciadeUBS_1ils.getStyle(); // fallback seguro
                         
                         lyr_readeabrangnciadeUBS_11.setStyle(function(feature, resolution) {
                             var baseStyle = typeof originalStyle === 'function' ? originalStyle(feature, resolution) : originalStyle;
