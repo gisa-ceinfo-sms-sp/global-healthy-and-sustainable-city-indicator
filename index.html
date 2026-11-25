@@ -165,11 +165,11 @@
                 color: #0284c7;
             }
 
-            /* 5. Painel Seletor GeoSampa WMS (Reposicionado para o Canto Superior Esquerdo, Abaixo da Busca de UBS, evitando conflito com o LayerSwitcher) */
+            /* 5. Painel Seletor de Camadas GeoSampa WMS (Canto Superior Esquerdo, ao lado da busca) */
             #geosampa-selector-container {
                 position: absolute;
                 top: 52px;
-                left: 385px; /* Posicionado logo à direita da barra de busca de UBS */
+                left: 385px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.96);
                 padding: 10px 12px;
@@ -265,14 +265,14 @@
                 gap: 8px;
                 align-items: center;
             }
-            .wms-legend-toggle-link {
+            .wms-legend-toggle-link, .wms-metadata-link {
                 color: #0284c7;
                 cursor: pointer;
                 font-size: 11px;
                 font-weight: 600;
                 text-decoration: underline;
             }
-            .wms-legend-toggle-link:hover {
+            .wms-legend-toggle-link:hover, .wms-metadata-link:hover {
                 color: #0369a1;
             }
             .wms-legend-container {
@@ -293,6 +293,7 @@
                 font-weight: bold;
                 cursor: pointer;
                 font-size: 14px;
+                margin-left: 4px;
             }
 
             /* 6. Painel de Informações Metodológicas (Botão "i") */
@@ -523,7 +524,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Reposicionado ao lado da busca, com botão de recolher) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 12px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -582,6 +583,13 @@
                         <li><strong>Caminhabilidade (Parâmetros Local e Global):</strong> Índice composto por densidade de interseções viárias, densidade residencial e diversidade de destinos, mensurando a propensão ao deslocamento a pé e vida ativa.</li>
                         <li><strong>Densidade Populacional (habitantes/km²):</strong> Concentração demográfica (hab./km²) que fundamenta a sustentabilidade de redes de transporte público e serviços de proximidade.</li>
                         <li><strong>Rede de Atenção à Saúde (CRS, STS e UBS):</strong> Unidades territoriais e áreas de abrangência das Unidades Básicas de Saúde da SMS-SP para planejamento e vigilância epidemiológica.</li>
+                    </ul>
+
+                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Notas Técnicas e Camadas de Apoio (GeoSampa):</h4>
+                    <ul style="margin: 0 0 10px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li><strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
+                        <li><strong>Esporte, Lazer e Parques:</strong> Equipamentos esportivos municipais, centros esportivos, clubes da comunidade e áreas verdes de permanência que fomentam a prática de atividade física e o bem-estar comunitário. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
+                        <li><strong>Segurança Alimentar e Abastecimento:</strong> Equipamentos públicos voltados ao combate à insegurança alimentar, incluindo feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. (<a href="http://geosampa.prefeitura.sp.gov.br/" target="_blank" rel="noopener noreferrer">Metadados GeoSampa</a>)</li>
                     </ul>
 
                     <p style="margin: 0 0 10px 0;">
@@ -880,7 +888,7 @@
                 }
 
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA E 50% OPACIDADE)
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA, METADADOS E OPACIDADE INTELIGENTE)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -890,7 +898,15 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Função para atualizar os emblemas (badges) e o controle de legendas individuais
+                // Lista de camadas conhecidas do GeoSampa que são de polígonos/áreas (para aplicar 50% de transparência)
+                var polygonLayers = [
+                    'geoportal:pde_parque_municipal',
+                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
+                    'geoportal:GEOSAMPA_v_praca_largo',
+                    'geoportal:calcada'
+                ];
+
+                // Função para atualizar os emblemas (badges), link de metadados e legendas individuais
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
@@ -910,16 +926,28 @@
                         var actionsDiv = document.createElement('div');
                         actionsDiv.className = 'wms-badge-actions';
                         
+                        // Link de Legenda
                         var legendToggleLink = document.createElement('span');
                         legendToggleLink.className = 'wms-legend-toggle-link';
                         legendToggleLink.innerText = 'Legenda';
                         
+                        // Link de Metadados (Redireciona para o portal GeoSampa da PMSP)
+                        var metadataLink = document.createElement('a');
+                        metadataLink.className = 'wms-metadata-link';
+                        metadataLink.href = 'http://geosampa.prefeitura.sp.gov.br/';
+                        metadataLink.target = '_blank';
+                        metadataLink.rel = 'noopener noreferrer';
+                        metadataLink.innerText = 'Metadados';
+                        metadataLink.title = 'Consultar metadados oficiais no portal GeoSampa';
+                        
+                        // Botão de remoção (×)
                         var removeX = document.createElement('span');
                         removeX.className = 'wms-remove-x';
                         removeX.title = 'Remover camada';
                         removeX.innerText = '×';
                         
                         actionsDiv.appendChild(legendToggleLink);
+                        actionsDiv.appendChild(metadataLink);
                         actionsDiv.appendChild(removeX);
                         
                         rowDiv.appendChild(titleSpan);
@@ -980,10 +1008,12 @@
                             return;
                         }
 
-                        // Camada ImageWMS com opacidade de 0.5 (50%)
+                        // Opacidade inteligente: 50% (0.5) para polígonos/áreas e 100% (1.0) para pontos e linhas
+                        var layerOpacity = (polygonLayers.indexOf(layerName) !== -1) ? 0.5 : 1.0;
+
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa (WMS): ' + layerText,
-                            'opacity': 0.5, // 50% de transparência solicitada
+                            'opacity': layerOpacity,
                             zIndex: 600,
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
