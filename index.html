@@ -99,7 +99,7 @@
                 opacity: 0.5;
             }
 
-            /* 4. Barra de Busca Rápida de UBS (Canto Superior Esquerdo) */
+            /* 4. Barra de Busca Rápida de UBS (Reposicionada no Canto Superior Esquerdo, abaixo dos botões de zoom) */
             #ubs-search-container {
                 position: absolute;
                 top: 8px;
@@ -165,11 +165,11 @@
                 color: #0284c7;
             }
 
-            /* 5. Painel Seletor de Camadas GeoSampa WMS (Posicionado ao lado da busca, sem conflitos) */
+            /* 5. Painel Seletor de Camadas GeoSampa WMS (Reposicionado no Canto Superior Direito, abaixo do LayerSwitcher) */
             #geosampa-selector-container {
                 position: absolute;
-                top: 8px;
-                left: 375px;
+                top: 135px; /* Abaixo do menu de camadas padrão do qgis2web */
+                right: 8px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.96);
                 padding: 8px 10px;
@@ -499,7 +499,7 @@
 
             @media (max-width: 768px) {
                 #geosampa-selector-container {
-                    top: 52px;
+                    top: 140px;
                     left: 8px;
                     right: auto;
                     width: 240px;
@@ -524,7 +524,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Ao lado da busca) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Movido para o Canto Superior Direito, abaixo do LayerSwitcher) -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -590,28 +590,6 @@
                         <a href="https://www.healthysustainablecities.org/Sao-Paulo/" target="_blank" rel="noopener noreferrer">Scorecard Oficial de São Paulo (Abrir em nova guia)</a>.
                     </p>
 
-                    <h3 style="font-size: 13.5px; color: #0369a1; margin: 16px 0 6px 0; border-top: 1px solid #cbd5e1; padding-top: 12px;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
-                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As seguintes notas técnicas detalham as fontes e parâmetros oficiais disponibilizados pelas bases geespaciais municipais integradas no painel:</p>
-                    
-                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
-                        <li>
-                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Ficha de Metadados GeoSampa</a>)
-                        </li>
-                        <li style="margin-top: 6px;">
-                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
-                        </li>
-                        <li style="margin-top: 6px;">
-                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Portal GeoSampa</a>)
-                        </li>
-                        <li style="margin-top: 6px;">
-                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search" target="_blank" rel="noopener noreferrer">Portal GeoSampa</a>)
-                        </li>
-                    </ul>
-
                     <!-- Botão Acordeão para Metadados Originais da Lancet -->
                     <button id="metadata-toggle-btn" class="metadata-toggle-btn" type="button">
                         <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas (Global Indicators Study)
@@ -627,6 +605,31 @@
                         Liu, S., Higgs, C., Arundel, J., Boeing, G., Cerdera, N., Moctezuma, D., Cerin, E., Adlakha, D., Lowe, M. and Giles-Corti, B. (2021), A Generalized Framework for Measuring Pedestrian Accessibility around the World Using Open Data. Geogr Anal. <a href="https://doi.org/10.1111/gean.12290" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/gean.12290</a><br>
                         This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
                     </div>
+
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
+
+                    <!-- SEÇÃO SEPARADA EXCLUSIVAMENTE PARA OS ITENS DO GEOSAMPA (AO FIM DO PAINEL) -->
+                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
+                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
+                    
+                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li style="margin-bottom: 6px;">
+                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Esporte e Lazer</a>)
+                        </li>
+                        <li>
+                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=abastecimento" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Abastecimento</a>)
+                        </li>
+                    </ul>
 
                     <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
 
@@ -903,7 +906,7 @@
                 }
 
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA, METADADOS E OPACIDADE INTELIGENTE)
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM URLS DE METADADOS PARAMETRIZADAS E OPACIDADE DIFERENCIADA)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -913,14 +916,28 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Mapeamento de links específicos de metadados oficiais do GeoSampa por camada
-                var geosampaMetadataLinks = {
+                // Dicionário de URLs parametrizadas de metadados para cada camada do GeoSampa
+                var geosampaMetadataUrls = {
                     'geoportal:via_bicicleta': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b',
-                    // Outras camadas apontam por padrão para o portal de busca do GeoSampa caso não tenham URL UUID específica
+                    'geoportal:calcada': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada',
+                    'geoportal:pde_parque_municipal': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=parque',
+                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=unidade%20de%20conservacao',
+                    'geoportal:GEOSAMPA_v_praca_largo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=praca',
+                    'geoportal:equipamento_esporte_centro_esportivo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=centro%20esportivo',
+                    'geoportal:equipamento_esporte_clubes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube',
+                    'geoportal:equipamento_esporte_clubesdacomunidade': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube%20da%20comunidade',
+                    'geoportal:equipamento_esporte_estadios': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=estadio',
+                    'geoportal:equipamento_esporte_outros': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte',
+                    'geoportal:bicicletario_paraciclo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bicicletario',
+                    'geoportal:equipamento_sacoloes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=sacolao',
+                    'geoportal:equipamento_feira_livre': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=feira%20livre',
+                    'geoportal:equipamento_mercados_municipais': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=mercado%20municipal',
+                    'geoportal:equipamento_bom_prato': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bom%20prato',
+                    'geoportal:seguranca_alimentar': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=seguranca%20alimentar',
                     'default': 'http://geosampa.prefeitura.sp.gov.br/'
                 };
 
-                // Camadas de polígonos/áreas que recebem 50% de opacidade para não ocultar o mapa de calor/hexágonos
+                // Camadas de polígonos/áreas que recebem 50% de opacidade; pontos e linhas recebem 100% (1.0)
                 var polygonLayers = [
                     'geoportal:pde_parque_municipal',
                     'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
@@ -928,7 +945,7 @@
                     'geoportal:calcada'
                 ];
 
-                // Função para atualizar badges, links de legenda, metadados e remoção
+                // Função para atualizar badges, links de legenda, metadados direcionados e remoção
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
@@ -953,14 +970,14 @@
                         legendToggleLink.className = 'wms-legend-toggle-link';
                         legendToggleLink.innerText = 'Legenda';
                         
-                        // Link para Metadados Oficiais
+                        // Link de Metadados Parametrizado
                         var metadataLink = document.createElement('a');
                         metadataLink.className = 'wms-metadata-link';
-                        metadataLink.href = geosampaMetadataLinks[key] || geosampaMetadataLinks['default'];
+                        metadataLink.href = geosampaMetadataUrls[key] || geosampaMetadataUrls['default'];
                         metadataLink.target = '_blank';
                         metadataLink.rel = 'noopener noreferrer';
                         metadataLink.innerText = 'Metadados';
-                        metadataLink.title = 'Abrir ficha de metadados oficial do GeoSampa';
+                        metadataLink.title = 'Abrir ficha de metadados correspondente no GeoSampa';
                         
                         // Botão de Exclusão (×)
                         var removeX = document.createElement('span');
@@ -1030,7 +1047,7 @@
                             return;
                         }
 
-                        // Opacidade inteligente: 50% para polígonos/áreas e 100% para pontos e linhas
+                        // Opacidade: 50% para polígonos/áreas e 100% para pontos e linhas
                         var layerOpacity = (polygonLayers.indexOf(layerName) !== -1) ? 0.5 : 1.0;
 
                         var wmsLayer = new ol.layer.Image({
