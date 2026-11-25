@@ -165,7 +165,137 @@
                 color: #0284c7;
             }
 
-            /* 5. Painel de Informações Metodológicas (Botão "i") */
+            /* 5. Painel Seletor GeoSampa WMS (Reposicionado no Canto Superior Direito, Abaixo dos Controles do Mapa) */
+            #geosampa-selector-container {
+                position: absolute;
+                top: 130px; /* Posicionado abaixo do LayerSwitcher e zoom nativo do OpenLayers */
+                right: 8px;
+                z-index: 2000;
+                background: rgba(255, 255, 255, 0.96);
+                padding: 10px 12px;
+                border-radius: 6px;
+                box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+                border: 1px solid #cbd5e1;
+                width: 290px;
+            }
+            .geosampa-header-flex {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 6px;
+            }
+            #geosampa-toggle-collapse-btn {
+                background: #f1f5f9;
+                border: 1px solid #cbd5e1;
+                color: #475569;
+                border-radius: 4px;
+                width: 22px;
+                height: 22px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+            }
+            #geosampa-toggle-collapse-btn:hover {
+                background: #e2e8f0;
+                color: #0284c7;
+            }
+            #geosampa-body-content {
+                display: block;
+            }
+            #geosampa-layer-select {
+                width: 100%;
+                padding: 6px;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                font-size: 12px;
+                background: #fff;
+                color: #1e293b;
+                margin-bottom: 8px;
+                outline: none;
+            }
+            #geosampa-add-btn {
+                background: #ffffff;
+                color: #16a34a;
+                border: 1px solid #16a34a;
+                border-radius: 4px;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                transition: all 0.2s;
+            }
+            #geosampa-add-btn:hover {
+                background: #16a34a;
+                color: #ffffff;
+            }
+            #geosampa-clear-btn {
+                background: #f8fafc;
+                color: #64748b;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                padding: 5px 8px;
+                cursor: pointer;
+                font-size: 11.5px;
+                font-weight: 600;
+                transition: all 0.2s;
+            }
+            #geosampa-clear-btn:hover {
+                background: #fee2e2;
+                color: #dc2626;
+                border-color: #fca5a5;
+            }
+            .wms-badge-item {
+                background: #f1f5f9;
+                padding: 6px 8px;
+                border-radius: 4px;
+                margin-top: 6px;
+                border-left: 3px solid #16a34a;
+                font-size: 11.5px;
+            }
+            .wms-badge-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .wms-badge-actions {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+            .wms-legend-toggle-link {
+                color: #0284c7;
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+            .wms-legend-toggle-link:hover {
+                color: #0369a1;
+            }
+            .wms-legend-container {
+                display: none;
+                margin-top: 6px;
+                padding-top: 6px;
+                border-top: 1px solid #e2e8f0;
+                text-align: center;
+                background: #ffffff;
+                border-radius: 3px;
+            }
+            .wms-legend-container img {
+                max-width: 100%;
+                height: auto;
+            }
+            .wms-remove-x {
+                color: #dc2626;
+                font-weight: bold;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            /* 6. Painel de Informações Metodológicas (Botão "i") */
             #custom-info-container {
                 position: absolute;
                 bottom: 28px;
@@ -366,83 +496,11 @@
                 background-color: #f8fafc;
             }
 
-            /* Painel Seletor WMS GeoSampa */
-            #geosampa-selector-container {
-                position: absolute;
-                top: 52px;
-                left: 50px;
-                z-index: 2000;
-                background: rgba(255, 255, 255, 0.96);
-                padding: 10px 12px;
-                border-radius: 6px;
-                box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-                border: 1px solid #cbd5e1;
-                width: 280px;
-            }
-            #geosampa-layer-select {
-                width: 100%;
-                padding: 6px;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                font-size: 12px;
-                background: #fff;
-                color: #1e293b;
-                margin-bottom: 8px;
-                outline: none;
-            }
-            #geosampa-add-btn {
-                background: #ffffff;
-                color: #16a34a;
-                border: 1px solid #16a34a;
-                border-radius: 4px;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 600;
-                transition: all 0.2s;
-            }
-            #geosampa-add-btn:hover {
-                background: #16a34a;
-                color: #ffffff;
-            }
-            #geosampa-clear-btn {
-                background: #f8fafc;
-                color: #64748b;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                padding: 5px 8px;
-                cursor: pointer;
-                font-size: 11.5px;
-                font-weight: 600;
-                transition: all 0.2s;
-            }
-            #geosampa-clear-btn:hover {
-                background: #fee2e2;
-                color: #dc2626;
-                border-color: #fca5a5;
-            }
-            .wms-badge-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: #f1f5f9;
-                padding: 3px 6px;
-                border-radius: 4px;
-                margin-top: 4px;
-                border-left: 3px solid #16a34a;
-            }
-            .wms-remove-x {
-                color: #dc2626;
-                font-weight: bold;
-                cursor: pointer;
-                padding-left: 6px;
-            }
-
             @media (max-width: 768px) {
                 #geosampa-selector-container {
-                    top: 96px;
-                    left: 8px;
-                    width: 240px;
+                    top: 140px;
+                    right: 8px;
+                    width: 250px;
                 }
             }
         </style>
@@ -456,49 +514,55 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Barra de Busca Rápida de UBS -->
+            <!-- Barra de Busca Rápida de UBS (Canto Superior Esquerdo) -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
-                <button id="ubs-search-btn">Ir</button>
+                <button id="ubs-search-btn" type="button">Ir</button>
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Esporte, Lazer, Parques, Ciclovias e Alimentos) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Canto Superior Direito, Recolhível) -->
             <div id="geosampa-selector-container">
-                <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
-                    Camadas GeoSampa (WMS):
-                </label>              
-                <select id="geosampa-layer-select">
-                    <option value="">-- Selecione uma camada --</option>
-                    <optgroup label="Esporte, Lazer e Recreação">
-                        <option value="geoportal:equipamento_esporte_centro_esportivo">Centros Esportivos</option>
-                        <option value="geoportal:equipamento_esporte_clubes">Clubes</option>
-                        <option value="geoportal:equipamento_esporte_clubesdacomunidade">Clubes da Comunidade</option>
-                        <option value="geoportal:equipamento_esporte_estadios">Estádios</option>
-                        <option value="geoportal:equipamento_esporte_outros">Esporte - Outros</option>
-                        <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
-                        <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
-                        <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
-                    </optgroup>
-                    <optgroup label="Caminhabilidade e Mobilidade">
-                        <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
-                        <option value="geoportal:bicicletario_paraciclo">Bicicletários e Paraciclos</option>
-                        <option value="geoportal:calcada">Calçadas</option>
-                    </optgroup>
-                    <optgroup label="Abastecimento e Alimentos">
-                        <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
-                        <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
-                        <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
-                        <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
-                        <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
-                    </optgroup>
-                </select>
-                <div style="display: flex; gap: 6px;">
-                    <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
-                    <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
+                <div class="geosampa-header-flex">
+                    <label for="geosampa-layer-select" style="font-size: 12px; font-weight: 600; color: #1e293b; margin: 0;">
+                        Camadas GeoSampa (WMS):
+                    </label>
+                    <button id="geosampa-toggle-collapse-btn" type="button" title="Minimizar / Expandir seletor">-</button>
                 </div>
-                <div id="geosampa-active-list" style="margin-top: 6px; font-size: 11.5px; color: #475569;"></div>
+                
+                <div id="geosampa-body-content">
+                    <select id="geosampa-layer-select">
+                        <option value="">-- Selecione uma camada --</option>
+                        <optgroup label="Esporte, Lazer e Recreação">
+                            <option value="geoportal:equipamento_esporte_centro_esportivo">Centros Esportivos</option>
+                            <option value="geoportal:equipamento_esporte_clubes">Clubes</option>
+                            <option value="geoportal:equipamento_esporte_clubesdacomunidade">Clubes da Comunidade</option>
+                            <option value="geoportal:equipamento_esporte_estadios">Estádios</option>
+                            <option value="geoportal:equipamento_esporte_outros">Esporte - Outros</option>
+                            <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
+                            <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
+                            <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
+                        </optgroup>
+                        <optgroup label="Caminhabilidade e Mobilidade">
+                            <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
+                            <option value="geoportal:bicicletario_paraciclo">Bicicletários e Paraciclos</option>
+                            <option value="geoportal:calcada">Calçadas</option>
+                        </optgroup>
+                        <optgroup label="Abastecimento e Alimentos">
+                            <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
+                            <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
+                            <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
+                            <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
+                            <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
+                        </optgroup>
+                    </select>
+                    <div style="display: flex; gap: 6px;">
+                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
+                        <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
+                    </div>
+                    <div id="geosampa-active-list" style="margin-top: 6px;"></div>
+                </div>
             </div>
             
             <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
@@ -765,7 +829,7 @@
                 }
 
                 // ==========================================
-                // 3. CONTROLE DE VISIBILIDADE DAS LEGENDA RETRÁTEIS
+                // 3. CONTROLE DE VISIBILIDADE DAS LEGENDA RETRÁTEIS LOCAIS
                 // ==========================================
                 function updateLegendVisibility() {
                     var layerItems = document.querySelectorAll('.layer-switcher li.layer');
@@ -796,42 +860,112 @@
                 }
 
                 // ==========================================
-                // 4. CONSUMO WMS RASTER DO GEOSAMPA (BLINDADO E OTIMIZADO)
+                // 4. COLAPSO DO PAINEL SELETOR GEOSAMPA
+                // ==========================================
+                var toggleCollapseBtn = document.getElementById('geosampa-toggle-collapse-btn');
+                var bodyContent = document.getElementById('geosampa-body-content');
+                if (toggleCollapseBtn && bodyContent) {
+                    toggleCollapseBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (bodyContent.style.display === 'none') {
+                            bodyContent.style.display = 'block';
+                            toggleCollapseBtn.innerText = '-';
+                        } else {
+                            bodyContent.style.display = 'none';
+                            toggleCollapseBtn.innerText = '+';
+                        }
+                    });
+                }
+
+                // ==========================================
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM LEGENDA E 50% OPACIDADE EM POLÍGONOS)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
                 var selectEl = document.getElementById('geosampa-layer-select');
                 var activeListEl = document.getElementById('geosampa-active-list');
                 
-                // Armazena as camadas WMS ativas no painel
                 var addedWmsLayers = {};
-                
-                // Endpoint WMS Oficial do GeoSampa
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Função para atualizar os emblemas (badges) visuais das camadas ativas
+                // Função para atualizar os emblemas (badges) e o controle de legendas individuais
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
                     Object.keys(addedWmsLayers).forEach(function(key) {
                         var item = addedWmsLayers[key];
-                        var div = document.createElement('div');
-                        div.className = 'wms-badge-item';
-                        div.innerHTML = '<span>' + item.title + '</span><span class="wms-remove-x" title="Remover camada">×</span>';
                         
-                        // Evento para remover a camada individualmente ao clicar no "×"
-                        div.querySelector('.wms-remove-x').addEventListener('click', function() {
+                        var badgeDiv = document.createElement('div');
+                        badgeDiv.className = 'wms-badge-item';
+                        
+                        // Linha principal do badge (Título + Botão Legenda + Botão Remover)
+                        var rowDiv = document.createElement('div');
+                        rowDiv.className = 'wms-badge-row';
+                        
+                        var titleSpan = document.createElement('span');
+                        titleSpan.style.fontWeight = '600';
+                        titleSpan.innerText = item.title;
+                        
+                        var actionsDiv = document.createElement('div');
+                        actionsDiv.className = 'wms-badge-actions';
+                        
+                        var legendToggleLink = document.createElement('span');
+                        legendToggleLink.className = 'wms-legend-toggle-link';
+                        legendToggleLink.innerText = 'Legenda';
+                        
+                        var removeX = document.createElement('span');
+                        removeX.className = 'wms-remove-x';
+                        removeX.title = 'Remover camada';
+                        removeX.innerText = '×';
+                        
+                        actionsDiv.appendChild(legendToggleLink);
+                        actionsDiv.appendChild(removeX);
+                        
+                        rowDiv.appendChild(titleSpan);
+                        rowDiv.appendChild(actionsDiv);
+                        badgeDiv.appendChild(rowDiv);
+                        
+                        // Container da Imagem da Legenda (GetLegendGraphic do WMS)
+                        var legendContainer = document.createElement('div');
+                        legendContainer.className = 'wms-legend-container';
+                        
+                        var legendImg = document.createElement('img');
+                        // URL oficial do GeoSampa GetLegendGraphic ajustada para 50% de opacidade visual simulada e tamanho ideal
+                        legendImg.src = wmsUrl + '?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&layer=' + encodeURIComponent(key);
+                        legendImg.alt = 'Legenda da Camada';
+                        legendContainer.appendChild(legendImg);
+                        badgeDiv.appendChild(legendContainer);
+                        
+                        // Evento para alternar exibição da legenda da camada específica
+                        legendToggleLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (legendContainer.style.display === 'block') {
+                                legendContainer.style.display = 'none';
+                                legendToggleLink.innerText = 'Legenda';
+                            } else {
+                                legendContainer.style.display = 'block';
+                                legendToggleLink.innerText = 'Ocultar';
+                            }
+                        });
+                        
+                        // Evento para remover a camada individualmente
+                        removeX.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
                             if (typeof map !== 'undefined') {
                                 map.removeLayer(item.layer);
                             }
                             delete addedWmsLayers[key];
                             renderActiveBadges();
                         });
-                        activeListEl.appendChild(div);
+                        
+                        activeListEl.appendChild(badgeDiv);
                     });
                 }
 
-                // Evento de clique blindado para o botão "Adicionar Camada"
+                // Evento de clique para o botão "Adicionar Camada"
                 if (addBtn && selectEl) {
                     addBtn.addEventListener('click', function(e) {
                         e.preventDefault();
@@ -840,7 +974,6 @@
                         var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
-                        // Validação preventiva para dar feedback imediato
                         if (!layerName || layerName === '') {
                             alert('Por favor, selecione uma camada válida no menu suspenso.');
                             return;
@@ -851,11 +984,11 @@
                             return;
                         }
 
-                        // Criação da camada raster ImageWMS compatível com o OpenLayers e GeoServer PMSP
+                        // Camada ImageWMS com opacidade de 0.5 (50%) para camadas de polígonos/áreas
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa (WMS): ' + layerText,
-                            'opacity': 0.95,
-                            zIndex: 600, // Renderizado acima dos mapas base e malhas estáticas
+                            'opacity': 0.5, // Ajustado para 50% de transparência conforme solicitado
+                            zIndex: 600,
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
                                 params: {
@@ -870,21 +1003,17 @@
                             })
                         });
 
-                        // Adiciona a camada ao mapa principal e atualiza o painel de badges
                         if (typeof map !== 'undefined') {
                             map.addLayer(wmsLayer);
                             addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
                             renderActiveBadges();
-                            console.log('Camada WMS adicionada com sucesso:', layerName);
                         } else {
-                            alert('Erro crítico: O mapa OpenLayers (map) não foi inicializado corretamente.');
+                            alert('Erro crítico: O mapa OpenLayers não foi inicializado corretamente.');
                         }
                     });
-                } else {
-                    console.warn('Aviso: O botão de adicionar ou o elemento select do GeoSampa não foram encontrados no DOM.');
                 }
 
-                // Evento para limpar todas as camadas WMS adicionadas de uma só vez
+                // Evento para limpar todas as camadas WMS adicionadas
                 if (clearBtn) {
                     clearBtn.addEventListener('click', function(e) {
                         e.preventDefault();
@@ -901,7 +1030,7 @@
                 }
 
                 // ==========================================
-                // 5. INTERATIVIDADE DE CLIQUE WMS (GETFEATUREINFO EM JSON)
+                // 6. INTERATIVIDADE DE CLIQUE WMS (GETFEATUREINFO EM JSON)
                 // ==========================================
                 if (typeof map !== 'undefined') {
                     map.on('click', function(evt) {
@@ -912,7 +1041,7 @@
                         var projection = map.getView().getProjection();
                         var clickedCoord = evt.coordinate;
 
-                        // Varre as camadas WMS ativas de cima para baixo (mais recente primeiro)
+                        // Varre as camadas WMS ativas para interrogar os atributos
                         for (var i = activeKeys.length - 1; i >= 0; i--) {
                             var key = activeKeys[i];
                             var item = addedWmsLayers[key];
@@ -978,7 +1107,7 @@
         </script>
 
         <!-- ========================================== -->
-        <!-- 6. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
+        <!-- 7. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
         <!-- ========================================== -->
         <script>
             window.addEventListener('load', function() {
