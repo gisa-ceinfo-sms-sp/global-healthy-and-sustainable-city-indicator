@@ -28,4 +28,6 @@ Z-Score	Interpretação	Implicações na Vida Diária
 -1.12 (Mínimo)	Pontuação abaixo da média global.	Bairros com planejamento deficiente. Baixa densidade, pouca conectividade (subúrbios dispersos) e baixo acesso a destinos/transporte. Alta dependência de veículos particulares, aumentando sedentarismo e poluição[cite: 27].
 Em resumo, o intervalo mostra que São Paulo contém, simultaneamente, bolsões de excelência urbana comparáveis aos melhores padrões globais (Z-score 2.15) e extensas áreas de exclusão ou planejamento de baixa qualidade (Z-score -1.12) que promovem estilos de vida pouco saudáveis[cite: 27].
 
+![Uploading image.png…]()
+
 <img width="1877" height="925" alt="image" src="https://github.com/user-attachments/assets/8e8e14a9-f204-473b-bd6d-5b6ac0c7f926" />
