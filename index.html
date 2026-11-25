@@ -618,7 +618,7 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WMS com GetFeatureInfo) -->
+        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WMS com Tratamento de Atributos) -->
         <script>
             window.addEventListener('load', function() {
                 // 1. Controle do Botão "i" e Acordeão de Metadados
@@ -855,7 +855,7 @@
                     });
                 }
 
-                // 5. Clique interativo via GetFeatureInfo do WMS (Exibe os atributos perfeitamente no popup)
+                // 5. Clique interativo via GetFeatureInfo do WMS (Extração robusta e estruturada em JSON)
                 if (typeof map !== 'undefined') {
                     map.on('click', function(evt) {
                         var viewResolution = map.getView().getResolution();
@@ -1003,4 +1003,3 @@
         </script>
     </body>
 </html>
-
