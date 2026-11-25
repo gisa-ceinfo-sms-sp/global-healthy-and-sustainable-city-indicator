@@ -99,36 +99,32 @@
                 opacity: 0.5;
             }
 
-            /* 4. Painel Seletor de Camadas GeoSampa WMS (Arrastável, Canto Superior Esquerdo) */
+            /* 4. Painel Seletor de Camadas GeoSampa WMS (Posicionado à Esquerda, após os controles nativos) */
             #geosampa-selector-container {
                 position: absolute;
                 top: 8px;
                 left: 50px;
                 z-index: 2000;
-                background: rgba(255, 255, 255, 0.97);
+                background: rgba(255, 255, 255, 0.96);
                 padding: 8px 10px;
                 border-radius: 6px;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                box-shadow: 0 3px 12px rgba(0,0,0,0.15);
                 border: 1px solid #cbd5e1;
                 width: 275px;
+                max-height: 82vh;
+                overflow-y: auto;
             }
             .geosampa-header-flex {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 4px;
-                cursor: move;
-                user-select: none;
-                background: #f8fafc;
-                padding: 4px 6px;
-                border-radius: 4px;
-                border: 1px solid #e2e8f0;
             }
             #geosampa-toggle-collapse-btn {
-                background: #ffffff;
+                background: #f1f5f9;
                 border: 1px solid #cbd5e1;
                 color: #475569;
-                border-radius: 3px;
+                border-radius: 4px;
                 width: 20px;
                 height: 20px;
                 font-weight: bold;
@@ -144,7 +140,6 @@
             }
             #geosampa-body-content {
                 display: block;
-                padding-top: 4px;
             }
             #geosampa-layer-select {
                 width: 100%;
@@ -200,11 +195,13 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 4px;
             }
             .wms-badge-actions {
                 display: flex;
                 gap: 6px;
                 align-items: center;
+                flex-shrink: 0;
             }
             .wms-legend-toggle-link, .wms-metadata-link {
                 color: #0284c7;
@@ -237,11 +234,11 @@
                 margin-left: 2px;
             }
 
-            /* 5. Barra de Busca Rápida de UBS (Posicionada imediatamente à direita do Seletor) */
+            /* 5. Barra de Busca Rápida de UBS (Posicionado à direita do Seletor GeoSampa) */
             #ubs-search-container {
                 position: absolute;
                 top: 8px;
-                left: 335px;
+                left: 355px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.95);
                 padding: 4px 8px;
@@ -504,15 +501,16 @@
                 background-color: #f8fafc;
             }
 
+            /* Responsividade para telas menores */
             @media (max-width: 900px) {
-                #geosampa-selector-container {
-                    top: 8px;
-                    left: 50px;
-                    width: 240px;
-                }
                 #ubs-search-container {
                     top: 52px;
                     left: 50px;
+                }
+                #geosampa-selector-container {
+                    top: 96px;
+                    left: 50px;
+                    width: 250px;
                 }
             }
         </style>
@@ -526,11 +524,11 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Arrastável) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS (Agora posicionado na esquerda, local original da busca UBS) -->
             <div id="geosampa-selector-container">
-                <div class="geosampa-header-flex" id="geosampa-drag-handle">
-                    <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0; cursor: move;">
-                        <i class="fas fa-arrows-alt" style="font-size: 10px; color: #64748b; margin-right: 3px;"></i> GeoSampa (WMS):
+                <div class="geosampa-header-flex">
+                    <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
+                        GeoSampa (WMS):
                     </label>
                     <button id="geosampa-toggle-collapse-btn" type="button" title="Minimizar / Expandir seletor">-</button>
                 </div>
@@ -565,11 +563,11 @@
                         <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar</button>
                         <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
                     </div>
-                    <div id="geosampa-active-list" style="margin-top: 5px; max-height: 250px; overflow-y: auto;"></div>
+                    <div id="geosampa-active-list" style="margin-top: 5px;"></div>
                 </div>
             </div>
 
-            <!-- Barra de Busca Rápida de UBS -->
+            <!-- Barra de Busca Rápida de UBS (Agora posicionada à direita do Seletor GeoSampa) -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
@@ -615,6 +613,38 @@
                         Liu, S., Higgs, C., Arundel, J., Boeing, G., Cerdera, N., Moctezuma, D., Cerin, E., Adlakha, D., Lowe, M. and Giles-Corti, B. (2021), A Generalized Framework for Measuring Pedestrian Accessibility around the World Using Open Data. Geogr Anal. <a href="https://doi.org/10.1111/gean.12290" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/gean.12290</a><br>
                         This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
                     </div>
+
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
+
+                    <h3 style="font-size: 13.5px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
+                    <p style="margin: 0 0 6px 0;">O <strong>Z-Score</strong> compara a pontuação de cada hexágono com a média geral de referência global:</p>
+                    <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li><strong>Z-Score 0:</strong> Média do estudo internacional.</li>
+                        <li><strong>Z-Score Positivo:</strong> Desempenho acima da média.</li>
+                        <li><strong>Z-Score Negativo:</strong> Desempenho abaixo da média.</li>
+                    </ul>
+                    
+                    <table class="tech-note-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 22%;">Z-Score</th>
+                                <th style="width: 38%;">Interpretação</th>
+                                <th style="width: 40%;">Implicações na Vida Diária</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>+2.15</strong> (Máximo)</td>
+                                <td>Padrão muito acima da média global.</td>
+                                <td>Áreas densas, alta conectividade viária, ampla acessibilidade a destinos e transporte. Estilo de vida ativo e sustentável.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>-1.12</strong> (Mínimo)</td>
+                                <td>Padrão abaixo da média global.</td>
+                                <td>Baixa densidade, dispersão urbana e menor acesso a serviços a pé. Maior dependência de automóveis e vulnerabilidade ao sedentarismo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
 
@@ -865,45 +895,10 @@
                 }
 
                 // ==========================================
-                // 4. FUNCIONALIDADE DE ARRASTAR E SOLTAR (DRAG AND DROP) + COLAPSO DO PAINEL GEOSAMPA
+                // 4. COLAPSO DO PAINEL SELETOR GEOSAMPA
                 // ==========================================
-                var selectorContainer = document.getElementById('geosampa-selector-container');
-                var dragHandle = document.getElementById('geosampa-drag-handle');
                 var toggleCollapseBtn = document.getElementById('geosampa-toggle-collapse-btn');
                 var bodyContent = document.getElementById('geosampa-body-content');
-
-                if (dragHandle && selectorContainer) {
-                    var isDragging = false;
-                    var startX, startY, initialLeft, initialTop;
-
-                    dragHandle.addEventListener('mousedown', function(e) {
-                        if (e.target === toggleCollapseBtn) return;
-                        isDragging = true;
-                        startX = e.clientX;
-                        startY = e.clientY;
-                        initialLeft = selectorContainer.offsetLeft;
-                        initialTop = selectorContainer.offsetTop;
-                        
-                        document.addEventListener('mousemove', onMouseMove);
-                        document.addEventListener('mouseup', onMouseUp);
-                        e.preventDefault();
-                    });
-
-                    function onMouseMove(e) {
-                        if (!isDragging) return;
-                        var dx = e.clientX - startX;
-                        var dy = e.clientY - startY;
-                        selectorContainer.style.left = (initialLeft + dx) + 'px';
-                        selectorContainer.style.top = (initialTop + dy) + 'px';
-                    }
-
-                    function onMouseUp() {
-                        isDragging = false;
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                    }
-                }
-
                 if (toggleCollapseBtn && bodyContent) {
                     toggleCollapseBtn.addEventListener('click', function(e) {
                         e.preventDefault();
