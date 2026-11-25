@@ -369,7 +369,7 @@
                 background-color: #f8fafc;
             }
 
-            /* Painel Seletor GeoSampa WFS Vetorial */
+            /* Painel Seletor GeoSampa WFS */
             #geosampa-selector-container {
                 position: absolute;
                 top: 52px;
@@ -467,19 +467,27 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WFS Vetorial -->
+            <!-- Painel Seletor de Camadas GeoSampa WFS Expandido -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WFS):
                 </label>              
                 <select id="geosampa-layer-select">
                     <option value="">-- Selecione uma camada --</option>
-                    <optgroup label="Abastecimento">
-                        <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
-                        <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
-                        <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
+                    <optgroup label="Esporte, Lazer e Recreação">
+                        <option value="geoportal:equipamento_esporte_lazer">Esporte e Lazer (Clubes Escola, etc.)</option>
+                        <option value="geoportal:parque_municipal">Parques Municipais</option>
+                        <option value="geoportal:parque_estadual">Parques Estaduais</option>
+                        <option value="geoportal:praca">Praças e Áreas Verdes</option>
                     </optgroup>
-                    <optgroup label="Segurança Alimentar">
+                    <optgroup label="Mobilidade Ativa e Infraestrutura">
+                        <option value="geoportal:ciclovia">Ciclovias</option>
+                        <option value="geoportal:ciclorrota">Ciclorrotas</option>
+                    </optgroup>
+                    <optgroup label="Abastecimento e Alimentos">
+                        <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
+                        <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
+                        <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
                         <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
                         <option value="geoportal:equipamento_armazem_solidario">Armazém Solidário</option>
                         <option value="geoportal:equipamento_rede_cozinha_cidada">Rede Cozinha Cidadã</option>
@@ -618,7 +626,7 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WFS com URL Oficial Correta) -->
+        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WFS via JSONP com Simbologia Adaptativa) -->
         <script>
             window.addEventListener('load', function() {
                 // 1. Controle do Botão "i" e Acordeão de Metadados
@@ -779,14 +787,13 @@
                     obs.observe(switcherPanel, { childList: true, subtree: true });
                 }
 
-                // 4. Seletor WFS Vetorial com a URL Oficial Correta do GeoSampa
+                // 4. Seletor WFS Vetorial com JSONP e Endpoint Oficial WFS do GeoSampa
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
                 var selectEl = document.getElementById('geosampa-layer-select');
                 var activeListEl = document.getElementById('geosampa-active-list');
                 var addedWmsLayers = {};
                 
-                // URL Oficial Correta do WFS do GeoSampa
                 var wfsUrl = 'https://wfs.geosampa.prefeitura.sp.gov.br/geoserver/geoportal/wfs';
 
                 function renderActiveBadges() {
@@ -809,7 +816,7 @@
 
                 if (addBtn && selectEl) {
                     addBtn.addEventListener('click', function() {
-                        var layerName = selectEl.value; // Ex: geoportal:equipamento_feira_livre
+                        var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
                         if (!layerName) {
@@ -818,47 +825,74 @@
                         }
                         if (addedWmsLayers[layerName]) return; // Evita duplicar
 
-                        // Fonte vetorial WFS utilizando a URL oficial correta
+                        // Fonte vetorial WFS utilizando JSONP para contornar o CORS do GeoServer
                         var vectorSource = new ol.source.Vector({
                             format: new ol.format.GeoJSON(),
                             loader: function(extent, resolution, projection) {
                                 var proj = projection.getCode();
+                                var callbackName = 'wfs_cb_' + Math.floor(Math.random() * 1000000);
+                                
+                                window[callbackName] = function(response) {
+                                    try {
+                                        var features = vectorSource.getFormat().readFeatures(response, {
+                                            featureProjection: proj
+                                        });
+                                        vectorSource.addFeatures(features);
+                                    } catch (err) {
+                                        console.warn('Erro ao ler feições WFS:', err);
+                                    }
+                                    document.body.removeChild(script);
+                                    delete window[callbackName];
+                                };
+
                                 var url = wfsUrl + '?' +
                                     'service=WFS&' +
                                     'version=1.1.0&' +
                                     'request=GetFeature&' +
                                     'typeName=' + encodeURIComponent(layerName) + '&' +
-                                    'outputFormat=application/json&' +
+                                    'outputFormat=text/javascript&' +
+                                    'format_options=callback:' + callbackName + '&' +
                                     'srsName=' + proj;
 
-                                fetch(url)
-                                    .then(function(response) {
-                                        if (!response.ok) throw new Error('Erro na rede WFS: ' + response.status);
-                                        return response.json();
-                                    })
-                                    .then(function(geojson) {
-                                        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(geojson, {
-                                            featureProjection: proj
-                                        }));
-                                    })
-                                    .catch(function(err) {
-                                        console.warn('Erro ao carregar WFS do GeoSampa:', err);
-                                    });
+                                var script = document.createElement('script');
+                                script.src = url;
+                                script.onerror = function() {
+                                    console.warn('Erro ao carregar script JSONP do WFS para:', layerName);
+                                    document.body.removeChild(script);
+                                    delete window[callbackName];
+                                };
+                                document.body.appendChild(script);
                             },
                             strategy: ol.loadingstrategy.all
                         });
 
-                        // Camada vetorial com estilo minimalista padronizado
+                        // Estilo inteligente adaptativo para Pontos, Linhas (Ciclovias) e Polígonos (Parques/Praças)
+                        var adaptiveStyle = function(feature) {
+                            var geomType = feature.getGeometry().getType();
+                            if (geomType.indexOf('Polygon') !== -1) {
+                                return new ol.style.Style({
+                                    fill: new ol.style.Fill({ color: 'rgba(34, 197, 94, 0.25)' }), // Verde suave para áreas/parques
+                                    stroke: new ol.style.Stroke({ color: '#16a34a', width: 1.5 })
+                                });
+                            } else if (geomType.indexOf('LineString') !== -1) {
+                                return new ol.style.Style({
+                                    stroke: new ol.style.Stroke({ color: '#ec4899', width: 3 }) // Rosa para ciclovias/ciclorrotas
+                                });
+                            } else {
+                                return new ol.style.Style({
+                                    image: new ol.style.Circle({
+                                        radius: 6,
+                                        fill: new ol.style.Fill({ color: '#0284c7' }), // Azul institucional para pontos
+                                        stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 })
+                                    })
+                                });
+                            }
+                        };
+
                         var vectorLayer = new ol.layer.Vector({
                             'title': 'GeoSampa (WFS): ' + layerText,
                             source: vectorSource,
-                            style: new ol.style.Style({
-                                image: new ol.style.Circle({
-                                    radius: 6,
-                                    fill: new ol.style.Fill({ color: '#0284c7' }),
-                                    stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 })
-                                })
-                            }),
+                            style: adaptiveStyle,
                             zIndex: 600
                         });
 
@@ -882,11 +916,11 @@
                     });
                 }
 
-                // 5. Clique interativo nas feições vetoriais WFS para exibir atributos no popup instantaneamente
+                // 5. Clique interativo nas feições WFS para exibir atributos no popup instantaneamente
                 if (typeof map !== 'undefined') {
                     map.on('click', function(evt) {
                         var clickedFeature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                            if (layer && layer.get('title') && layer.get('title').indexOf('GeoSampa (WFS):') !== -1) {
+                            if (layer && layer.get('title') && layer.get('title'].indexOf('GeoSampa (WFS):') !== -1) {
                                 return feature;
                             }
                         });
@@ -913,7 +947,7 @@
                         }
                     });
 
-                    // Altera o cursor para "pointer" ao passar o mouse sobre os pontos carregados via WFS
+                    // Altera o cursor para "pointer" ao passar o mouse sobre os elementos WFS
                     map.on('pointermove', function(e) {
                         var hit = map.hasFeatureAtPixel(e.pixel, {
                             layerFilter: function(layer) {
@@ -966,7 +1000,7 @@
 
                 setTimeout(function() {
                     if (typeof lyr_readeabrangnciadeUBS_11 !== 'undefined') {
-                        var originalStyle = lyr_readeabrangnciadeUBS_1ils.getStyle(); // fallback seguro
+                        var originalStyle = lyr_readeabrangnciadeUBS_11.getStyle();
                         
                         lyr_readeabrangnciadeUBS_11.setStyle(function(feature, resolution) {
                             var baseStyle = typeof originalStyle === 'function' ? originalStyle(feature, resolution) : originalStyle;
