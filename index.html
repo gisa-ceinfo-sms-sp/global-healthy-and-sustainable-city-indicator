@@ -10,6 +10,7 @@
         <!-- Favicon Oficial PMSP -->
         <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/gisa-ceinfo-sms-sp/dados/refs/heads/main/Brasao_PMSP_reduzido_favicon.png">
         
+        <!-- Folhas de Estilo (CSS) das Bibliotecas e QGIS2Web -->
         <link rel="stylesheet" href="./resources/ol.css">
         <link rel="stylesheet" href="./resources/fontawesome-all.min.css">
         <link rel="stylesheet" href="./resources/photon-geocoder-autocomplete.min.css">
@@ -17,6 +18,7 @@
         <link rel="stylesheet" href="./resources/qgis2web.css">
         
         <style>
+            /* Configuração Global de Layout - Tela Cheia Sem Rolagem Externa */
             html, body {
                 width: 100%;
                 height: 100%;
@@ -29,14 +31,14 @@
                 overflow: hidden;
             }
 
-            /* Ocultar elementos nativos desnecessários */
+            /* Ocultar elementos nativos desnecessários gerados pelo qgis2web */
             .project-title,
             h2.project-title,
             #abstract {
                 display: none !important;
             }
 
-            /* 1. Banner Superior (100% da largura) */
+            /* 1. Banner Superior Institucional (100% da largura) */
             #top-banner {
                 width: 100%;
                 flex-shrink: 0;
@@ -53,7 +55,7 @@
                 display: block;
             }
 
-            /* 2. Área do Mapa */
+            /* 2. Área do Mapa Interativo OpenLayers */
             #map {
                 width: 100%;
                 flex: 1;
@@ -86,19 +88,18 @@
                 color: #0369a1;
             }
 
-            /* Legenda Retrátil */
+            /* Legenda Retrátil Customizada */
             .layer-legend-items {
                 margin-top: 4px;
                 padding-left: 6px;
                 font-size: 12px;
                 line-height: 1.45;
             }
-
             .layer-legend-items img {
                 opacity: 0.5;
             }
 
-            /* 4. Barra de Busca de UBS (Canto Superior Esquerdo) */
+            /* 4. Barra de Busca de Unidades Básicas de Saúde (UBS) */
             #ubs-search-container {
                 position: absolute;
                 top: 8px;
@@ -164,14 +165,13 @@
                 color: #0284c7;
             }
 
-            /* 5. Botão "i" no Canto Inferior Direito */
+            /* 5. Painel de Informações Metodológicas (Botão "i") */
             #custom-info-container {
                 position: absolute;
                 bottom: 28px;
                 right: 8px;
                 z-index: 2000;
             }
-
             #custom-info-btn {
                 background-color: #0284c7;
                 color: #ffffff;
@@ -195,7 +195,6 @@
                 background-color: #0369a1;
                 transform: scale(1.06);
             }
-
             #custom-info-panel {
                 display: none;
                 background-color: rgba(255, 255, 255, 0.98);
@@ -287,7 +286,7 @@
                 margin-top: 6px;
             }
 
-            /* Controles OpenLayers Clean */
+            /* Estilização dos Controles OpenLayers */
             .ol-control {
                 background-color: rgba(255, 255, 255, 0.88) !important;
                 padding: 3px !important;
@@ -304,12 +303,10 @@
                 background-color: #e0f2fe !important;
                 color: #0284c7 !important;
             }
-
             .ol-control.layer-switcher {
                 top: 8px !important;
                 right: 8px !important;
             }
-
             .layer-switcher .panel {
                 border-radius: 6px !important;
                 border: 1px solid #cbd5e1 !important;
@@ -320,7 +317,7 @@
                 overflow-y: auto;
             }
 
-            /* Estilização dos Popups Corrigida */
+            /* Estilização do Popup de Atributos (Sem Rolagem Duplicada) */
             .ol-popup {
                 background-color: #ffffff !important;
                 border-radius: 8px !important;
@@ -369,7 +366,7 @@
                 background-color: #f8fafc;
             }
 
-            /* Painel Seletor GeoSampa WFS */
+            /* Painel Seletor WFS GeoSampa */
             #geosampa-selector-container {
                 position: absolute;
                 top: 52px;
@@ -457,9 +454,9 @@
             <img src="https://raw.githubusercontent.com/gisa-ceinfo-sms-sp/global-healthy-and-sustainable-city-indicator/refs/heads/main/banner_upper.png" alt="Banner Institucional - Indicadores de Caminhabilidade, Acesso Alimentar e Saúde">
         </header>
 
-        <!-- Container do Mapa -->
+        <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Barra de Busca de UBS -->
+            <!-- Barra de Busca Rápida de UBS -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
@@ -467,7 +464,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- Painel Seletor de Camadas GeoSampa WFS Completo -->
+            <!-- Painel Seletor de Camadas GeoSampa WFS (Esporte, Lazer, Parques, Ciclovias e Alimentos) -->
             <div id="geosampa-selector-container">
                 <label for="geosampa-layer-select" style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #1e293b;">
                     Camadas GeoSampa (WFS):
@@ -475,12 +472,12 @@
                 <select id="geosampa-layer-select">
                     <option value="">-- Selecione uma camada --</option>
                     <optgroup label="Esporte, Lazer e Recreação">
-                        <option value="geoportal:equipamento_esporte_lazer">Esporte e Lazer</option>
+                        <option value="geoportal:equipamento_esporte_lazer">Esporte e Lazer (Clubes Escola, etc.)</option>
                         <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
                         <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
                         <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
                     </optgroup>
-                    <optgroup label="Mobilidade Ativa e Infraestrutura">
+                    <optgroup label="Caminhabilidade e Mobilidade">
                         <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
                     </optgroup>
                     <optgroup label="Abastecimento e Alimentos">
@@ -493,12 +490,12 @@
                 </select>
                 <div style="display: flex; gap: 6px;">
                     <button id="geosampa-add-btn" style="flex: 1;">Adicionar Camada</button>
-                    <button id="geosampa-clear-btn" title="Remover camadas adicionadas">Limpar</button>
+                    <button id="geosampa-clear-btn" title="Remover camadas WFS adicionadas">Limpar</button>
                 </div>
                 <div id="geosampa-active-list" style="margin-top: 6px; font-size: 11.5px; color: #475569;"></div>
             </div>
             
-            <!-- Botão "i" no Canto Inferior Direito -->
+            <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
             <div id="custom-info-container">
                 <div id="custom-info-btn" title="Clique para ver informações sobre os indicadores e diretrizes metodológicas">i</div>
                 <div id="custom-info-panel">
@@ -571,6 +568,7 @@
                 </div>
             </div>
 
+            <!-- Container do Balão Pop-up Flutuante -->
             <div id="popup" class="ol-popup">
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
@@ -587,7 +585,7 @@
             </div>
         </footer>
 
-        <!-- Bibliotecas Base -->
+        <!-- Bibliotecas Base do OpenLayers e QGIS2Web -->
         <script src="./resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -595,7 +593,7 @@
         <script src="./resources/photon-geocoder-autocomplete.min.js"></script>
         <script src="./resources/olms.js"></script>
 
-        <!-- Camadas de Dados -->
+        <!-- Camadas de Dados Vetoriais Locais (SMS-SP e Lancet) -->
         <script src="./layers/DailyLivingZglobal_1.js"></script>
         <script src="./layers/DailyLivinglocal_2.js"></script>
         <script src="./layers/Populaosemacessoalimentosfrescosem500metros_4.js"></script>
@@ -607,7 +605,7 @@
         <script src="./layers/SupervisoTcnicadeSade_10.js"></script>
         <script src="./layers/readeabrangnciadeUBS_11.js"></script>
 
-        <!-- Estilos das Camadas -->
+        <!-- Estilos das Camadas Locais -->
         <script src="./styles/DailyLivingZglobal_1_style.js"></script>
         <script src="./styles/DailyLivinglocal_2_style.js"></script>
         <script src="./styles/Populaosemacessoalimentosfrescosem500metros_4_style.js"></script>
@@ -619,15 +617,17 @@
         <script src="./styles/SupervisoTcnicadeSade_10_style.js"></script>
         <script src="./styles/readeabrangnciadeUBS_11_style.js"></script>
 
-        <!-- Configuração de Camadas e Inicialização -->
+        <!-- Configuração de Camadas e Inicialização Geral -->
         <script src="./layers/layers.js" type="text/javascript"></script> 
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
 
-        <!-- Scripts de Customização (Busca UBS, Janela "i" e Seletor WFS com Endpoint Oficial Correta) -->
+        <!-- Scripts de Customização: Busca UBS, Painel "i", Legendas e Integração WFS GeoSampa -->
         <script>
             window.addEventListener('load', function() {
-                // 1. Controle do Botão "i" e Acordeão de Metadados
+                // ==========================================
+                // 1. CONTROLE DO PAINEL DE INFORMAÇÕES ("i")
+                // ==========================================
                 var infoBtn = document.getElementById('custom-info-btn');
                 var infoPanel = document.getElementById('custom-info-panel');
                 var infoClose = document.getElementById('custom-info-close');
@@ -669,7 +669,9 @@
                     });
                 }
 
-                // 2. Funcionalidade de Busca por Nome da UBS
+                // ==========================================
+                // 2. FUNCIONALIDADE DE BUSCA E ZOOM POR UBS
+                // ==========================================
                 var searchInput = document.getElementById('ubs-search-input');
                 var searchBtn = document.getElementById('ubs-search-btn');
                 var suggestionsBox = document.getElementById('ubs-suggestions');
@@ -756,7 +758,9 @@
                     });
                 }
 
-                // 3. Contrair/Expandir categorias na legenda
+                // ==========================================
+                // 3. CONTROLE DE VISIBILIDADE DAS LEGENDA RETRÁTEIS
+                // ==========================================
                 function updateLegendVisibility() {
                     var layerItems = document.querySelectorAll('.layer-switcher li.layer');
                     layerItems.forEach(function(li) {
@@ -785,16 +789,19 @@
                     obs.observe(switcherPanel, { childList: true, subtree: true });
                 }
 
-                // 4. Seletor WFS Vetorial com a URL Oficial Correta do GetCapabilities do GeoSampa
+                // ==========================================
+                // 4. CONSUMO WFS VETORIAL DO GEOSAMPA (EXPANDIDO)
+                // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
                 var selectEl = document.getElementById('geosampa-layer-select');
                 var activeListEl = document.getElementById('geosampa-active-list');
                 var addedWmsLayers = {};
                 
-                // URL Oficial Correta retirada do GetCapabilities do WFS do GeoSampa
+                // Endpoint WFS Oficial do GeoSampa (validado via GetCapabilities)
                 var wfsUrl = 'http://wfs.geosampa.prefeitura.sp.gov.br/geoserver/wfs';
 
+                // Função para renderizar os emblemas (badges) das camadas ativas no painel
                 function renderActiveBadges() {
                     activeListEl.innerHTML = '';
                     Object.keys(addedWmsLayers).forEach(function(key) {
@@ -813,9 +820,10 @@
                     });
                 }
 
+                // Evento de clique para adicionar a camada WFS selecionada ao mapa
                 if (addBtn && selectEl) {
                     addBtn.addEventListener('click', function() {
-                        var layerName = selectEl.value; // Ex: geoportal:equipamento_feira_livre
+                        var layerName = selectEl.value; // Ex: geoportal:equipamento_esporte_lazer
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
                         if (!layerName) {
@@ -827,7 +835,7 @@
                             return;
                         }
 
-                        // Fonte vetorial WFS robusta
+                        // Configuração da Fonte Vetorial WFS (GeoJSON) com carregador assíncrono
                         var vectorSource = new ol.source.Vector({
                             format: new ol.format.GeoJSON(),
                             loader: function(extent, resolution, projection) {
@@ -853,34 +861,36 @@
                                     })
                                     .catch(function(err) {
                                         console.warn('Erro ao carregar WFS do GeoSampa:', err);
+                                        alert('Não foi possível carregar os dados desta camada devido a restrições de segurança/rede do servidor.');
                                     });
                             },
                             strategy: ol.loadingstrategy.all
                         });
 
-                        // Estilo adaptativo para Pontos, Linhas (Ciclovias) e Polígonos (Parques/Praças)
+                        // Estilo Adaptativo Inteligente por Tipo de Geometria (Polígonos, Linhas e Pontos)
                         var adaptiveStyle = function(feature) {
                             var geomType = feature.getGeometry().getType();
                             if (geomType.indexOf('Polygon') !== -1) {
                                 return new ol.style.Style({
-                                    fill: new ol.style.Fill({ color: 'rgba(34, 197, 94, 0.25)' }), // Verde suave
+                                    fill: new ol.style.Fill({ color: 'rgba(34, 197, 94, 0.25)' }), // Verde translúcido para parques/áreas
                                     stroke: new ol.style.Stroke({ color: '#16a34a', width: 1.5 })
                                 });
                             } else if (geomType.indexOf('LineString') !== -1) {
                                 return new ol.style.Style({
-                                    stroke: new ol.style.Stroke({ color: '#ec4899', width: 3 }) // Rosa para ciclovias
+                                    stroke: new ol.style.Stroke({ color: '#ec4899', width: 3 }) // Rosa vibrante para ciclovias
                                 });
                             } else {
                                 return new ol.style.Style({
                                     image: new ol.style.Circle({
                                         radius: 6,
-                                        fill: new ol.style.Fill({ color: '#0284c7' }), // Azul institucional
+                                        fill: new ol.style.Fill({ color: '#0284c7' }), // Azul institucional para pontos de equipamentos/feiras
                                         stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 })
                                     })
                                 });
                             }
                         };
 
+                        // Criação da Camada Vetorial no OpenLayers
                         var vectorLayer = new ol.layer.Vector({
                             'title': 'GeoSampa (WFS): ' + layerText,
                             source: vectorSource,
@@ -896,6 +906,7 @@
                     });
                 }
 
+                // Evento para limpar todas as camadas WFS adicionadas
                 if (clearBtn) {
                     clearBtn.addEventListener('click', function() {
                         Object.keys(addedWmsLayers).forEach(function(key) {
@@ -908,7 +919,9 @@
                     });
                 }
 
-                // 5. Clique interativo nas feições vetoriais WFS para exibir atributos no popup instantaneamente
+                // ==========================================
+                // 5. INTERATIVIDADE DE CLIQUE E ATRIBUTOS (POPUP)
+                // ==========================================
                 if (typeof map !== 'undefined') {
                     map.on('click', function(evt) {
                         var clickedFeature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
@@ -939,7 +952,7 @@
                         }
                     });
 
-                    // Altera o cursor para "pointer" ao passar o mouse sobre os elementos WFS
+                    // Alteração dinâmica do cursor do mouse para "pointer" ao sobrevoar feições WFS
                     map.on('pointermove', function(e) {
                         var hit = map.hasFeatureAtPixel(e.pixel, {
                             layerFilter: function(layer) {
@@ -950,7 +963,7 @@
                     });
                 }
 
-                // 6. Atualiza tamanho do canvas após carregar o banner
+                // Atualização do tamanho do mapa após o carregamento do banner superior
                 var bannerImg = document.querySelector('#top-banner img');
                 if (bannerImg) {
                     bannerImg.addEventListener('load', function() {
@@ -962,7 +975,9 @@
             });
         </script>
 
-        <!-- Script de Rótulos das UBSs -->
+        <!-- ========================================== -->
+        <!-- 6. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
+        <!-- ========================================== -->
         <script>
             window.addEventListener('load', function() {
                 function wrapText(text, maxChars) {
