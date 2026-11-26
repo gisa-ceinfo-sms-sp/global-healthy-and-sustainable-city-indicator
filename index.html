@@ -582,7 +582,7 @@
 
                     <!-- SEÇÃO 2: CAMADAS TEMÁTICAS LOCAIS (SMS-SP / Lancet) -->
                     <div class="sidebar-section">
-                        <div class="sidebar-section-title">Indicadores e Malha Temática</div>
+                        <div class="sidebar-section-title">Indicadores e unidades territoriais da Saúde</div>
                         <div id="local-layers-list"></div>
                     </div>
 
@@ -915,9 +915,15 @@
                     
                     var layers = map.getLayers().getArray();
                     layers.forEach(function(layer) {
-                        var title = layer.get('title');
-                        if (!title || title.indexOf('GeoSampa') !== -1 || title.indexOf('Google') !== -1 || title.indexOf('Carto') !== -1) return;
+                        var rawTitle = layer.get('title');
+                        if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
+                        // Extrai apenas o texto limpo do título (ignorando eventuais tags HTML de legenda embutidas)
+                        var tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = rawTitle;
+                        var cleanTitle = tempDiv.textContent || tempDiv.innerText || rawTitle;
+                        cleanTitle = cleanTitle.split('<')[0].trim();
+
                         var visible = layer.getVisible();
                         
                         var itemDiv = document.createElement('div');
@@ -939,7 +945,7 @@
                         });
                         
                         var span = document.createElement('span');
-                        span.innerText = title;
+                        span.innerText = cleanTitle;
                         
                         label.appendChild(checkbox);
                         label.appendChild(span);
