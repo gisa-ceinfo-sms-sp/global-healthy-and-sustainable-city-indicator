@@ -561,7 +561,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) COM ABAS -->
+            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) COM ORDEM INVERTIDA -->
             <div id="control-sidebar">
                 <div class="sidebar-header" id="sidebar-drag-handle">
                     <h3 class="sidebar-title">
@@ -572,7 +572,13 @@
 
                 <div class="sidebar-body" id="sidebar-body-content">
                     
-                    <!-- SEÇÃO 1: CAMADAS DO GEOSAMPA (WMS) COM ABAS TEMÁTICAS -->
+                    <!-- SEÇÃO 1: INDICADORES E UNIDADES DA SAÚDE (PRIMEIRO) -->
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">Indicadores e unidades territoriais da Saúde</div>
+                        <div id="local-layers-list"></div>
+                    </div>
+
+                    <!-- SEÇÃO 2: CAMADAS DO GEOSAMPA (WMS) COM ABAS TEMÁTICAS (SEGUNDO) -->
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">GeoSampa (WMS)</div>
                         
@@ -656,12 +662,6 @@
                             <button id="geosampa-clear-btn" type="button" title="Remover WMS" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 6px; cursor: pointer; font-size: 11px; font-weight: 600;">Limpar</button>
                         </div>
                         <div id="geosampa-active-list" style="margin-top: 6px;"></div>
-                    </div>
-
-                    <!-- SEÇÃO 2: CAMADAS TEMÁTICAS LOCAIS (SMS-SP / Lancet) -->
-                    <div class="sidebar-section">
-                        <div class="sidebar-section-title">Indicadores e unidades territoriais da Saúde</div>
-                        <div id="local-layers-list"></div>
                     </div>
 
                 </div>
@@ -754,7 +754,7 @@
                             (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=saude" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Saúde</a>)
                         </li>
                         <li style="margin-bottom: 6px;">
-                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
+                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. The programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
                             (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
                         </li>
                         <li style="margin-bottom: 6px;">
@@ -1000,22 +1000,18 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Extração robusta: Usa um elemento temporário para remover tags HTML e extrair o primeiro bloco de texto válido
                         var tempDiv = document.createElement('div');
                         tempDiv.innerHTML = rawTitle;
                         
-                        // Remove elementos filhos de legenda ou imagens do nó temporário para sobrar só o título
                         var legendElements = tempDiv.querySelectorAll('.layer-legend-items, img, br, div');
                         legendElements.forEach(function(el) { el.remove(); });
                         
                         var cleanTitle = (tempDiv.textContent || tempDiv.innerText || '').trim();
                         if (!cleanTitle) {
-                            // Fallback caso o qgis2web envie tudo misturado sem classes
                             cleanTitle = rawTitle.split(/<div|<br|<img/i)[0].replace(/<[^>]*>/g, '').trim();
                         }
                         if (!cleanTitle) cleanTitle = "Camada temática";
 
-                        // Isola o bloco HTML da legenda associada
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
@@ -1424,7 +1420,7 @@
                         
                         lyr_readeabrangnciadeUBS_11.set('declutter', true);
                         if (typeof map !== 'undefined') {
-                            map.getLayers().forEach(function(layer) {
+                            map.getLayers().getArray().forEach(function(layer) {
                                 if (layer instanceof ol.layer.Vector) {
                                     layer.set('declutter', true);
                                 }
