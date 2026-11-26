@@ -374,7 +374,6 @@
                 color: #0284c7;
             }
 
-            /* Estilização da Tabela no Painel Técnico */
             .tech-note-table {
                 width: 100%;
                 border-collapse: collapse;
@@ -393,7 +392,6 @@
                 font-weight: 600;
             }
 
-            /* Estilo dos Botões de Acordeão */
             .metadata-toggle-btn {
                 background-color: #f1f5f9;
                 color: #0369a1;
@@ -505,7 +503,6 @@
                 background-color: #f8fafc;
             }
 
-            /* Responsividade para telas menores */
             @media (max-width: 900px) {
                 #ubs-search-container {
                     top: 52px;
@@ -528,7 +525,7 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- 4. Painel Seletor de Camadas GeoSampa WMS (Posicionado à Esquerda) -->
+            <!-- Painel Seletor de Camadas GeoSampa WMS -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -562,6 +559,17 @@
                             <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
                             <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
                         </optgroup>
+                        <optgroup label="Vulnerabilidade e Habitação">
+                            <option value="geoportal:indice_paulista_vulnerabilidadesocial">Índice Paulista de Vulnerabilidade Social (IPVS)</option>
+                            <option value="geoportal:habita2geosampa_habi_acao_regularizacao2geosampa">Ações de Regularização Fundiária</option>
+                            <option value="geoportal:habita2geosampa_habi_cortico2geosampa">Cortiço - Habitasampa</option>
+                            <option value="geoportal:habita2geosampa_habi_conjhabitacional2geosampa_ext">Empreendimento Habitacional</option>
+                            <option value="geoportal:habita2geosampa_habi_favela2geosampa">Favela - Habitasampa</option>
+                            <option value="geoportal:habita2geosampa_habi_loteamento2geosampa">Loteamento Irregular - Habitasampa</option>
+                            <option value="geoportal:habita2geosampa_habi_nucleo2geosampa">Núcleo - Habitasampa</option>
+                            <option value="geoportal:habita2geosampa_habi_reforma_conjuntohabitacional2geosampa_ext">Reforma em Conjuntos Habitacionais</option>
+                            <option value="geoportal:habita2geosampa_habi_obraurbanizacao2geosampa_ext">Obra de Urbanização em Assentamento Precário</option>
+                        </optgroup>
                     </select>
                     <div style="display: flex; gap: 5px;">
                         <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
@@ -571,7 +579,7 @@
                 </div>
             </div>
 
-            <!-- 5. Barra de Busca Rápida de UBS (Posicionado à direita do Seletor GeoSampa) -->
+            <!-- Barra de Busca Rápida de UBS -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
@@ -579,7 +587,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
             
-            <!-- 6. Painel de Informações Metodológicas (Botão "i") -->
+            <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
             <div id="custom-info-container">
                 <div id="custom-info-btn" title="Clique para ver informações sobre os indicadores e diretrizes metodológicas">i</div>
                 <div id="custom-info-panel">
@@ -653,6 +661,35 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
+
+                    <!-- NOTAS TÉCNICAS E CAMADAS DE CONSULTA (GEOSAMPA) -->
+                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
+                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
+                    
+                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li style="margin-bottom: 6px;">
+                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Esporte e Lazer</a>)
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=abastecimento" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Abastecimento</a>)
+                        </li>
+                        <li>
+                            <strong>Vulnerabilidade e Habitação (IPVS e Assentamentos):</strong> Camadas que mapeiam o Índice Paulista de Vulnerabilidade Social (IPVS), favelas, cortiços, loteamentos irregulares e ações de regularização fundiária da PMSP. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=vulnerabilidade" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Vulnerabilidade</a>)
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -916,7 +953,7 @@
                 }
 
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM URLS DE METADADOS PARAMETRIZADAS E OPACIDADE DIFERENCIADA)
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -926,23 +963,104 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
+                // Dicionário de URLs parametrizadas de metadados para cada camada do GeoSampa (incluindo o novo grupo de vulnerabilidade)
+                var geosampaMetadataUrls = {
+                    'geoportal:via_bicicleta': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b',
+                    'geoportal:calcada': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada',
+                    'geoportal:pde_parque_municipal': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=parque',
+                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=unidade%20de%20conservacao',
+                    'geoportal:GEOSAMPA_v_praca_largo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=praca',
+                    'geoportal:equipamento_esporte_centro_esportivo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=centro%20esportivo',
+                    'geoportal:equipamento_esporte_clubes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube',
+                    'geoportal:equipamento_esporte_clubesdacomunidade': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube%20da%20comunidade',
+                    'geoportal:equipamento_esporte_estadios': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=estadio',
+                    'geoportal:equipamento_esporte_outros': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte',
+                    'geoportal:bicicletario_paraciclo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bicicletario',
+                    'geoportal:equipamento_sacoloes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=sacolao',
+                    'geoportal:equipamento_feira_livre': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=feira%20livre',
+                    'geoportal:equipamento_mercados_municipais': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=mercado%20municipal',
+                    'geoportal:equipamento_bom_prato': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bom%20prato',
+                    'geoportal:seguranca_alimentar': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=seguranca%20alimentar',
+                    'geoportal:indice_paulista_vulnerabilidadesocial': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=vulnerabilidade%20social',
+                    'geoportal:habita2geosampa_habi_acao_regularizacao2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=regularizacao%20fundiaria',
+                    'geoportal:habita2geosampa_habi_cortico2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=cortico',
+                    'geoportal:habita2geosampa_habi_conjhabitacional2geosampa_ext': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=conjunto%20habitacional',
+                    'geoportal:habita2geosampa_habi_favela2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=favela',
+                    'geoportal:habita2geosampa_habi_loteamento2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=loteamento%20irregular',
+                    'geoportal:habita2geosampa_habi_nucleo2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=nucleo',
+                    'geoportal:habita2geosampa_habi_reforma_conjuntohabitacional2geosampa_ext': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=reforma%20conjunto%20habitacional',
+                    'geoportal:habita2geosampa_habi_obraurbanizacao2geosampa_ext': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=urbanizacao',
+                    'default': 'http://geosampa.prefeitura.sp.gov.br/'
+                };
+
+                // Camadas de polígonos/áreas que recebem 50% de opacidade
+                var polygonLayers = [
+                    'geoportal:pde_parque_municipal',
+                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
+                    'geoportal:GEOSAMPA_v_praca_largo',
+                    'geoportal:calcada',
+                    'geoportal:indice_paulista_vulnerabilidadesocial',
+                    'geoportal:habita2geosampa_habi_acao_regularizacao2geosampa',
+                    'geoportal:habita2geosampa_habi_cortico2geosampa',
+                    'geoportal:habita2geosampa_habi_conjhabitacional2geosampa_ext',
+                    'geoportal:habita2geosampa_habi_favela2geosampa',
+                    'geoportal:habita2geosampa_habi_loteamento2geosampa',
+                    'geoportal:habita2geosampa_habi_nucleo2geosampa',
+                    'geoportal:habita2geosampa_habi_reforma_conjuntohabitacional2geosampa_ext',
+                    'geoportal:habita2geosampa_habi_obraurbanizacao2geosampa_ext'
+                ];
+
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
                     Object.keys(addedWmsLayers).forEach(function(key) {
                         var item = addedWmsLayers[key];
-                        var div = document.createElement('div');
-                        div.className = 'wms-badge-item';
-                        div.innerHTML = '<div class="wms-badge-row"><span>' + item.title + '</span><div class="wms-badge-actions"><span class="wms-legend-toggle-link">Legenda</span><span class="wms-remove-x" title="Remover">×</span></div></div>';
+                        var badgeDiv = document.createElement('div');
+                        badgeDiv.className = 'wms-badge-item';
                         
+                        var rowDiv = document.createElement('div');
+                        rowDiv.className = 'wms-badge-row';
+                        
+                        var titleSpan = document.createElement('span');
+                        titleSpan.style.fontWeight = '600';
+                        titleSpan.innerText = item.title;
+                        
+                        var actionsDiv = document.createElement('div');
+                        actionsDiv.className = 'wms-badge-actions';
+                        
+                        var legendToggleLink = document.createElement('span');
+                        legendToggleLink.className = 'wms-legend-toggle-link';
+                        legendToggleLink.innerText = 'Legenda';
+                        
+                        var metadataLink = document.createElement('a');
+                        metadataLink.className = 'wms-metadata-link';
+                        metadataLink.href = geosampaMetadataUrls[key] || geosampaMetadataUrls['default'];
+                        metadataLink.target = '_blank';
+                        metadataLink.rel = 'noopener noreferrer';
+                        metadataLink.innerText = 'Metadados';
+                        metadataLink.title = 'Abrir ficha de metadados correspondente no GeoSampa';
+                        
+                        var removeX = document.createElement('span');
+                        removeX.className = 'wms-remove-x';
+                        removeX.title = 'Remover';
+                        removeX.innerText = '×';
+
+                        actionsDiv.appendChild(legendToggleLink);
+                        actionsDiv.appendChild(metadataLink);
+                        actionsDiv.appendChild(removeX);
+
+                        rowDiv.appendChild(titleSpan);
+                        rowDiv.appendChild(actionsDiv);
+                        badgeDiv.appendChild(rowDiv);
+
                         var legendContainer = document.createElement('div');
                         legendContainer.className = 'wms-legend-container';
                         var legendImg = document.createElement('img');
                         legendImg.src = wmsUrl + '?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&layer=' + encodeURIComponent(key);
                         legendContainer.appendChild(legendImg);
-                        div.appendChild(legendContainer);
+                        badgeDiv.appendChild(legendContainer);
 
-                        div.querySelector('.wms-legend-toggle-link').addEventListener('click', function(e) {
+                        legendToggleLink.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             if (legendContainer.style.display === 'block') {
@@ -954,7 +1072,7 @@
                             }
                         });
 
-                        div.querySelector('.wms-remove-x').addEventListener('click', function(e) {
+                        removeX.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             if (typeof map !== 'undefined') {
@@ -964,7 +1082,7 @@
                             renderActiveBadges();
                         });
 
-                        activeListEl.appendChild(div);
+                        activeListEl.appendChild(badgeDiv);
                     });
                 }
 
@@ -984,9 +1102,11 @@
                             return;
                         }
 
+                        var layerOpacity = (polygonLayers.indexOf(layerName) !== -1) ? 0.5 : 1.0;
+
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa (WMS): ' + layerText,
-                            'opacity': 0.95,
+                            'opacity': layerOpacity,
                             zIndex: 600,
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
