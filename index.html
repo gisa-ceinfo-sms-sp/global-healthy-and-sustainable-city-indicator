@@ -92,11 +92,14 @@
             .layer-legend-items {
                 margin-top: 4px;
                 padding-left: 6px;
-                font-size: 12px;
-                line-height: 1.45;
+                font-size: 11px;
+                line-height: 1.35;
+                color: #475569;
             }
             .layer-legend-items img {
-                opacity: 0.5;
+                opacity: 0.8;
+                vertical-align: middle;
+                margin-right: 4px;
             }
 
             /* 4. Barra de Busca Rápida de UBS (Canto Superior Esquerdo) */
@@ -266,7 +269,7 @@
             #local-layers-list {
                 display: flex;
                 flex-direction: column;
-                gap: 4px;
+                gap: 6px;
             }
             .custom-layer-item {
                 display: flex;
@@ -983,8 +986,8 @@
                     });
                 }
 
-               // ==========================================
-                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA
+                // ==========================================
+                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (TÍTULOS ABSOLUTAMENTE LIMPOS)
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
                 
@@ -997,14 +1000,12 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Limpeza robusta: remove qualquer tag HTML (<img ...>, <div ...>, <br ...>, etc.) e o conteúdo subsequente
+                        // Remove qualquer tag HTML (como <img ...>, <div ...>, etc.) e pega somente a primeira linha limpa
                         var cleanTitle = rawTitle.replace(/<[^>]*>/g, '').trim();
-                        // Se houver quebras de linha ou múltiplos espaços gerados pelas tags, pega apenas a primeira linha limpa
                         cleanTitle = cleanTitle.split(/[\r\n]+/)[0].trim();
-                        // Fallback caso o título fique vazio
                         if (!cleanTitle) cleanTitle = "Camada temática";
 
-                        // Extrai a legenda HTML associada para o modo retrátil
+                        // Extrai a legenda HTML associada
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
@@ -1280,7 +1281,6 @@
                         e.preventDefault();
                         e.stopPropagation();
                         
-                        // Identifica qual aba está ativa para pegar o select correspondente
                         var activeTabContent = document.querySelector('.geosampa-tab-content.active');
                         var selectEl = activeTabContent ? activeTabContent.querySelector('select') : null;
 
