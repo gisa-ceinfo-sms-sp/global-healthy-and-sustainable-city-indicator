@@ -561,7 +561,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) COM ABAS -->
+            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) COM ORDEM INVERTIDA -->
             <div id="control-sidebar">
                 <div class="sidebar-header" id="sidebar-drag-handle">
                     <h3 class="sidebar-title">
@@ -572,7 +572,13 @@
 
                 <div class="sidebar-body" id="sidebar-body-content">
                     
-                    <!-- SEÇÃO 1: CAMADAS DO GEOSAMPA (WMS) COM ABAS TEMÁTICAS -->
+                    <!-- SEÇÃO 1: INDICADORES E UNIDADES DA SAÚDE (PRIMEIRO) -->
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">Indicadores e unidades territoriais da Saúde</div>
+                        <div id="local-layers-list"></div>
+                    </div>
+
+                    <!-- SEÇÃO 2: CAMADAS DO GEOSAMPA (WMS) COM ABAS TEMÁTICAS (SEGUNDO) -->
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">GeoSampa (WMS)</div>
                         
@@ -656,12 +662,6 @@
                             <button id="geosampa-clear-btn" type="button" title="Remover WMS" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 6px; cursor: pointer; font-size: 11px; font-weight: 600;">Limpar</button>
                         </div>
                         <div id="geosampa-active-list" style="margin-top: 6px;"></div>
-                    </div>
-
-                    <!-- SEÇÃO 2: CAMADAS TEMÁTICAS LOCAIS (SMS-SP / Lancet) -->
-                    <div class="sidebar-section">
-                        <div class="sidebar-section-title">Indicadores e unidades territoriais da Saúde</div>
-                        <div id="local-layers-list"></div>
                     </div>
 
                 </div>
@@ -987,153 +987,18 @@
                 }
 
                 // ==========================================
-                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (EXTRAÇÃO LIMPA E PRECISA DE TÍTULOS)
+                // 3. PERSONALIZAÇÃO DO TÍTULO DO LAYERSWITCHER (DIREITA)
                 // ==========================================
-                var localLayersListEl = document.getElementById('local-layers-list');
-                
-                function buildLocalLayersControl() {
-                    if (!localLayersListEl || typeof map === 'undefined') return;
-                    localLayersListEl.innerHTML = '';
-                    
-                    var layers = map.getLayers().getArray();
-                    layers.forEach(function(layer) {
-                        var rawTitle = layer.get('title');
-                        if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
-                        
-                        // Extração robusta: Usa um elemento temporário para remover tags HTML e extrair o primeiro bloco de texto válido
-                        var tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = rawTitle;
-                        
-                        // Remove elementos filhos de legenda ou imagens do nó temporário para sobrar só o título
-                        var legendElements = tempDiv.querySelectorAll('.layer-legend-items, img, br, div');
-                        legendElements.forEach(function(el) { el.remove(); });
-                        
-                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || '').trim();
-                        if (!cleanTitle) {
-                            // Fallback caso o qgis2web envie tudo misturado sem classes
-                            cleanTitle = rawTitle.split(/<div|<br|<img/i)[0].replace(/<[^>]*>/g, '').trim();
-                        }
-                        if (!cleanTitle) cleanTitle = "Camada temática";
-
-                        // Isola o bloco HTML da legenda associada
-                        var legendHtml = '';
-                        var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
-                        if (matchLegend) {
-                            legendHtml = matchLegend[0];
-                        }
-
-                        var visible = layer.getVisible();
-                        
-                        var wrapperDiv = document.createElement('div');
-                        wrapperDiv.style.display = 'flex';
-                        wrapperDiv.style.flexDirection = 'column';
-
-                        var itemDiv = document.createElement('div');
-                        itemDiv.className = 'custom-layer-item';
-                        
-                        var label = document.createElement('label');
-                        label.className = 'custom-layer-label';
-                        
-                        var checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.checked = visible;
-                        checkbox.style.cursor = 'pointer';
-                        
-                        var span = document.createElement('span');
-                        span.innerText = cleanTitle;
-                        
-                        label.appendChild(checkbox);
-                        label.appendChild(span);
-                        itemDiv.appendChild(label);
-                        wrapperDiv.appendChild(itemDiv);
-
-                        if (legendHtml) {
-                            var legendBox = document.createElement('div');
-                            legendBox.className = 'local-layer-legend-box';
-                            legendBox.innerHTML = legendHtml;
-                            legendBox.style.display = visible ? 'block' : 'none';
-                            legendBox.style.paddingLeft = '22px';
-                            legendBox.style.fontSize = '11px';
-                            legendBox.style.color = '#475569';
-                            
-                            var innerLegend = legendBox.querySelector('.layer-legend-items');
-                            if (innerLegend) {
-                                innerLegend.style.display = 'block';
-                            }
-
-                            checkbox.addEventListener('change', function() {
-                                layer.setVisible(this.checked);
-                                legendBox.style.display = this.checked ? 'block' : 'none';
-                            });
-
-                            wrapperDiv.appendChild(legendBox);
-                        } else {
-                            checkbox.addEventListener('change', function() {
-                                layer.setVisible(this.checked);
-                            });
-                        }
-
-                        localLayersListEl.appendChild(wrapperDiv);
-                    });
-                }
-
-                setTimeout(buildLocalLayersControl, 400);
-
-                // Comportamento Arrastável (Drag) e Recolhível do Painel Direito
-                var controlSidebar = document.getElementById('control-sidebar');
-                var sidebarDragHandle = document.getElementById('sidebar-drag-handle');
-                var sidebarToggleBtn = document.getElementById('sidebar-toggle-collapse-btn');
-                var sidebarBody = document.getElementById('sidebar-body-content');
-
-                if (sidebarToggleBtn && sidebarBody) {
-                    sidebarToggleBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (sidebarBody.style.display === 'none') {
-                            sidebarBody.style.display = 'block';
-                            sidebarToggleBtn.innerText = '-';
-                        } else {
-                            sidebarBody.style.display = 'none';
-                            sidebarToggleBtn.innerText = '+';
-                        }
-                    });
-                }
-
-                if (sidebarDragHandle && controlSidebar) {
-                    var isSideDragging = false;
-                    var sStartX, sStartY, sInitLeft, sInitTop;
-
-                    sidebarDragHandle.addEventListener('mousedown', function(e) {
-                        if (e.target === sidebarToggleBtn) return;
-                        isSideDragging = true;
-                        sStartX = e.clientX;
-                        sStartY = e.clientY;
-                        sInitLeft = controlSidebar.offsetLeft;
-                        sInitTop = controlSidebar.offsetTop;
-                        
-                        document.addEventListener('mousemove', onSideMouseMove);
-                        document.addEventListener('mouseup', onSideMouseUp);
-                        e.preventDefault();
-                    });
-
-                    function onSideMouseMove(e) {
-                        if (!isSideDragging) return;
-                        var dx = e.clientX - sStartX;
-                        var dy = e.clientY - sStartY;
-                        controlSidebar.style.left = (sInitLeft + dx) + 'px';
-                        controlSidebar.style.top = (sInitTop + dy) + 'px';
-                        controlSidebar.style.right = 'auto';
-                    }
-
-                    function onSideMouseUp() {
-                        isSideDragging = false;
-                        document.removeEventListener('mousemove', onSideMouseMove);
-                        document.removeEventListener('mouseup', onSideMouseUp);
+                var switcherPanel = document.querySelector('.layer-switcher .panel');
+                if (switcherPanel) {
+                    var firstNode = switcherPanel.firstChild;
+                    if (firstNode && firstNode.nodeType === Node.TEXT_NODE || firstNode.tagName === 'B') {
+                        firstNode.textContent = "INDICADORES E UNIDADES TERRITORIAIS DA SAÚDE";
                     }
                 }
 
                 // ==========================================
-                // 4. ABAS (TABS) DO GEOSAMPA
+                // 4. ABAS (TABS) DO GEOSAMPA (ESQUERDA)
                 // ==========================================
                 var tabBtns = document.querySelectorAll('.geosampa-tab-btn');
                 tabBtns.forEach(function(btn) {
@@ -1148,6 +1013,58 @@
                         document.getElementById(targetTab).classList.add('active');
                     });
                 });
+
+                // Comportamento Arrastável e Recolhível do Seletor GeoSampa Esquerdo
+                var geosampaContainer = document.getElementById('geosampa-selector-container');
+                var geosampaDragHandle = document.getElementById('geosampa-drag-handle');
+                var geosampaToggleBtn = document.getElementById('geosampa-toggle-collapse-btn');
+                var geosampaBody = document.getElementById('geosampa-body-content');
+
+                if (geosampaToggleBtn && geosampaBody) {
+                    geosampaToggleBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (geosampaBody.style.display === 'none') {
+                            geosampaBody.style.display = 'block';
+                            geosampaToggleBtn.innerText = '-';
+                        } else {
+                            geosampaBody.style.display = 'none';
+                            geosampaToggleBtn.innerText = '+';
+                        }
+                    });
+                }
+
+                if (geosampaDragHandle && geosampaContainer) {
+                    var isGeoDragging = false;
+                    var gStartX, gStartY, gInitLeft, gInitTop;
+
+                    geosampaDragHandle.addEventListener('mousedown', function(e) {
+                        if (e.target === geosampaToggleBtn) return;
+                        isGeoDragging = true;
+                        gStartX = e.clientX;
+                        gStartY = e.clientY;
+                        gInitLeft = geosampaContainer.offsetLeft;
+                        gInitTop = geosampaContainer.offsetTop;
+                        
+                        document.addEventListener('mousemove', onGeoMouseMove);
+                        document.addEventListener('mouseup', onGeoMouseUp);
+                        e.preventDefault();
+                    });
+
+                    function onGeoMouseMove(e) {
+                        if (!isGeoDragging) return;
+                        var dx = e.clientX - gStartX;
+                        var dy = e.clientY - gStartY;
+                        geosampaContainer.style.left = (gInitLeft + dx) + 'px';
+                        geosampaContainer.style.top = (gInitTop + dy) + 'px';
+                    }
+
+                    function onGeoMouseUp() {
+                        isGeoDragging = false;
+                        document.removeEventListener('mousemove', onGeoMouseMove);
+                        document.removeEventListener('mouseup', onGeoMouseUp);
+                    }
+                }
 
                 // ==========================================
                 // 5. CONSUMO WMS RASTER DO GEOSAMPA
@@ -1424,7 +1341,7 @@
                         
                         lyr_readeabrangnciadeUBS_11.set('declutter', true);
                         if (typeof map !== 'undefined') {
-                            map.getLayers().forEach(function(layer) {
+                            map.getLayers().getArray().forEach(function(layer) {
                                 if (layer instanceof ol.layer.Vector) {
                                     layer.set('declutter', true);
                                 }
