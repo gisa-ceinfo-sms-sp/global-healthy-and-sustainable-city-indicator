@@ -97,7 +97,7 @@
                 color: #475569;
             }
             .layer-legend-items img {
-                opacity: 0.8;
+                opacity: 0.9;
                 vertical-align: middle;
                 margin-right: 4px;
             }
@@ -987,7 +987,7 @@
                 }
 
                 // ==========================================
-                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (TÍTULOS ABSOLUTAMENTE LIMPOS)
+                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (TÍTULOS ABSOLUTAMENTE LIMPOS SEM DUPLICAÇÃO)
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
                 
@@ -1000,12 +1000,11 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Remove qualquer tag HTML (como <img ...>, <div ...>, etc.) e pega somente a primeira linha limpa
-                        var cleanTitle = rawTitle.replace(/<[^>]*>/g, '').trim();
-                        cleanTitle = cleanTitle.split(/[\r\n]+/)[0].trim();
+                        // Extração cirúrgica do nome da camada: corta exatamente onde inicia a primeira tag HTML (<div>, <img>, <br>, etc.)
+                        var cleanTitle = rawTitle.split(/<div|<br|<img/i)[0].replace(/<[^>]*>/g, '').trim();
                         if (!cleanTitle) cleanTitle = "Camada temática";
 
-                        // Extrai a legenda HTML associada
+                        // Isola o bloco de legenda HTML enviado pelo qgis2web
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
@@ -1255,10 +1254,10 @@
                             e.stopPropagation();
                             if (legendContainer.style.display === 'block') {
                                 legendContainer.style.display = 'none';
-                                this.innerText = 'Legenda';
+                                legendToggleLink.innerText = 'Legenda';
                             } else {
                                 legendContainer.style.display = 'block';
-                                this.innerText = 'Ocultar';
+                                legendToggleLink.innerText = 'Ocultar';
                             }
                         });
 
