@@ -987,7 +987,7 @@
                 }
 
                 // ==========================================
-                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (TÍTULOS ABSOLUTAMENTE LIMPOS SEM DUPLICAÇÃO)
+                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA (EXTRAÇÃO LIMPA E PRECISA DE TÍTULOS)
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
                 
@@ -1000,11 +1000,22 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Extração cirúrgica do nome da camada: corta exatamente onde inicia a primeira tag HTML (<div>, <img>, <br>, etc.)
-                        var cleanTitle = rawTitle.split(/<div|<br|<img/i)[0].replace(/<[^>]*>/g, '').trim();
+                        // Extração robusta: Usa um elemento temporário para remover tags HTML e extrair o primeiro bloco de texto válido
+                        var tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = rawTitle;
+                        
+                        // Remove elementos filhos de legenda ou imagens do nó temporário para sobrar só o título
+                        var legendElements = tempDiv.querySelectorAll('.layer-legend-items, img, br, div');
+                        legendElements.forEach(function(el) { el.remove(); });
+                        
+                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || '').trim();
+                        if (!cleanTitle) {
+                            // Fallback caso o qgis2web envie tudo misturado sem classes
+                            cleanTitle = rawTitle.split(/<div|<br|<img/i)[0].replace(/<[^>]*>/g, '').trim();
+                        }
                         if (!cleanTitle) cleanTitle = "Camada temática";
 
-                        // Isola o bloco de legenda HTML enviado pelo qgis2web
+                        // Isola o bloco HTML da legenda associada
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
