@@ -99,146 +99,11 @@
                 opacity: 0.5;
             }
 
-            /* 4. Painel Seletor de Camadas GeoSampa WMS (Posicionado à Esquerda, após os controles nativos) */
-            #geosampa-selector-container {
-                position: absolute;
-                top: 8px;
-                left: 50px;
-                z-index: 2000;
-                background: rgba(255, 255, 255, 0.96);
-                padding: 8px 10px;
-                border-radius: 6px;
-                box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-                border: 1px solid #cbd5e1;
-                width: 275px;
-                max-height: 82vh;
-                overflow-y: auto;
-            }
-            .geosampa-header-flex {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 4px;
-            }
-            #geosampa-toggle-collapse-btn {
-                background: #f1f5f9;
-                border: 1px solid #cbd5e1;
-                color: #475569;
-                border-radius: 4px;
-                width: 20px;
-                height: 20px;
-                font-weight: bold;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 12px;
-            }
-            #geosampa-toggle-collapse-btn:hover {
-                background: #e2e8f0;
-                color: #0284c7;
-            }
-            #geosampa-body-content {
-                display: block;
-            }
-            #geosampa-layer-select {
-                width: 100%;
-                padding: 5px;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                font-size: 11.5px;
-                background: #fff;
-                color: #1e293b;
-                margin-bottom: 6px;
-                outline: none;
-            }
-            #geosampa-add-btn {
-                background: #ffffff;
-                color: #16a34a;
-                border: 1px solid #16a34a;
-                border-radius: 4px;
-                padding: 4px 8px;
-                cursor: pointer;
-                font-size: 11.5px;
-                font-weight: 600;
-                transition: all 0.2s;
-            }
-            #geosampa-add-btn:hover {
-                background: #16a34a;
-                color: #ffffff;
-            }
-            #geosampa-clear-btn {
-                background: #f8fafc;
-                color: #64748b;
-                border: 1px solid #cbd5e1;
-                border-radius: 4px;
-                padding: 4px 6px;
-                cursor: pointer;
-                font-size: 11px;
-                font-weight: 600;
-                transition: all 0.2s;
-            }
-            #geosampa-clear-btn:hover {
-                background: #fee2e2;
-                color: #dc2626;
-                border-color: #fca5a5;
-            }
-            .wms-badge-item {
-                background: #f1f5f9;
-                padding: 5px 7px;
-                border-radius: 4px;
-                margin-top: 5px;
-                border-left: 3px solid #16a34a;
-                font-size: 11px;
-            }
-            .wms-badge-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 4px;
-            }
-            .wms-badge-actions {
-                display: flex;
-                gap: 6px;
-                align-items: center;
-                flex-shrink: 0;
-            }
-            .wms-legend-toggle-link, .wms-metadata-link {
-                color: #0284c7;
-                cursor: pointer;
-                font-size: 10.5px;
-                font-weight: 600;
-                text-decoration: underline;
-            }
-            .wms-legend-toggle-link:hover, .wms-metadata-link:hover {
-                color: #0369a1;
-            }
-            .wms-legend-container {
-                display: none;
-                margin-top: 5px;
-                padding-top: 5px;
-                border-top: 1px solid #e2e8f0;
-                text-align: center;
-                background: #ffffff;
-                border-radius: 3px;
-            }
-            .wms-legend-container img {
-                max-width: 100%;
-                height: auto;
-            }
-            .wms-remove-x {
-                color: #dc2626;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: 13px;
-                margin-left: 2px;
-            }
-
-            /* 5. Barra de Busca Rápida de UBS (Posicionado à direita do Seletor GeoSampa) */
+            /* 4. Barra de Busca Rápida de UBS (Canto Superior Esquerdo) */
             #ubs-search-container {
                 position: absolute;
                 top: 8px;
-                left: 355px;
+                left: 50px;
                 z-index: 2000;
                 background: rgba(255, 255, 255, 0.95);
                 padding: 4px 8px;
@@ -298,6 +163,156 @@
             .ubs-suggestion-item:hover {
                 background: #e0f2fe;
                 color: #0284c7;
+            }
+
+            /* 5. Painel de Controle Lateral Direito Unificado (Modo Clean / Flutuante) */
+            #control-sidebar {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                width: 310px;
+                max-height: calc(100vh - 125px);
+                background: rgba(255, 255, 255, 0.98);
+                border: 1px solid #cbd5e1;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+                z-index: 2000;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            }
+            .sidebar-header {
+                background: #f8fafc;
+                padding: 8px 12px;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: move;
+                user-select: none;
+            }
+            .sidebar-title {
+                font-size: 12.5px;
+                font-weight: 700;
+                color: #0f172a;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .sidebar-body {
+                padding: 10px;
+                overflow-y: auto;
+                flex: 1;
+            }
+            .sidebar-section {
+                margin-bottom: 12px;
+                border-bottom: 1px solid #f1f5f9;
+                padding-bottom: 10px;
+            }
+            .sidebar-section:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+            .sidebar-section-title {
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #64748b;
+                margin-bottom: 6px;
+            }
+            /* Ocultar LayerSwitcher nativo antigo do qgis2web */
+            .ol-control.layer-switcher {
+                display: none !important;
+            }
+            #local-layers-list {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .custom-layer-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 11.5px;
+                color: #334155;
+                padding: 3px 5px;
+                border-radius: 4px;
+            }
+            .custom-layer-item:hover {
+                background: #f8fafc;
+            }
+            .custom-layer-label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                flex: 1;
+            }
+
+            #geosampa-layer-select {
+                width: 100%;
+                padding: 5px;
+                border: 1px solid #cbd5e1;
+                border-radius: 4px;
+                font-size: 11.5px;
+                background: #fff;
+                color: #1e293b;
+                margin-bottom: 6px;
+                outline: none;
+            }
+            .wms-badge-item {
+                background: #f1f5f9;
+                padding: 5px 7px;
+                border-radius: 4px;
+                margin-top: 5px;
+                border-left: 3px solid #16a34a;
+                font-size: 11px;
+            }
+            .wms-badge-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 4px;
+            }
+            .wms-badge-actions {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+            .wms-legend-toggle-link, .wms-metadata-link {
+                color: #0284c7;
+                cursor: pointer;
+                font-size: 10.5px;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+            .wms-legend-toggle-link:hover, .wms-metadata-link:hover {
+                color: #0369a1;
+            }
+            .wms-legend-container {
+                display: none;
+                margin-top: 5px;
+                padding-top: 5px;
+                border-top: 1px solid #e2e8f0;
+                text-align: center;
+                background: #ffffff;
+                border-radius: 3px;
+            }
+            .wms-legend-container img {
+                max-width: 100%;
+                height: auto;
+            }
+            .wms-remove-x {
+                color: #dc2626;
+                font-weight: bold;
+                cursor: pointer;
+                font-size: 13px;
+                margin-left: 2px;
             }
 
             /* 6. Painel de Informações Metodológicas (Botão "i") */
@@ -440,19 +455,6 @@
                 background-color: #e0f2fe !important;
                 color: #0284c7 !important;
             }
-            .ol-control.layer-switcher {
-                top: 8px !important;
-                right: 8px !important;
-            }
-            .layer-switcher .panel {
-                border-radius: 6px !important;
-                border: 1px solid #cbd5e1 !important;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
-                font-size: 13px !important;
-                color: #1e293b !important;
-                max-height: 65vh;
-                overflow-y: auto;
-            }
 
             /* Estilização do Popup de Atributos (Sem Rolagem Duplicada) */
             .ol-popup {
@@ -502,18 +504,6 @@
             #popup-content tr:hover {
                 background-color: #f8fafc;
             }
-
-            @media (max-width: 900px) {
-                #ubs-search-container {
-                    top: 52px;
-                    left: 50px;
-                }
-                #geosampa-selector-container {
-                    top: 96px;
-                    left: 50px;
-                    width: 250px;
-                }
-            }
         </style>
         <title>Indicadores de Caminhabilidade, Acesso Alimentar e Saúde</title>
     </head>
@@ -525,66 +515,78 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Painel Seletor de Camadas GeoSampa WMS -->
-            <div id="geosampa-selector-container">
-                <div class="geosampa-header-flex">
-                    <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
-                        GeoSampa (WMS):
-                    </label>
-                    <button id="geosampa-toggle-collapse-btn" type="button" title="Minimizar / Expandir seletor">-</button>
-                </div>
-                
-                <div id="geosampa-body-content">
-                    <select id="geosampa-layer-select">
-                        <option value="">-- Selecione uma camada --</option>
-                        <optgroup label="Esporte, Lazer e Recreação">
-                            <option value="geoportal:equipamento_esporte_centro_esportivo">Centros Esportivos</option>
-                            <option value="geoportal:equipamento_esporte_clubes">Clubes</option>
-                            <option value="geoportal:equipamento_esporte_clubesdacomunidade">Clubes da Comunidade</option>
-                            <option value="geoportal:equipamento_esporte_estadios">Estádios</option>
-                            <option value="geoportal:equipamento_esporte_outros">Esporte - Outros</option>
-                            <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
-                            <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
-                            <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
-                        </optgroup>
-                        <optgroup label="Caminhabilidade e Mobilidade">
-                            <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
-                            <option value="geoportal:bicicletario_paraciclo">Bicicletários e Paraciclos</option>
-                            <option value="geoportal:calcada">Calçadas</option>
-                        </optgroup>
-                        <optgroup label="Abastecimento e Alimentos">
-                            <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
-                            <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
-                            <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
-                            <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
-                            <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
-                        </optgroup>
-                        <optgroup label="Vulnerabilidade e Habitação">
-                            <option value="geoportal:indice_paulista_vulnerabilidadesocial">Índice Paulista de Vulnerabilidade Social (IPVS)</option>
-                            <option value="geoportal:habi_acao_regularizacao2geosampa">Ações de Regularização Fundiária</option>
-                            <option value="geoportal:habi_cortico2geosampa">Cortiço - Habitasampa</option>
-                            <option value="geoportal:habi_conjhabitacional2geosampa_ext">Empreendimento Habitacional</option>
-                            <option value="geoportal:habi_favela2geosampa">Favela - Habitasampa</option>
-                            <option value="geoportal:habi_loteamento2geosampa">Loteamento Irregular - Habitasampa</option>
-                            <option value="geoportal:habi_nucleo2geosampa">Núcleo - Habitasampa</option>
-                            <option value="geoportal:habi_reforma_conjuntohabitacional2geosampa_ext">Reforma em Conjuntos Habitacionais</option>
-                            <option value="geoportal:habi_obraurbanizacao2geosampa_ext">Obra de Urbanização em Assentamento Precário</option>
-                        </optgroup>
-                            </select>
-                    <div style="display: flex; gap: 5px;">
-                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
-                        <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
-                    </div>
-                    <div id="geosampa-active-list" style="margin-top: 5px;"></div>
-                </div>
-            </div>
-
-            <!-- Barra de Busca Rápida de UBS -->
+            <!-- Barra de Busca Rápida de UBS (Canto Superior Esquerdo) -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
                 <button id="ubs-search-btn" type="button">Ir</button>
                 <div id="ubs-suggestions"></div>
+            </div>
+
+            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) -->
+            <div id="control-sidebar">
+                <div class="sidebar-header" id="sidebar-drag-handle">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-sliders-h" style="color: #0284c7;"></i> Gerenciador de Camadas
+                    </h3>
+                    <button id="sidebar-toggle-collapse-btn" type="button" title="Minimizar / Expandir painel" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; width: 20px; height: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #475569;">-</button>
+                </div>
+
+                <div class="sidebar-body" id="sidebar-body-content">
+                    
+                    <!-- SEÇÃO 1: CAMADAS DO GEOSAMPA (WMS) -->
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">GeoSampa (WMS)</div>
+                        <select id="geosampa-layer-select">
+                            <option value="">-- Selecione uma camada --</option>
+                            <optgroup label="Esporte, Lazer e Recreação">
+                                <option value="geoportal:equipamento_esporte_centro_esportivo">Centros Esportivos</option>
+                                <option value="geoportal:equipamento_esporte_clubes">Clubes</option>
+                                <option value="geoportal:equipamento_esporte_clubesdacomunidade">Clubes da Comunidade</option>
+                                <option value="geoportal:equipamento_esporte_estadios">Estádios</option>
+                                <option value="geoportal:equipamento_esporte_outros">Esporte - Outros</option>
+                                <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
+                                <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
+                                <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
+                            </optgroup>
+                            <optgroup label="Caminhabilidade e Mobilidade">
+                                <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
+                                <option value="geoportal:bicicletario_paraciclo">Bicicletários e Paraciclos</option>
+                                <option value="geoportal:calcada">Calçadas</option>
+                            </optgroup>
+                            <optgroup label="Abastecimento e Alimentos">
+                                <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
+                                <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
+                                <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
+                                <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
+                                <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
+                            </optgroup>
+                            <optgroup label="Vulnerabilidade e Habitação">
+                                <option value="geoportal:indice_paulista_vulnerabilidadesocial">Índice Paulista de Vulnerabilidade Social (IPVS)</option>
+                                <option value="geoportal:habi_acao_regularizacao2geosampa">Ações de Regularização Fundiária</option>
+                                <option value="geoportal:habi_cortico2geosampa">Cortiço - Habitasampa</option>
+                                <option value="geoportal:habi_conjhabitacional2geosampa_ext">Empreendimento Habitacional</option>
+                                <option value="geoportal:habi_favela2geosampa">Favela - Habitasampa</option>
+                                <option value="geoportal:habi_loteamento2geosampa">Loteamento Irregular - Habitasampa</option>
+                                <option value="geoportal:habi_nucleo2geosampa">Núcleo - Habitasampa</option>
+                                <option value="geoportal:habi_reforma_conjuntohabitacional2geosampa_ext">Reforma em Conjuntos Habitacionais</option>
+                                <option value="geoportal:habi_obraurbanizacao2geosampa_ext">Obra de Urbanização em Assentamento Precário</option>
+                            </optgroup>
+                        </select>
+                        <div style="display: flex; gap: 5px; margin-top: 6px;">
+                            <button id="geosampa-add-btn" type="button" style="flex: 1; background: #ffffff; color: #16a34a; border: 1px solid #16a34a; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 11.5px; font-weight: 600;">Adicionar Camada</button>
+                            <button id="geosampa-clear-btn" type="button" title="Remover WMS" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 6px; cursor: pointer; font-size: 11px; font-weight: 600;">Limpar</button>
+                        </div>
+                        <div id="geosampa-active-list" style="margin-top: 6px;"></div>
+                    </div>
+
+                    <!-- SEÇÃO 2: CAMADAS TEMÁTICAS LOCAIS (SMS-SP / Lancet) -->
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">Indicadores e Malha Temática</div>
+                        <div id="local-layers-list"></div>
+                    </div>
+
+                </div>
             </div>
             
             <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
@@ -903,57 +905,106 @@
                 }
 
                 // ==========================================
-                // 3. CONTROLE DE VISIBILIDADE DAS LEGENDA RETRÁTEIS LOCAIS
+                // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA
                 // ==========================================
-                function updateLegendVisibility() {
-                    var layerItems = document.querySelectorAll('.layer-switcher li.layer');
-                    layerItems.forEach(function(li) {
-                        var cb = li.querySelector('input[type="checkbox"]');
-                        if (!cb) return;
-                        var legendBlock = li.querySelector('.layer-legend-items');
-                        if (legendBlock) {
-                            legendBlock.style.display = cb.checked ? 'block' : 'none';
-                        }
+                var localLayersListEl = document.getElementById('local-layers-list');
+                
+                function buildLocalLayersControl() {
+                    if (!localLayersListEl || typeof map === 'undefined') return;
+                    localLayersListEl.innerHTML = '';
+                    
+                    var layers = map.getLayers().getArray();
+                    layers.forEach(function(layer) {
+                        var title = layer.get('title');
+                        if (!title || title.indexOf('GeoSampa') !== -1 || title.indexOf('Google') !== -1 || title.indexOf('Carto') !== -1) return;
+                        
+                        var visible = layer.getVisible();
+                        
+                        var itemDiv = document.createElement('div');
+                        itemDiv.className = 'custom-layer-item';
+                        
+                        var label = document.createElement('label');
+                        label.className = 'custom-layer-label';
+                        
+                        var checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.checked = visible;
+                        checkbox.style.cursor = 'pointer';
+                        
+                        checkbox.addEventListener('change', function() {
+                            layer.setVisible(this.checked);
+                            if (typeof updateLegendVisibility === 'function') {
+                                updateLegendVisibility();
+                            }
+                        });
+                        
+                        var span = document.createElement('span');
+                        span.innerText = title;
+                        
+                        label.appendChild(checkbox);
+                        label.appendChild(span);
+                        itemDiv.appendChild(label);
+                        localLayersListEl.appendChild(itemDiv);
                     });
                 }
 
-                updateLegendVisibility();
-                document.addEventListener('change', updateLegendVisibility);
-                document.addEventListener('click', function(e) {
-                    if (e.target && e.target.closest('.layer-switcher')) {
-                        setTimeout(updateLegendVisibility, 20);
-                    }
-                });
+                setTimeout(buildLocalLayersControl, 400);
 
-                var switcherPanel = document.querySelector('.layer-switcher');
-                if (switcherPanel) {
-                    var obs = new MutationObserver(function() {
-                        updateLegendVisibility();
-                    });
-                    obs.observe(switcherPanel, { childList: true, subtree: true });
-                }
+                // Comportamento Arrastável (Drag) e Recolhível do Painel Direito
+                var controlSidebar = document.getElementById('control-sidebar');
+                var sidebarDragHandle = document.getElementById('sidebar-drag-handle');
+                var sidebarToggleBtn = document.getElementById('sidebar-toggle-collapse-btn');
+                var sidebarBody = document.getElementById('sidebar-body-content');
 
-                // ==========================================
-                // 4. COLAPSO DO PAINEL SELETOR GEOSAMPA
-                // ==========================================
-                var toggleCollapseBtn = document.getElementById('geosampa-toggle-collapse-btn');
-                var bodyContent = document.getElementById('geosampa-body-content');
-                if (toggleCollapseBtn && bodyContent) {
-                    toggleCollapseBtn.addEventListener('click', function(e) {
+                if (sidebarToggleBtn && sidebarBody) {
+                    sidebarToggleBtn.addEventListener('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (bodyContent.style.display === 'none') {
-                            bodyContent.style.display = 'block';
-                            toggleCollapseBtn.innerText = '-';
+                        if (sidebarBody.style.display === 'none') {
+                            sidebarBody.style.display = 'block';
+                            sidebarToggleBtn.innerText = '-';
                         } else {
-                            bodyContent.style.display = 'none';
-                            toggleCollapseBtn.innerText = '+';
+                            sidebarBody.style.display = 'none';
+                            sidebarToggleBtn.innerText = '+';
                         }
                     });
                 }
 
+                if (sidebarDragHandle && controlSidebar) {
+                    var isSideDragging = false;
+                    var sStartX, sStartY, sInitLeft, sInitTop;
+
+                    sidebarDragHandle.addEventListener('mousedown', function(e) {
+                        if (e.target === sidebarToggleBtn) return;
+                        isSideDragging = true;
+                        sStartX = e.clientX;
+                        sStartY = e.clientY;
+                        sInitLeft = controlSidebar.offsetLeft;
+                        sInitTop = controlSidebar.offsetTop;
+                        
+                        document.addEventListener('mousemove', onSideMouseMove);
+                        document.addEventListener('mouseup', onSideMouseUp);
+                        e.preventDefault();
+                    });
+
+                    function onSideMouseMove(e) {
+                        if (!isSideDragging) return;
+                        var dx = e.clientX - sStartX;
+                        var dy = e.clientY - sStartY;
+                        controlSidebar.style.left = (sInitLeft + dx) + 'px';
+                        controlSidebar.style.top = (sInitTop + dy) + 'px';
+                        controlSidebar.style.right = 'auto';
+                    }
+
+                    function onSideMouseUp() {
+                        isSideDragging = false;
+                        document.removeEventListener('mousemove', onSideMouseMove);
+                        document.removeEventListener('mouseup', onSideMouseUp);
+                    }
+                }
+
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM URLS DE METADADOS PARAMETRIZADAS E OPACIDADE DIFERENCIADA)
+                // 4. CONSUMO WMS RASTER DO GEOSAMPA
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -963,7 +1014,6 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Dicionário de URLs parametrizadas de metadados para cada camada do GeoSampa (incluindo o novo grupo de vulnerabilidade)
                 var geosampaMetadataUrls = {
                     'geoportal:via_bicicleta': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b',
                     'geoportal:calcada': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada',
@@ -993,8 +1043,7 @@
                     'default': 'http://geosampa.prefeitura.sp.gov.br/'
                 };
 
-                // Camadas de polígonos/áreas que recebem 50% de opacidade
-              var polygonLayers = [
+                var polygonLayers = [
                     'geoportal:pde_parque_municipal',
                     'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
                     'geoportal:GEOSAMPA_v_praca_largo',
@@ -1150,7 +1199,7 @@
         </script>
 
         <!-- ========================================== -->
-        <!-- 7. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
+        <!-- 5. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
         <!-- ========================================== -->
         <script>
             window.addEventListener('load', function() {
