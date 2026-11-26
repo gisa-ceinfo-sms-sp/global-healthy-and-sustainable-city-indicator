@@ -170,7 +170,7 @@
                 position: absolute;
                 top: 8px;
                 right: 8px;
-                width: 310px;
+                width: 320px;
                 max-height: calc(100vh - 125px);
                 background: rgba(255, 255, 255, 0.98);
                 border: 1px solid #cbd5e1;
@@ -224,6 +224,41 @@
                 color: #64748b;
                 margin-bottom: 6px;
             }
+
+            /* Estilo das Abas (Tabs) para o GeoSampa */
+            .geosampa-tabs {
+                display: flex;
+                gap: 2px;
+                margin-bottom: 6px;
+                background: #f1f5f9;
+                padding: 2px;
+                border-radius: 4px;
+            }
+            .geosampa-tab-btn {
+                flex: 1;
+                background: transparent;
+                border: none;
+                padding: 5px 2px;
+                font-size: 10px;
+                font-weight: 600;
+                color: #64748b;
+                cursor: pointer;
+                border-radius: 3px;
+                text-align: center;
+                transition: all 0.2s;
+            }
+            .geosampa-tab-btn.active {
+                background: #ffffff;
+                color: #0284c7;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            .geosampa-tab-content {
+                display: none;
+            }
+            .geosampa-tab-content.active {
+                display: block;
+            }
+
             /* Ocultar LayerSwitcher nativo antigo do qgis2web */
             .ol-control.layer-switcher {
                 display: none !important;
@@ -253,7 +288,7 @@
                 flex: 1;
             }
 
-            #geosampa-layer-select {
+            .geosampa-layer-select {
                 width: 100%;
                 padding: 5px;
                 border: 1px solid #cbd5e1;
@@ -523,7 +558,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
 
-            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) -->
+            <!-- PAINEL DE CONTROLE UNIFICADO (LATERAL DIREITO) COM ABAS -->
             <div id="control-sidebar">
                 <div class="sidebar-header" id="sidebar-drag-handle">
                     <h3 class="sidebar-title">
@@ -534,12 +569,36 @@
 
                 <div class="sidebar-body" id="sidebar-body-content">
                     
-                    <!-- SEÇÃO 1: CAMADAS DO GEOSAMPA (WMS) -->
+                    <!-- SEÇÃO 1: CAMADAS DO GEOSAMPA (WMS) COM ABAS TEMÁTICAS -->
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">GeoSampa (WMS)</div>
-                        <select id="geosampa-layer-select">
-                            <option value="">-- Selecione uma camada --</option>
-                            <optgroup label="Esporte, Lazer e Recreação">
+                        
+                        <!-- Botões de Abas -->
+                        <div class="geosampa-tabs">
+                            <button type="button" class="geosampa-tab-btn active" data-tab="tab-saude">Saúde</button>
+                            <button type="button" class="geosampa-tab-btn" data-tab="tab-esporte">Esporte</button>
+                            <button type="button" class="geosampa-tab-btn" data-tab="tab-mobilidade">Mobilidade</button>
+                            <button type="button" class="geosampa-tab-btn" data-tab="tab-alimentos">Alimentos</button>
+                            <button type="button" class="geosampa-tab-btn" data-tab="tab-habitacao">Habitação</button>
+                        </div>
+
+                        <!-- Conteúdo da Aba: Saúde -->
+                        <div id="tab-saude" class="geosampa-tab-content active">
+                            <select id="geosampa-select-saude" class="geosampa-layer-select">
+                                <option value="">-- Selecione Saúde --</option>
+                                <option value="geoportal:equipamento_saude_ubs">Unidades Básicas de Saúde (UBS)</option>
+                                <option value="geoportal:equipamento_saude_hospital">Hospitais</option>
+                                <option value="geoportal:equipamento_saude_upa">Unidades de Pronto Atendimento (UPA)</option>
+                                <option value="geoportal:equipamento_saude_amas">AMAs (Assistência Médica Ambulatorial)</option>
+                                <option value="geoportal:equipamento_saude_caps">CAPS (Centro de Atenção Psicossocial)</option>
+                                <option value="geoportal:equipamento_saude_outros">Outros Serviços de Saúde</option>
+                            </select>
+                        </div>
+
+                        <!-- Conteúdo da Aba: Esporte, Lazer e Recreação -->
+                        <div id="tab-esporte" class="geosampa-tab-content">
+                            <select id="geosampa-select-esporte" class="geosampa-layer-select">
+                                <option value="">-- Selecione Esporte e Lazer --</option>
                                 <option value="geoportal:equipamento_esporte_centro_esportivo">Centros Esportivos</option>
                                 <option value="geoportal:equipamento_esporte_clubes">Clubes</option>
                                 <option value="geoportal:equipamento_esporte_clubesdacomunidade">Clubes da Comunidade</option>
@@ -548,20 +607,35 @@
                                 <option value="geoportal:pde_parque_municipal">Parques Municipais</option>
                                 <option value="geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao">Parques e Unidades de Conservação</option>
                                 <option value="geoportal:GEOSAMPA_v_praca_largo">Praças e Largos</option>
-                            </optgroup>
-                            <optgroup label="Caminhabilidade e Mobilidade">
+                            </select>
+                        </div>
+
+                        <!-- Conteúdo da Aba: Caminhabilidade e Mobilidade -->
+                        <div id="tab-mobilidade" class="geosampa-tab-content">
+                            <select id="geosampa-select-mobilidade" class="geosampa-layer-select">
+                                <option value="">-- Selecione Mobilidade --</option>
                                 <option value="geoportal:via_bicicleta">Rede Cicloviária</option>
                                 <option value="geoportal:bicicletario_paraciclo">Bicicletários e Paraciclos</option>
                                 <option value="geoportal:calcada">Calçadas</option>
-                            </optgroup>
-                            <optgroup label="Abastecimento e Alimentos">
+                            </select>
+                        </div>
+
+                        <!-- Conteúdo da Aba: Abastecimento e Alimentos -->
+                        <div id="tab-alimentos" class="geosampa-tab-content">
+                            <select id="geosampa-select-alimentos" class="geosampa-layer-select">
+                                <option value="">-- Selecione Alimentos --</option>
                                 <option value="geoportal:equipamento_sacoloes">Sacolões Municipais</option>
                                 <option value="geoportal:equipamento_feira_livre">Feiras Livres</option>
                                 <option value="geoportal:equipamento_mercados_municipais">Mercados Municipais</option>
                                 <option value="geoportal:equipamento_bom_prato">Bom Prato</option>
                                 <option value="geoportal:seguranca_alimentar">Segurança Alimentar</option>
-                            </optgroup>
-                            <optgroup label="Vulnerabilidade e Habitação">
+                            </select>
+                        </div>
+
+                        <!-- Conteúdo da Aba: Vulnerabilidade e Habitação -->
+                        <div id="tab-habitacao" class="geosampa-tab-content">
+                            <select id="geosampa-select-habitacao" class="geosampa-layer-select">
+                                <option value="">-- Selecione Habitação --</option>
                                 <option value="geoportal:indice_paulista_vulnerabilidadesocial">Índice Paulista de Vulnerabilidade Social (IPVS)</option>
                                 <option value="geoportal:habi_acao_regularizacao2geosampa">Ações de Regularização Fundiária</option>
                                 <option value="geoportal:habi_cortico2geosampa">Cortiço - Habitasampa</option>
@@ -571,9 +645,10 @@
                                 <option value="geoportal:habi_nucleo2geosampa">Núcleo - Habitasampa</option>
                                 <option value="geoportal:habi_reforma_conjuntohabitacional2geosampa_ext">Reforma em Conjuntos Habitacionais</option>
                                 <option value="geoportal:habi_obraurbanizacao2geosampa_ext">Obra de Urbanização em Assentamento Precário</option>
-                            </optgroup>
-                        </select>
-                        <div style="display: flex; gap: 5px; margin-top: 6px;">
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 5px; margin-top: 4px;">
                             <button id="geosampa-add-btn" type="button" style="flex: 1; background: #ffffff; color: #16a34a; border: 1px solid #16a34a; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 11.5px; font-weight: 600;">Adicionar Camada</button>
                             <button id="geosampa-clear-btn" type="button" title="Remover WMS" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 6px; cursor: pointer; font-size: 11px; font-weight: 600;">Limpar</button>
                         </div>
@@ -671,6 +746,10 @@
                     <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
                     
                     <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
+                        <li style="margin-bottom: 6px;">
+                            <strong>Saúde (UBS, Hospitais, UPAs, AMAs, CAPS):</strong> Equipamentos de assistência à saúde pública municipal integrados para vigilância, atendimento de urgência e planejamento territorial. 
+                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=saude" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Saúde</a>)
+                        </li>
                         <li style="margin-bottom: 6px;">
                             <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
                             (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
@@ -909,7 +988,7 @@
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
                 
-               function buildLocalLayersControl() {
+                function buildLocalLayersControl() {
                     if (!localLayersListEl || typeof map === 'undefined') return;
                     localLayersListEl.innerHTML = '';
                     
@@ -918,13 +997,13 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Separa o título limpo do HTML da legenda injetado pelo qgis2web (<div class="layer-legend-items"> ou <br>)
+                        // Extrai apenas o texto limpo do título (ignorando classes HTML de legenda)
                         var titlePart = rawTitle.split(/<div|<br|<img/i)[0];
                         var tempDiv = document.createElement('div');
                         tempDiv.innerHTML = titlePart;
-                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || '').trim();
+                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || rawTitle).trim();
 
-                        // Extrai o bloco HTML da legenda, caso exista, para exibição retrátil limpa
+                        // Extrai a legenda HTML associada
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
@@ -956,7 +1035,6 @@
                         itemDiv.appendChild(label);
                         wrapperDiv.appendChild(itemDiv);
 
-                        // Adiciona a legenda visual limpa logo abaixo quando a camada estiver marcada
                         if (legendHtml) {
                             var legendBox = document.createElement('div');
                             legendBox.className = 'local-layer-legend-box';
@@ -966,7 +1044,6 @@
                             legendBox.style.fontSize = '11px';
                             legendBox.style.color = '#475569';
                             
-                            // Garante que o div interno gerado pelo qgis2web fique visível dentro do box
                             var innerLegend = legendBox.querySelector('.layer-legend-items');
                             if (innerLegend) {
                                 innerLegend.style.display = 'block';
@@ -1044,11 +1121,27 @@
                 }
 
                 // ==========================================
-                // 4. CONSUMO WMS RASTER DO GEOSAMPA
+                // 4. ABAS (TABS) DO GEOSAMPA
+                // ==========================================
+                var tabBtns = document.querySelectorAll('.geosampa-tab-btn');
+                tabBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var targetTab = this.getAttribute('data-tab');
+                        
+                        document.querySelectorAll('.geosampa-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                        document.querySelectorAll('.geosampa-tab-content').forEach(function(c) { c.classList.remove('active'); });
+                        
+                        this.classList.add('active');
+                        document.getElementById(targetTab).classList.add('active');
+                    });
+                });
+
+                // ==========================================
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
-                var selectEl = document.getElementById('geosampa-layer-select');
                 var activeListEl = document.getElementById('geosampa-active-list');
                 
                 var addedWmsLayers = {};
@@ -1071,6 +1164,12 @@
                     'geoportal:equipamento_mercados_municipais': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=mercado%20municipal',
                     'geoportal:equipamento_bom_prato': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bom%20prato',
                     'geoportal:seguranca_alimentar': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=seguranca%20alimentar',
+                    'geoportal:equipamento_saude_ubs': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=ubs',
+                    'geoportal:equipamento_saude_hospital': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=hospital',
+                    'geoportal:equipamento_saude_upa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=upa',
+                    'geoportal:equipamento_saude_amas': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=ama',
+                    'geoportal:equipamento_saude_caps': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=caps',
+                    'geoportal:equipamento_saude_outros': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=saude',
                     'geoportal:indice_paulista_vulnerabilidadesocial': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=vulnerabilidade%20social',
                     'geoportal:habi_acao_regularizacao2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=regularizacao%20fundiaria',
                     'geoportal:habi_cortico2geosampa': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=cortico',
@@ -1175,10 +1274,17 @@
                     });
                 }
 
-                if (addBtn && selectEl) {
+                if (addBtn) {
                     addBtn.addEventListener('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
+                        
+                        // Identifica qual aba está ativa para pegar o select correspondente
+                        var activeTabContent = document.querySelector('.geosampa-tab-content.active');
+                        var selectEl = activeTabContent ? activeTabContent.querySelector('select') : null;
+
+                        if (!selectEl) return;
+
                         var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
@@ -1239,7 +1345,7 @@
         </script>
 
         <!-- ========================================== -->
-        <!-- 5. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
+        <!-- 6. SCRIPT DE RÓTULOS AUTOMATIZADOS DAS UBSS -->
         <!-- ========================================== -->
         <script>
             window.addEventListener('load', function() {
