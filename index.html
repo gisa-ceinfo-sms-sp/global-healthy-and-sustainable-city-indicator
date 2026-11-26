@@ -909,7 +909,7 @@
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
                 
-                function buildLocalLayersControl() {
+               function buildLocalLayersControl() {
                     if (!localLayersListEl || typeof map === 'undefined') return;
                     localLayersListEl.innerHTML = '';
                     
@@ -918,14 +918,25 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Extrai apenas o texto limpo do título (ignorando eventuais tags HTML de legenda embutidas)
+                        // Separa o título limpo do HTML da legenda injetado pelo qgis2web (<div class="layer-legend-items"> ou <br>)
+                        var titlePart = rawTitle.split(/<div|<br|<img/i)[0];
                         var tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = rawTitle;
-                        var cleanTitle = tempDiv.textContent || tempDiv.innerText || rawTitle;
-                        cleanTitle = cleanTitle.split('<')[0].trim();
+                        tempDiv.innerHTML = titlePart;
+                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || '').trim();
+
+                        // Extrai o bloco HTML da legenda, caso exista, para exibição retrátil limpa
+                        var legendHtml = '';
+                        var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
+                        if (matchLegend) {
+                            legendHtml = matchLegend[0];
+                        }
 
                         var visible = layer.getVisible();
                         
+                        var wrapperDiv = document.createElement('div');
+                        wrapperDiv.style.display = 'flex';
+                        wrapperDiv.style.flexDirection = 'column';
+
                         var itemDiv = document.createElement('div');
                         itemDiv.className = 'custom-layer-item';
                         
@@ -937,20 +948,43 @@
                         checkbox.checked = visible;
                         checkbox.style.cursor = 'pointer';
                         
-                        checkbox.addEventListener('change', function() {
-                            layer.setVisible(this.checked);
-                            if (typeof updateLegendVisibility === 'function') {
-                                updateLegendVisibility();
-                            }
-                        });
-                        
                         var span = document.createElement('span');
                         span.innerText = cleanTitle;
                         
                         label.appendChild(checkbox);
                         label.appendChild(span);
                         itemDiv.appendChild(label);
-                        localLayersListEl.appendChild(itemDiv);
+                        wrapperDiv.appendChild(itemDiv);
+
+                        // Adiciona a legenda visual limpa logo abaixo quando a camada estiver marcada
+                        if (legendHtml) {
+                            var legendBox = document.createElement('div');
+                            legendBox.className = 'local-layer-legend-box';
+                            legendBox.innerHTML = legendHtml;
+                            legendBox.style.display = visible ? 'block' : 'none';
+                            legendBox.style.paddingLeft = '22px';
+                            legendBox.style.fontSize = '11px';
+                            legendBox.style.color = '#475569';
+                            
+                            // Garante que o div interno gerado pelo qgis2web fique visível dentro do box
+                            var innerLegend = legendBox.querySelector('.layer-legend-items');
+                            if (innerLegend) {
+                                innerLegend.style.display = 'block';
+                            }
+
+                            checkbox.addEventListener('change', function() {
+                                layer.setVisible(this.checked);
+                                legendBox.style.display = this.checked ? 'block' : 'none';
+                            });
+
+                            wrapperDiv.appendChild(legendBox);
+                        } else {
+                            checkbox.addEventListener('change', function() {
+                                layer.setVisible(this.checked);
+                            });
+                        }
+
+                        localLayersListEl.appendChild(wrapperDiv);
                     });
                 }
 
