@@ -983,7 +983,7 @@
                     });
                 }
 
-                // ==========================================
+               // ==========================================
                 // 3. SINCRONIZAÇÃO E CONTROLE DA BARRA LATERAL DIREITA
                 // ==========================================
                 var localLayersListEl = document.getElementById('local-layers-list');
@@ -997,13 +997,14 @@
                         var rawTitle = layer.get('title');
                         if (!rawTitle || rawTitle.indexOf('GeoSampa') !== -1 || rawTitle.indexOf('Google') !== -1 || rawTitle.indexOf('Carto') !== -1) return;
                         
-                        // Extrai apenas o texto limpo do título (ignorando classes HTML de legenda)
-                        var titlePart = rawTitle.split(/<div|<br|<img/i)[0];
-                        var tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = titlePart;
-                        var cleanTitle = (tempDiv.textContent || tempDiv.innerText || rawTitle).trim();
+                        // Limpeza robusta: remove qualquer tag HTML (<img ...>, <div ...>, <br ...>, etc.) e o conteúdo subsequente
+                        var cleanTitle = rawTitle.replace(/<[^>]*>/g, '').trim();
+                        // Se houver quebras de linha ou múltiplos espaços gerados pelas tags, pega apenas a primeira linha limpa
+                        cleanTitle = cleanTitle.split(/[\r\n]+/)[0].trim();
+                        // Fallback caso o título fique vazio
+                        if (!cleanTitle) cleanTitle = "Camada temática";
 
-                        // Extrai a legenda HTML associada
+                        // Extrai a legenda HTML associada para o modo retrátil
                         var legendHtml = '';
                         var matchLegend = rawTitle.match(/(<div[\s\S]*|<img[\s\S]*)/i);
                         if (matchLegend) {
