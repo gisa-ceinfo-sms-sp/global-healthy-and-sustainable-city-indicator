@@ -301,13 +301,12 @@
             }
 
             /* 6. Painel de Informações Metodológicas (Botão "i") */
-       #custom-info-container {
+            #custom-info-container {
                 position: absolute;
                 bottom: 28px;
                 right: 8px;
                 z-index: 2000;
             }
-
             #custom-info-btn {
                 background-color: #0284c7;
                 color: #ffffff;
@@ -331,7 +330,6 @@
                 background-color: #0369a1;
                 transform: scale(1.06);
             }
-
             #custom-info-panel {
                 display: none;
                 background-color: rgba(255, 255, 255, 0.98);
@@ -395,7 +393,7 @@
                 font-weight: 600;
             }
 
-            /* Estilo do Acordeão de Metadados */
+            /* Estilo dos Botões de Acordeão */
             .metadata-toggle-btn {
                 background-color: #f1f5f9;
                 color: #0369a1;
@@ -411,11 +409,13 @@
                 margin-top: 12px;
                 margin-bottom: 8px;
                 transition: background-color 0.2s;
+                width: 100%;
+                box-sizing: border-box;
             }
             .metadata-toggle-btn:hover {
                 background-color: #e2e8f0;
             }
-            #metadata-content {
+            .metadata-content-block {
                 display: none;
                 background-color: #f8fafc;
                 border: 1px solid #e2e8f0;
@@ -528,7 +528,7 @@
 
         <!-- Container Principal do Mapa -->
         <div id="map">
-            <!-- Painel Seletor de Camadas GeoSampa WMS (Agora posicionado na esquerda, local original da busca UBS) -->
+            <!-- 4. Painel Seletor de Camadas GeoSampa WMS (Posicionado à Esquerda) -->
             <div id="geosampa-selector-container">
                 <div class="geosampa-header-flex">
                     <label for="geosampa-layer-select" style="font-size: 11.5px; font-weight: 600; color: #1e293b; margin: 0;">
@@ -564,14 +564,14 @@
                         </optgroup>
                     </select>
                     <div style="display: flex; gap: 5px;">
-                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar</button>
+                        <button id="geosampa-add-btn" type="button" style="flex: 1;">Adicionar Camada</button>
                         <button id="geosampa-clear-btn" type="button" title="Remover camadas WMS adicionadas">Limpar</button>
                     </div>
                     <div id="geosampa-active-list" style="margin-top: 5px;"></div>
                 </div>
             </div>
 
-            <!-- Barra de Busca Rápida de UBS (Agora posicionada à direita do Seletor GeoSampa) -->
+            <!-- 5. Barra de Busca Rápida de UBS (Posicionado à direita do Seletor GeoSampa) -->
             <div id="ubs-search-container">
                 <i class="fas fa-search" style="color: #64748b; font-size: 12px; margin-left: 2px;"></i>
                 <input type="text" id="ubs-search-input" placeholder="Buscar por Nome da UBS..." autocomplete="off">
@@ -579,7 +579,7 @@
                 <div id="ubs-suggestions"></div>
             </div>
             
-            <!-- Botão "i" de Metodologia no Canto Inferior Direito -->
+            <!-- 6. Painel de Informações Metodológicas (Botão "i") -->
             <div id="custom-info-container">
                 <div id="custom-info-btn" title="Clique para ver informações sobre os indicadores e diretrizes metodológicas">i</div>
                 <div id="custom-info-panel">
@@ -588,7 +588,7 @@
                     <h3 style="font-size: 15px; color: #0369a1; margin: 0 0 8px 0;">Painel de Indicadores Urbanos e Saúde (São Paulo)</h3>
                     <p style="margin: 0 0 10px 0;">Este geoportal consolida indicadores espaciais estruturados sob as diretrizes científicas da <strong>The Lancet Series on Urban Design, Transport and Health</strong> e do <strong>Global Observatory of Healthy and Sustainable Cities</strong>, avaliando o impacto do desenho urbano sobre a saúde pública na capital paulista.</p>
                     
-                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Resumo dos Indicadores Temáticos (Lancet):</h4>
+                    <h4 style="font-size: 13px; color: #1e293b; margin: 12px 0 4px 0;">Resumo dos Indicadores Temáticos:</h4>
                     <ul style="margin: 0 0 10px 0; padding-left: 18px; font-size: 11.5px;">
                         <li><strong>Daily Living (Z-global e Local):</strong> Mede o acesso por caminhada a destinos essenciais de cotidiano (comércio, serviços e transporte) em raios de proximidade. O índice em Z-Score compara São Paulo com o padrão de referência de 25 cidades globais e com a média intraurbana local.</li>
                         <li><strong>Acesso a Alimentos Frescos (500m):</strong> Avalia a proporção da população com cobertura caminhável a feiras, sacolões e mercados de hortifrútis, combatendo desertos alimentares e promovendo segurança nutricional.</li>
@@ -602,12 +602,12 @@
                         <a href="https://www.healthysustainablecities.org/Sao-Paulo/" target="_blank" rel="noopener noreferrer">Scorecard Oficial de São Paulo (Abrir em nova guia)</a>.
                     </p>
 
-                    <!-- Botão Acordeão para Metadados Originais da Lancet -->
+                    <!-- Botão Acordeão para Metadados Originais -->
                     <button id="metadata-toggle-btn" class="metadata-toggle-btn" type="button">
-                        <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas (Global Indicators Study)
+                        <i class="fas fa-chevron-down" id="metadata-icon"></i> Metadados e Referências Técnicas Originais
                     </button>
                     
-                    <div id="metadata-content">
+                    <div id="metadata-content" class="metadata-content-block">
                         <strong>Global indicator data from the Global Healthy and Sustainable City Indicator Study Collaboration</strong><br>
                         21 June 2021<br>
                         Output data prepared for analysis of 25 diverse global cities included in the Global Healthy and Sustainable City Indicator Study Collaboration study. The dataset will be described in detail in a forthcoming publication (under review, September 2021).<br>
@@ -618,62 +618,41 @@
                         This database is made available under the Open Database License: <a href="http://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/odbl/1.0/</a>. Any rights in individual contents of the database are licensed under the Database Contents License: <a href="http://opendatacommons.org/licenses/dbcl/1.0/" target="_blank" rel="noopener noreferrer">http://opendatacommons.org/licenses/dbcl/1.0/</a>
                     </div>
 
-                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 12px 0;">
-
-                    <h3 style="font-size: 13.5px; color: #0369a1; margin: 0 0 6px 0;">Nota Técnica: O "Daily Living Z-Score" (Local e Global)</h3>
-                    <p style="margin: 0 0 6px 0;">O <strong>Z-Score</strong> compara a pontuação de cada hexágono com a média geral de referência global:</p>
-                    <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 11.5px;">
-                        <li><strong>Z-Score 0:</strong> Média do estudo internacional.</li>
-                        <li><strong>Z-Score Positivo:</strong> Desempenho acima da média.</li>
-                        <li><strong>Z-Score Negativo:</strong> Desempenho abaixo da média.</li>
-                    </ul>
+                    <!-- Botão Acordeão para a Nota Técnica do Z-Score -->
+                    <button id="zscore-toggle-btn" class="metadata-toggle-btn" type="button">
+                        <i class="fas fa-chevron-down" id="zscore-icon"></i> Nota Técnica: O "Daily Living Z-Score" (Local e Global)
+                    </button>
                     
-                    <table class="tech-note-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 22%;">Z-Score</th>
-                                <th style="width: 38%;">Interpretação</th>
-                                <th style="width: 40%;">Implicações na Vida Diária</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>+2.15</strong> (Máximo)</td>
-                                <td>Padrão muito acima da média global.</td>
-                                <td>Áreas densas, alta conectividade viária, ampla acessibilidade a destinos e transporte. Estilo de vida ativo e sustentável.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>-1.12</strong> (Mínimo)</td>
-                                <td>Padrão abaixo da média global.</td>
-                                <td>Baixa densidade, dispersão urbana e menor acesso a serviços a pé. Maior dependência de automóveis e vulnerabilidade ao sedentarismo.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <hr style="border: 0; border-top: 1px solid #cbd5f1; margin: 16px 0;">
-
-                    <!-- SEÇÃO SEPARADA EXCLUSIVAMENTE PARA OS ITENS DO GEOSAMPA (AO FIM DO PAINEL) -->
-                    <h3 style="font-size: 14px; color: #0369a1; margin: 0 0 6px 0;">Notas Técnicas e Camadas de Consulta (GeoSampa)</h3>
-                    <p style="margin: 0 0 8px 0; font-size: 11.5px;">As notas técnicas abaixo descrevem as fontes espaciais municipais adicionais integradas sob demanda no painel:</p>
-                    
-                    <ul style="margin: 0 0 12px 0; padding-left: 18px; font-size: 11.5px;">
-                        <li style="margin-bottom: 6px;">
-                            <strong>Calçadas (PEC):</strong> Calçadas PEC referem-se às calçadas requalificadas ou previstas no Plano Emergencial de Calçadas (também chamado de Programa Emergencial de Calçadas) da cidade de São Paulo, criado pela Lei nº 14.675/2008. O programa busca padronizar e tornar acessíveis passeios públicos em rotas prioritárias de circulação de pedestres. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada" target="_blank" rel="noopener noreferrer">Pesquisar Metadados PEC</a>)
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            <strong>Rede Cicloviária:</strong> Infraestrutura viária dedicada à circulação de bicicletas, composta por ciclovias, ciclofaixas, calçadas compartilhadas e ciclorrotas oficiais do município. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b" target="_blank" rel="noopener noreferrer">Ficha de Metadados Oficial</a>)
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            <strong>Esporte, Lazer e Parques:</strong> Centros esportivos, clubes, estádios, parques municipais e praças públicas que promovem a qualidade de vida, a prática de atividades físicas ao ar livre e a saúde mental urbana. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Esporte e Lazer</a>)
-                        </li>
-                        <li>
-                            <strong>Abastecimento e Alimentos:</strong> Equipamentos públicos de segurança alimentar e nutricional, abrange feiras livres, sacolões, mercados municipais e unidades do programa Bom Prato. 
-                            (<a href="https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=abastecimento" target="_blank" rel="noopener noreferrer">Pesquisar Metadados Abastecimento</a>)
-                        </li>
-                    </ul>
+                    <div id="zscore-content" class="metadata-content-block">
+                        <p style="margin: 0 0 6px 0;">O <strong>Z-Score</strong> compara a pontuação de cada hexágono com a média geral de referência global:</p>
+                        <ul style="margin: 0 0 8px 0; padding-left: 18px; font-size: 11.5px;">
+                            <li><strong>Z-Score 0:</strong> Média do estudo internacional.</li>
+                            <li><strong>Z-Score Positivo:</strong> Desempenho acima da média.</li>
+                            <li><strong>Z-Score Negativo:</strong> Desempenho abaixo da média.</li>
+                        </ul>
+                        
+                        <table class="tech-note-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 22%;">Z-Score</th>
+                                    <th style="width: 38%;">Interpretação</th>
+                                    <th style="width: 40%;">Implicações na Vida Diária</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>+2.15</strong> (Máximo)</td>
+                                    <td>Padrão muito acima da média global.</td>
+                                    <td>Áreas densas, alta conectividade viária, ampla acessibilidade a destinos e transporte. Estilo de vida ativo e sustentável.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>-1.12</strong> (Mínimo)</td>
+                                    <td>Padrão abaixo da média global.</td>
+                                    <td>Baixa densidade, dispersão urbana e menor acesso a serviços a pé. Maior dependência de automóveis e vulnerabilidade ao sedentarismo.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -740,9 +719,14 @@
                 var infoBtn = document.getElementById('custom-info-btn');
                 var infoPanel = document.getElementById('custom-info-panel');
                 var infoClose = document.getElementById('custom-info-close');
+                
                 var metadataToggleBtn = document.getElementById('metadata-toggle-btn');
                 var metadataContent = document.getElementById('metadata-content');
                 var metadataIcon = document.getElementById('metadata-icon');
+
+                var zscoreToggleBtn = document.getElementById('zscore-toggle-btn');
+                var zscoreContent = document.getElementById('zscore-content');
+                var zscoreIcon = document.getElementById('zscore-icon');
 
                 if (infoBtn && infoPanel && infoClose) {
                     infoBtn.addEventListener('click', function(e) {
@@ -766,6 +750,7 @@
                     });
                 }
 
+                // Acordeão de Metadados (Lancet)
                 if (metadataToggleBtn && metadataContent) {
                     metadataToggleBtn.addEventListener('click', function() {
                         if (metadataContent.style.display === 'block') {
@@ -774,6 +759,19 @@
                         } else {
                             metadataContent.style.display = 'block';
                             metadataIcon.className = 'fas fa-chevron-up';
+                        }
+                    });
+                }
+
+                // Acordeão da Nota Técnica do Z-Score
+                if (zscoreToggleBtn && zscoreContent) {
+                    zscoreToggleBtn.addEventListener('click', function() {
+                        if (zscoreContent.style.display === 'block') {
+                            zscoreContent.style.display = 'none';
+                            zscoreIcon.className = 'fas fa-chevron-down';
+                        } else {
+                            zscoreContent.style.display = 'block';
+                            zscoreIcon.className = 'fas fa-chevron-up';
                         }
                     });
                 }
@@ -918,7 +916,7 @@
                 }
 
                 // ==========================================
-                // 5. CONSUMO WMS RASTER DO GEOSAMPA (COM URLS DE METADADOS PARAMETRIZADAS E OPACIDADE DIFERENCIADA)
+                // 5. CONSUMO WMS RASTER DO GEOSAMPA
                 // ==========================================
                 var addBtn = document.getElementById('geosampa-add-btn');
                 var clearBtn = document.getElementById('geosampa-clear-btn');
@@ -928,105 +926,35 @@
                 var addedWmsLayers = {};
                 var wmsUrl = 'https://wms.geosampa.prefeitura.sp.gov.br/geoserver/wms';
 
-                // Dicionário de URLs parametrizadas de metadados para cada camada do GeoSampa
-                var geosampaMetadataUrls = {
-                    'geoportal:via_bicicleta': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search;jsessionid=E912887B4376D33A8435826D50B88666#/metadata/5d973631-65e5-447d-ab38-e5fb6b07a67b',
-                    'geoportal:calcada': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=calcada',
-                    'geoportal:pde_parque_municipal': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=parque',
-                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=unidade%20de%20conservacao',
-                    'geoportal:GEOSAMPA_v_praca_largo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=praca',
-                    'geoportal:equipamento_esporte_centro_esportivo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=centro%20esportivo',
-                    'geoportal:equipamento_esporte_clubes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube',
-                    'geoportal:equipamento_esporte_clubesdacomunidade': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=clube%20da%20comunidade',
-                    'geoportal:equipamento_esporte_estadios': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=estadio',
-                    'geoportal:equipamento_esporte_outros': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=esporte',
-                    'geoportal:bicicletario_paraciclo': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bicicletario',
-                    'geoportal:equipamento_sacoloes': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=sacolao',
-                    'geoportal:equipamento_feira_livre': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=feira%20livre',
-                    'geoportal:equipamento_mercados_municipais': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=mercado%20municipal',
-                    'geoportal:equipamento_bom_prato': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=bom%20prato',
-                    'geoportal:seguranca_alimentar': 'https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/srv/por/catalog.search#/search?any=seguranca%20alimentar',
-                    'default': 'http://geosampa.prefeitura.sp.gov.br/'
-                };
-
-                // Camadas de polígonos/áreas que recebem 50% de opacidade; pontos e linhas recebem 100% (1.0)
-                var polygonLayers = [
-                    'geoportal:pde_parque_municipal',
-                    'geoportal:GEOSAMPA_cadparcs_parque_unidade_conservacao',
-                    'geoportal:GEOSAMPA_v_praca_largo',
-                    'geoportal:calcada'
-                ];
-
-                // Função para atualizar badges, links de legenda, metadados direcionados e remoção
                 function renderActiveBadges() {
                     if (!activeListEl) return;
                     activeListEl.innerHTML = '';
                     Object.keys(addedWmsLayers).forEach(function(key) {
                         var item = addedWmsLayers[key];
-                        
-                        var badgeDiv = document.createElement('div');
-                        badgeDiv.className = 'wms-badge-item';
-                        
-                        var rowDiv = document.createElement('div');
-                        rowDiv.className = 'wms-badge-row';
-                        
-                        var titleSpan = document.createElement('span');
-                        titleSpan.style.fontWeight = '600';
-                        titleSpan.innerText = item.title;
-                        
-                        var actionsDiv = document.createElement('div');
-                        actionsDiv.className = 'wms-badge-actions';
-                        
-                        // Botão de Legenda
-                        var legendToggleLink = document.createElement('span');
-                        legendToggleLink.className = 'wms-legend-toggle-link';
-                        legendToggleLink.innerText = 'Legenda';
-                        
-                        // Link de Metadados Parametrizado
-                        var metadataLink = document.createElement('a');
-                        metadataLink.className = 'wms-metadata-link';
-                        metadataLink.href = geosampaMetadataUrls[key] || geosampaMetadataUrls['default'];
-                        metadataLink.target = '_blank';
-                        metadataLink.rel = 'noopener noreferrer';
-                        metadataLink.innerText = 'Metadados';
-                        metadataLink.title = 'Abrir ficha de metadados correspondente no GeoSampa';
-                        
-                        // Botão de Exclusão (×)
-                        var removeX = document.createElement('span');
-                        removeX.className = 'wms-remove-x';
-                        removeX.title = 'Remover camada';
-                        removeX.innerText = '×';
-                        
-                        actionsDiv.appendChild(legendToggleLink);
-                        actionsDiv.appendChild(metadataLink);
-                        actionsDiv.appendChild(removeX);
-                        
-                        rowDiv.appendChild(titleSpan);
-                        rowDiv.appendChild(actionsDiv);
-                        badgeDiv.appendChild(rowDiv);
+                        var div = document.createElement('div');
+                        div.className = 'wms-badge-item';
+                        div.innerHTML = '<div class="wms-badge-row"><span>' + item.title + '</span><div class="wms-badge-actions"><span class="wms-legend-toggle-link">Legenda</span><span class="wms-remove-x" title="Remover">×</span></div></div>';
                         
                         var legendContainer = document.createElement('div');
                         legendContainer.className = 'wms-legend-container';
-                        
                         var legendImg = document.createElement('img');
                         legendImg.src = wmsUrl + '?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&layer=' + encodeURIComponent(key);
-                        legendImg.alt = 'Legenda da Camada';
                         legendContainer.appendChild(legendImg);
-                        badgeDiv.appendChild(legendContainer);
-                        
-                        legendToggleLink.addEventListener('click', function(e) {
+                        div.appendChild(legendContainer);
+
+                        div.querySelector('.wms-legend-toggle-link').addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             if (legendContainer.style.display === 'block') {
                                 legendContainer.style.display = 'none';
-                                legendToggleLink.innerText = 'Legenda';
+                                this.innerText = 'Legenda';
                             } else {
                                 legendContainer.style.display = 'block';
-                                legendToggleLink.innerText = 'Ocultar';
+                                this.innerText = 'Ocultar';
                             }
                         });
-                        
-                        removeX.addEventListener('click', function(e) {
+
+                        div.querySelector('.wms-remove-x').addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             if (typeof map !== 'undefined') {
@@ -1035,46 +963,34 @@
                             delete addedWmsLayers[key];
                             renderActiveBadges();
                         });
-                        
-                        activeListEl.appendChild(badgeDiv);
+
+                        activeListEl.appendChild(div);
                     });
                 }
 
-                // Evento de clique para o botão "Adicionar Camada"
                 if (addBtn && selectEl) {
                     addBtn.addEventListener('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        
                         var layerName = selectEl.value;
                         var layerText = selectEl.options[selectEl.selectedIndex].text;
 
-                        if (!layerName || layerName === '') {
-                            alert('Por favor, selecione uma camada válida no menu suspenso.');
+                        if (!layerName) {
+                            alert('Por favor, selecione uma camada.');
                             return;
                         }
-                        
                         if (addedWmsLayers[layerName]) {
-                            alert('Esta camada já se encontra ativa no mapa.');
+                            alert('Esta camada já foi adicionada.');
                             return;
                         }
-
-                        // Opacidade: 50% para polígonos/áreas e 100% para pontos e linhas
-                        var layerOpacity = (polygonLayers.indexOf(layerName) !== -1) ? 0.5 : 1.0;
 
                         var wmsLayer = new ol.layer.Image({
                             'title': 'GeoSampa (WMS): ' + layerText,
-                            'opacity': layerOpacity,
+                            'opacity': 0.95,
                             zIndex: 600,
                             source: new ol.source.ImageWMS({
                                 url: wmsUrl,
-                                params: {
-                                    'LAYERS': layerName,
-                                    'VERSION': '1.3.0',
-                                    'CRS': 'EPSG:3857',
-                                    'FORMAT': 'image/png',
-                                    'TRANSPARENT': true
-                                },
+                                params: {'LAYERS': layerName, 'VERSION': '1.3.0', 'CRS': 'EPSG:3857', 'FORMAT': 'image/png', 'TRANSPARENT': true},
                                 serverType: 'geoserver',
                                 ratio: 1
                             })
@@ -1084,18 +1000,14 @@
                             map.addLayer(wmsLayer);
                             addedWmsLayers[layerName] = { title: layerText, layer: wmsLayer };
                             renderActiveBadges();
-                        } else {
-                            alert('Erro crítico: O mapa OpenLayers não foi inicializado corretamente.');
                         }
                     });
                 }
 
-                // Evento para limpar todas as camadas WMS adicionadas
                 if (clearBtn) {
                     clearBtn.addEventListener('click', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        
                         Object.keys(addedWmsLayers).forEach(function(key) {
                             if (typeof map !== 'undefined') {
                                 map.removeLayer(addedWmsLayers[key].layer);
@@ -1106,71 +1018,6 @@
                     });
                 }
 
-                // ==========================================
-                // 6. INTERATIVIDADE DE CLIQUE WMS (GETFEATUREINFO EM JSON)
-                // ==========================================
-                if (typeof map !== 'undefined') {
-                    map.on('click', function(evt) {
-                        var activeKeys = Object.keys(addedWmsLayers);
-                        if (activeKeys.length === 0) return;
-
-                        var viewResolution = map.getView().getResolution();
-                        var projection = map.getView().getProjection();
-                        var clickedCoord = evt.coordinate;
-
-                        for (var i = activeKeys.length - 1; i >= 0; i--) {
-                            var key = activeKeys[i];
-                            var item = addedWmsLayers[key];
-                            var source = item.layer.getSource();
-
-                            if (source instanceof ol.source.ImageWMS) {
-                                var url = source.getFeatureInfoUrl(
-                                    clickedCoord,
-                                    viewResolution,
-                                    projection,
-                                    {
-                                        'INFO_FORMAT': 'application/json',
-                                        'FEATURE_COUNT': 1
-                                    }
-                                );
-
-                                if (url) {
-                                    (function(layerTitle, infoUrl) {
-                                        fetch(infoUrl)
-                                            .then(function(res) { return res.json(); })
-                                            .then(function(data) {
-                                                if (data && data.features && data.features.length > 0) {
-                                                    var props = data.features[0].properties;
-                                                    var htmlTable = '<div style="font-weight:600; color:#0369a1; margin-bottom:6px; font-size:13px; border-bottom: 2px solid #0284c7; padding-bottom: 3px;">' + layerTitle + '</div>';
-                                                    htmlTable += '<table>';
-                                                    for (var propKey in props) {
-                                                        if (props.hasOwnProperty(propKey) && propKey !== 'geometry' && propKey !== 'geom' && props[propKey] !== null && props[propKey] !== '') {
-                                                            htmlTable += '<tr><th>' + propKey + '</th><td>' + props[propKey] + '</td></tr>';
-                                                        }
-                                                    }
-                                                    htmlTable += '</table>';
-
-                                                    var popupContent = document.getElementById('popup-content');
-                                                    var popupEl = document.getElementById('popup');
-                                                    if (popupContent && popupEl) {
-                                                        popupContent.innerHTML = htmlTable;
-                                                        if (typeof overlay !== 'undefined') {
-                                                            overlay.setPosition(clickedCoord);
-                                                        }
-                                                    }
-                                                }
-                                            })
-                                            .catch(function(err) {
-                                                console.warn('Consulta WMS GetFeatureInfo concluída para ' + layerTitle + ':', err);
-                                            });
-                                    })(item.title, url);
-                                }
-                            }
-                        }
-                    });
-                }
-
-                // Atualização do tamanho do mapa após o carregamento do banner superior
                 var bannerImg = document.querySelector('#top-banner img');
                 if (bannerImg) {
                     bannerImg.addEventListener('load', function() {
